@@ -1,0 +1,137 @@
+/* Keep navigation compact and give the page itself most of the canvas. */
+.workspace-header{height:72px;padding:0 24px;gap:20px}
+.brand{gap:12px}
+.brand-symbol{width:44px;height:44px;display:block;object-fit:contain;flex-shrink:0}
+.brand-copy .eyebrow{font-size:8px;letter-spacing:1.2px}
+.brand-copy h1{font-size:20px;margin-top:4px}
+.header-actions{gap:19px}
+.scheme-total strong{font-size:23px}
+.scheme-total>span{font-size:11px}
+.workbench{grid-template-columns:250px minmax(0,1fr)}
+.catalog{padding:20px 14px 0}
+.catalog-header{padding:0 7px}
+.catalog-header h2{font-size:16px;margin-top:6px}
+.catalog-intro{margin:12px 7px 0;font-size:9px}
+.scheme-list{padding-top:22px;padding-bottom:20px}
+.scheme-group+.scheme-group{margin-top:22px}
+.group-heading{margin:0 8px 9px}
+.scheme-button{gap:10px;padding:10px 8px}
+.scheme-button.is-selected:before{left:-15px;top:22px;height:25px}
+.scheme-thumb{width:48px;height:49px}
+.scheme-title{font-size:11px}
+.scheme-subtitle{font-size:9px}
+.scheme-meta{font-size:8px;margin-top:5px}
+.catalog-footer{padding:16px 7px 18px}
+.preview-panel{padding:14px 14px 0}
+.preview-heading{min-height:0;padding:0 1px 12px;gap:16px}
+.preview-breadcrumb{font-size:8px;line-height:11px}
+#preview-version{font-size:8px}
+#preview-title{font-size:22px;line-height:1.25;margin-top:6px}
+#preview-description{font-size:10px;line-height:1.7;margin-top:4px;max-width:920px}
+.preview-public-label{margin-top:18px;font-size:7px;letter-spacing:1px}
+.preview-toolbar{min-height:58px;padding-bottom:10px;gap:14px}
+.preview-tools{gap:10px}
+.full-preview-hint{font-size:10px;color:#99a4b5;line-height:1.5;margin-right:2px}
+.button-open{min-height:48px;min-width:206px;padding:12px 18px;border:1px solid #315ce7;border-radius:9px;background:#315ce7;color:#fff;font-size:14px;font-weight:600;gap:12px;box-shadow:0 3px 9px #315ce71a}
+.button-open svg{width:16px;height:16px;stroke-width:1.7}
+.button-open:hover{background:#244dd1;border-color:#244dd1;color:#fff;box-shadow:0 4px 12px #315ce72e}
+.button-open:active{background:#1f43ba}
+.button-open[aria-disabled=true]{opacity:.45}
+.preview-stage{padding:4px;border-radius:8px}
+.preview-window{border-radius:5px;box-shadow:0 3px 12px #1d36550a}
+.browser-bar{height:24px;padding:0 10px;font-size:7px}
+.browser-dots{width:35px;gap:4px}
+.browser-dots i{width:4px;height:4px}
+.preview-source{font-size:6px}
+.preview-footer{min-height:25px;font-size:8px;padding:4px 1px}
+.preview-stage.is-mobile .preview-window{border-radius:20px}
+
+@media(min-width:621px){
+  .workspace-header{height:72px;flex-shrink:0}
+  .workbench{min-height:0}
+  .preview-stage{min-height:0}
+  .preview-window{height:100%;min-height:0}
+}
+@media(min-width:1600px){
+  .workspace-header{padding:0 27px}
+  .workbench{grid-template-columns:258px minmax(0,1fr)}
+  .catalog{padding-left:18px;padding-right:18px}
+  .scheme-button.is-selected:before{left:-19px}
+  .preview-panel{padding:14px 16px 0}
+}
+@media(min-width:621px) and (max-width:1000px){
+  .workbench{grid-template-columns:220px minmax(0,1fr)}
+  .catalog{padding-left:10px;padding-right:10px}
+  .scheme-button.is-selected:before{left:-11px}
+  .preview-panel{padding:13px 12px 0}
+  .full-preview-hint{display:none}
+  .button-open{min-width:190px;font-size:13px;padding:12px 14px}
+  .preview-tools{gap:6px}
+  .preview-public-label{display:none}
+}
+@media(min-width:621px) and (max-width:800px){
+  .workbench{grid-template-columns:192px minmax(0,1fr)}
+  .catalog{padding-left:8px;padding-right:8px}
+  .scheme-button{padding:9px 6px;gap:7px}
+  .scheme-thumb{width:36px;height:43px}
+  .scheme-title{font-size:10px}
+  .scheme-subtitle{font-size:8px}
+  .scheme-button.is-selected:before{left:-9px}
+  .preview-heading{display:block}
+  .preview-toolbar{gap:8px;flex-wrap:wrap}
+  .preview-tools{margin-left:auto}
+  .device-button{padding:5px 9px}
+  .button-open{min-width:184px;font-size:12px;gap:9px}
+  #preview-title{font-size:20px}
+}
+@media(max-width:620px){
+  .workspace-header{height:72px;padding:0 16px;gap:12px}
+  .brand{gap:9px;min-width:0}
+  .brand-symbol{width:37px;height:37px}
+  .brand-copy .eyebrow{font-size:5.5px;letter-spacing:.65px}
+  .brand-copy h1{font-size:18px;margin-top:4px}
+  .header-actions{gap:12px}
+  .scheme-total{gap:4px}
+  .scheme-total strong{font-size:20px}
+  .scheme-total>span{font-size:8px}
+  .public-status{font-size:8px;gap:5px}
+  .catalog{padding:14px 16px 12px}
+  .catalog-header{padding:0}
+  .catalog-header h2{font-size:12px;margin:0}
+  .scheme-list{padding:10px 0 2px;gap:17px}
+  .scheme-group{padding-top:20px}
+  .scheme-group+.scheme-group{margin:0}
+  .group-heading{margin:0}
+  .scheme-button{width:168px;min-height:69px;padding:9px 10px;gap:9px}
+  .scheme-thumb{width:42px;height:44px}
+  .scheme-title{font-size:10px}
+  .scheme-subtitle{font-size:8px}
+  .scheme-meta{margin-top:4px}
+  .preview-panel{padding:17px 12px 0}
+  .preview-heading{padding-bottom:12px;display:block}
+  .preview-public-label{display:none}
+  #preview-title{font-size:21px;margin-top:6px}
+  #preview-description{font-size:10px;line-height:1.7;margin-top:5px}
+  .preview-toolbar{min-height:0;display:flex;align-items:center;flex-wrap:wrap;gap:9px 10px;padding-bottom:12px}
+  .device-switch{order:0}
+  .device-button{padding:5px 10px}
+  .preview-tools{order:1;display:contents}
+  #reload-preview{order:0;margin-left:auto;width:32px;height:32px}
+  .full-preview-hint{order:3;display:block;flex:1 0 100%;text-align:center;font-size:9px;margin:0;line-height:1.5}
+  .button-open{order:2;flex:1 0 100%;min-width:0;min-height:48px;width:100%;padding:12px 16px;font-size:14px;border-radius:8px;gap:10px}
+  .preview-stage{min-height:570px;padding:3px;border-radius:7px}
+  .preview-window{min-height:562px;height:calc(100dvh - 235px);border-radius:4px}
+  .preview-stage.is-mobile .preview-window{min-height:562px;border-radius:17px}
+  .browser-bar{height:22px;padding:0 8px}
+  .preview-footer{min-height:30px;font-size:8px}
+  .preview-footnote-right{font-size:7px}
+}
+@media(max-width:360px){
+  .workspace-header{padding:0 12px;gap:9px}
+  .brand-copy .eyebrow{font-size:5px;letter-spacing:.35px}
+  .brand-copy h1{font-size:17px}
+  .brand-symbol{width:33px;height:33px}
+  .header-actions{gap:9px}
+  .scheme-total>span{font-size:7px}
+  .public-status{font-size:7px}
+}

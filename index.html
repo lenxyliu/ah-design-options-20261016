@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6f7f9">
   <title>AH · 方案预览</title>
+  <link rel="icon" type="image/png" href="./brand/agent-hosting-symbol.png">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./layout-refinement.css">
   <script src="./app.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#preview-title">跳到方案预览</a>
   <div class="workspace">
     <header class="workspace-header">
-      <div class="brand" aria-label="AH 方案预览">
-        <span class="brand-mark" aria-hidden="true">a<span>h</span><i></i></span>
+      <div class="brand" aria-label="Agent Hosting 方案预览">
+        <img class="brand-symbol" src="./brand/agent-hosting-symbol.png" alt="Agent Hosting" width="44" height="44">
         <div class="brand-copy"><span class="eyebrow">AGENT HOSTING / DESIGN SPACE</span><h1>方案预览<span class="title-dot">.</span></h1></div>
       </div>
       <div class="header-actions">
@@ -41,7 +43,7 @@
 
         <div class="preview-toolbar">
           <div class="device-switch" role="group" aria-label="预览尺寸"><button id="device-desktop" class="device-button is-active" type="button" aria-pressed="true" title="桌面预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>桌面</span></button><button id="device-mobile" class="device-button" type="button" aria-pressed="false" title="手机预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>手机</span></button></div>
-          <div class="preview-tools"><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><span class="toolbar-divider" aria-hidden="true"></span><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>新标签打开</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+          <div class="preview-tools"><span class="full-preview-hint">完整交互，建议在新标签中体验</span><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>新标签打开完整预览</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
         </div>
 
         <div id="preview-notice" class="preview-notice" role="status" hidden><span id="preview-notice-text"></span><a id="notice-open" target="_blank" rel="noopener noreferrer">打开独立预览 ↗</a></div>

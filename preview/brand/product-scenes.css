@@ -1,0 +1,173 @@
+/* Scoped product diagrams. Dimensions stay proportional; no application state is simulated. */
+.product-scene{position:relative;width:100%;aspect-ratio:560/390;color:#102a50;background:linear-gradient(145deg,#fff 5%,#f5faff 48%,#eaf4ff);border:1px solid #dce9fa;border-radius:12px;isolation:isolate;container-type:inline-size;overflow:hidden;box-shadow:0 24px 60px -35px #214c8b38}
+.product-scene *,.product-scene *:before,.product-scene *:after{box-sizing:border-box}
+.product-scene .ps-canvas{position:absolute;inset:0;font-size:clamp(10px,2.15cqw,12px);line-height:1.45;font-weight:400}
+.product-scene .ps-canvas:before{content:"";position:absolute;inset:22% -5% -20%;z-index:-1;background-image:linear-gradient(#97b8e416 1px,transparent 1px),linear-gradient(90deg,#97b8e416 1px,transparent 1px);background-size:7% 10%;transform:perspective(500px) rotateX(58deg);transform-origin:50% 85%;mask-image:linear-gradient(transparent,#000 60%)}
+.product-scene .ps-header{position:absolute;top:6%;left:6%;right:6%;display:flex;align-items:center;justify-content:space-between;color:#245bff;font-size:1em;letter-spacing:.01em}
+.product-scene .ps-header>span:first-child{display:flex;align-items:center;gap:.6em;font-weight:500}
+.product-scene .ps-header i{display:inline-block;width:.45em;height:.45em;background:#245bff;border-radius:1px}
+.product-scene .ps-header .ps-figure-note{font-size:max(10px,.9em);color:#6d85a6;letter-spacing:.08em}
+.product-scene .ps-icon{display:block;width:2em;height:2em;flex:none}
+.product-scene strong{font-weight:500}
+.product-scene .ps-footer{position:absolute;left:6%;right:6%;bottom:4.8%;border-top:1px solid #cbdcf2;padding-top:2%;display:flex;align-items:center;justify-content:space-between;color:#6980a0;font-size:max(10px,.9em);gap:12px}
+.product-scene .ps-footer-mark{font-size:1.4em;color:#245bff;line-height:1}
+.product-scene .ps-window-bar{height:16%;display:flex;justify-content:space-between;align-items:center;padding:0 5%;color:#617e9f;border-bottom:1px solid #dfeafa;font-size:max(10px,.9em)}
+.product-scene .ps-window-dots{display:flex;gap:.35em}
+.product-scene .ps-window-dots i{width:.35em;height:.35em;background:#bbceea;border-radius:50%}
+.product-scene .ps-window-dots i:first-child{background:#245bff}
+.product-scene .ps-flow{stroke:#245bff;stroke-width:1.7;stroke-dasharray:7 90;animation:ps-flow 5s linear infinite;opacity:.7}
+@keyframes ps-flow{to{stroke-dashoffset:-194}}
+
+/* Lighthouse: the main Agent hands a task to three distinct roles. */
+.product-scene .ps-lh-floor{position:absolute;left:14%;top:71%;width:72%;height:11%;border:1px solid #c1d7f5;background:#dfeeff;transform:skewX(-25deg);box-shadow:0 9px 0 -2px #d5e6fd}
+.product-scene .ps-lh-window{position:absolute;left:10%;top:19%;width:80%;height:52%;background:#ffffffed;border:1px solid #b7cff0;border-radius:9px;box-shadow:0 18px 35px -22px #3167b380,7px 6px 0 #c4ddff55;transform:perspective(1100px) rotateY(-5deg) rotateX(3deg)}
+.product-scene .ps-lh-lead{position:absolute;left:6%;top:31%;width:32%;display:flex;align-items:center;flex-direction:column;text-align:center}
+.product-scene .ps-lh-lead>.ps-icon{width:4.9em;height:4.9em;padding:.9em;color:#fff;background:#245bff;border-radius:22%;box-shadow:0 8px 20px #245bff30,3px 3px 0 #123fbd;animation:ps-agent-breathe 7s ease-in-out infinite}
+.product-scene .ps-lh-lead strong{margin-top:.8em;font-size:1.1em}
+.product-scene .ps-lh-lead>span{margin-top:.3em;font-size:max(10px,.86em);color:#7890ad;white-space:nowrap}
+.product-scene .ps-lh-wires{position:absolute;left:36%;top:26%;width:20%;height:60%;stroke:#c4d9f3;stroke-width:1.4;overflow:visible}
+.product-scene .ps-lh-roles{position:absolute;left:55%;right:6%;top:25%;bottom:8%;display:flex;flex-direction:column;gap:7%}
+.product-scene .ps-role{display:flex;align-items:center;gap:.8em;flex:1;border:1px solid #d7e5f7;background:linear-gradient(110deg,#f0f6ff,#fff);padding:0 6%;border-radius:4px;box-shadow:0 4px 9px #245bff04}
+.product-scene .ps-role>.ps-icon{color:#245bff;width:1.85em;height:1.85em}
+.product-scene .ps-role strong{display:block;font-size:max(10px,.95em);white-space:nowrap}
+.product-scene .ps-role div>span{display:block;color:#8296af;font-size:max(10px,.85em);margin-top:.15em}
+.product-scene .ps-role>i{margin-left:auto;font-style:normal;color:#a1b5d2;font-size:max(10px,.85em);font-family:monospace}
+.product-scene .ps-lh-schedule{position:absolute;left:7%;top:70%;width:35%;height:12.5%;display:flex;align-items:center;gap:.75em;padding:0 3%;border:1px solid #c7daf4;border-radius:6px;background:#fff;box-shadow:0 6px 18px #1d4f9b0a}
+.product-scene .ps-lh-schedule>.ps-icon{color:#245bff;width:2em;height:2em}
+.product-scene .ps-lh-schedule strong{display:block;font-size:max(10px,.95em)}
+.product-scene .ps-lh-schedule div>span{display:block;color:#7c92ae;font-size:max(10px,.83em);margin-top:.1em;white-space:nowrap}
+.product-scene .ps-schedule-tick{position:absolute;right:7%;top:-23%;height:23%;width:1px;background:#b3cae8}
+.product-scene .ps-lh-cloud{position:absolute;left:47%;top:74%;width:43%;height:10%;display:flex;align-items:center;gap:.65em;color:#245bff}
+.product-scene .ps-lh-cloud>.ps-icon{width:2.3em;height:2.3em}
+.product-scene .ps-lh-cloud>strong{font-size:max(10px,.95em);white-space:nowrap}
+.product-scene .ps-lh-cloud>span{font-size:max(10px,.85em);white-space:nowrap;color:#768fae}
+.product-scene .ps-lh-cloud>i{position:absolute;left:50%;bottom:110%;height:20%;border-left:1px solid #a9c5e9}
+@keyframes ps-agent-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* ClawPro: people -> reusable company assets -> internal and external applications. */
+.product-scene .ps-cp-outline{position:absolute;left:10%;right:10%;top:23%;bottom:21%;border:1px solid #c5d9f35c;border-radius:14px;transform:perspective(500px) rotateX(4deg)}
+.product-scene .ps-cp-team{position:absolute;left:15%;right:12%;top:19%;height:17%;display:flex;justify-content:space-around;align-items:center}
+.product-scene .ps-layer-label{font-size:max(10px,.82em);letter-spacing:.08em}
+.product-scene .ps-cp-team>.ps-layer-label{position:absolute;top:-.65em;left:-5%;color:#7d94b2}
+.product-scene .ps-cp-team>div{display:flex;align-items:center;flex-direction:column;gap:.3em;padding:0 .8em;background:#f7fbff}
+.product-scene .ps-cp-team .ps-icon{width:2.65em;height:2.65em;color:#4379c7;fill:#e4efff}
+.product-scene .ps-cp-team>div>span{font-size:max(10px,.9em)}
+.product-scene .ps-cp-wires{position:absolute;left:9%;top:34%;width:82%;height:49%;stroke:#c0d5f1;stroke-width:1.3}
+.product-scene .ps-cp-assets{position:absolute;left:12%;right:12%;top:43%;height:24%;background:#fff;border:1px solid #b5cff2;border-radius:7px;box-shadow:5px 7px 0 #dceaff,0 15px 26px -17px #245bff35;transform:perspective(800px) rotateX(4deg)}
+.product-scene .ps-cp-assets-title{height:48%;display:flex;align-items:center;gap:.65em;padding:0 5%;border-bottom:1px solid #e1ecfa}
+.product-scene .ps-cp-logo{display:flex;align-items:center;justify-content:center;width:1.9em;height:1.9em;background:#245bff;color:#fff;border-radius:5px;font-weight:600;font-family:Arial,sans-serif;font-size:max(10px,.9em);box-shadow:2px 2px 0 #c4d8ff}
+.product-scene .ps-cp-assets-title>strong{font-size:1em}
+.product-scene .ps-cp-assets-title>span:last-child{font-size:max(10px,.85em);margin-left:auto;color:#6a86ab}
+.product-scene .ps-cp-asset-items{height:52%;display:flex;justify-content:space-around;align-items:center;padding:0 4%}
+.product-scene .ps-cp-asset-items>span{display:flex;align-items:center;gap:.55em;font-size:max(10px,.93em)}
+.product-scene .ps-cp-asset-items .ps-icon{width:1.65em;height:1.65em;color:#487dcc}
+.product-scene .ps-cp-base{position:absolute;left:8%;right:8%;top:73%;height:12%;display:flex;align-items:center;justify-content:space-evenly;background:linear-gradient(115deg,#245bff,#3775ff);border-radius:5px;color:#fff;box-shadow:4px 5px 0 #bdd7ff;transform:perspective(800px) rotateX(3deg)}
+.product-scene .ps-cp-base>.ps-layer-label{position:absolute;left:3%;top:-1.6em;color:#6989b3}
+.product-scene .ps-cp-base>div{display:flex;flex-direction:column;gap:.1em}
+.product-scene .ps-cp-base strong{font-size:max(10px,.96em)}
+.product-scene .ps-cp-base div>span{color:#dce8ff;font-size:max(10px,.82em)}
+.product-scene .ps-cp-base>i{font-size:1.7em;color:#a3c5ff;font-style:normal}
+.product-scene .ps-cp-governance{position:absolute;right:10%;top:16%;font-size:max(10px,.83em);color:#6584b0}
+
+/* SkillHub: recognizable plug-in blocks physically connect to an Agent. */
+.product-scene .ps-sh-guide{position:absolute;left:8%;top:20%;font-size:1.1em;font-weight:500}
+.product-scene .ps-sh-guide>span{display:block;color:#8096b4;font-size:max(10px,.8em);font-weight:400;margin-top:.35em}
+.product-scene .ps-sh-modules{position:absolute;left:8%;width:43%;top:35%;height:45%;display:flex;flex-direction:column;justify-content:space-between}
+.product-scene .ps-skill{height:27%;position:relative;display:flex;align-items:center;gap:.85em;padding:0 7%;background:#fff;border:1px solid #bed4f2;border-radius:6px;box-shadow:3px 4px 0 #dceaff,0 5px 16px #326dc20b;z-index:2}
+.product-scene .ps-skill-two{transform:translateX(3%);border-color:#759dff;box-shadow:3px 4px 0 #c3d8ff,0 5px 16px #326dc20b}
+.product-scene .ps-skill-three{transform:translateX(-1.5%)}
+.product-scene .ps-skill-icon{padding:.45em;background:#edf4ff;border-radius:4px;color:#245bff}
+.product-scene .ps-skill .ps-icon{width:1.9em;height:1.9em}
+.product-scene .ps-skill strong{display:block;font-size:1.03em}
+.product-scene .ps-skill div>span{display:block;font-size:max(10px,.82em);margin-top:.2em;color:#7b91af;white-space:nowrap}
+.product-scene .ps-skill>i{position:absolute;right:-4%;top:31%;height:38%;width:4%;border:1px solid #aec9ee;border-left:none;background:#eef5ff;border-radius:0 2px 2px 0}
+.product-scene .ps-skill>i:before,.product-scene .ps-skill>i:after{content:"";position:absolute;left:100%;width:50%;height:1px;background:#83a9e1}
+.product-scene .ps-skill>i:before{top:25%}.product-scene .ps-skill>i:after{bottom:25%}
+.product-scene .ps-sh-wires{position:absolute;left:51%;top:35%;width:30%;height:45%;stroke:#b8d0f1;stroke-width:1.5}
+.product-scene .ps-sh-agent{position:absolute;left:65%;top:31%;width:29%;height:48%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2em}
+.product-scene .ps-sh-agent-face{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.7em;color:#fff;background:linear-gradient(145deg,#3775ff,#245bff 75%);border:1px solid #fff9;border-radius:24%;width:8em;height:8em;box-shadow:5px 6px 0 #c3d8ff,0 15px 30px -10px #245bff40;transform:rotate(-4deg);z-index:1}
+.product-scene .ps-sh-agent-face>.ps-icon{width:3.8em;height:3.8em}
+.product-scene .ps-sh-agent-face>strong{font-size:1em}
+.product-scene .ps-sh-agent>span{font-size:max(10px,.86em);color:#6c88ad;white-space:nowrap}
+.product-scene .ps-sh-ring{position:absolute;top:6%;left:-11%;width:122%;aspect-ratio:1;border:1px solid #b7d1f1;border-radius:50%;transform:rotateX(36deg);opacity:.7}
+.product-scene .ps-sh-ring:after{content:"＋";position:absolute;right:7%;top:8%;width:1.3em;height:1.3em;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:#245bff;animation:ps-agent-breathe 5s ease-in-out infinite}
+.product-scene .ps-sh-types{position:absolute;right:8%;top:20%;display:flex;gap:.5em}
+.product-scene .ps-sh-types>span{font-size:max(10px,.83em);padding:.2em .65em;border:1px solid #cbddf5;color:#6c88ac;background:#fff8;border-radius:3px}
+
+/* Octop: a visible environment boundary holds documents, memory and experts. */
+.product-scene .ps-ot-environment{position:absolute;left:6%;right:6%;top:20%;bottom:17%;border:1px solid #adc9ee;border-radius:12px;background:linear-gradient(145deg,#ffffff55,#eaf4ff33);box-shadow:5px 6px 0 #d7e8fc66}
+.product-scene .ps-ot-environment>span{position:absolute;top:-1em;left:4%;display:flex;align-items:center;gap:.4em;padding:0 .6em;background:#f8fcff;color:#245bff;font-size:1em}
+.product-scene .ps-ot-environment>span>.ps-icon{width:1.4em;height:1.4em}
+.product-scene .ps-ot-environment>i{position:absolute;right:4%;top:5%;font-style:normal;font-size:max(10px,.82em);color:#8097b6}
+.product-scene .ps-ot-environment>b{position:absolute;width:.4em;height:.4em;bottom:4%;right:3%;background:#80a9e0}
+.product-scene .ps-ot-documents{position:absolute;left:11%;top:35%;width:26%;height:29%}
+.product-scene .ps-ot-documents>div{position:absolute;top:0;left:0;right:0;bottom:0;border:1px solid #c6d9f2;border-radius:5px;background:#fff;box-shadow:0 9px 20px -15px #245bff45}
+.product-scene .ps-ot-documents>div:first-child{transform:rotate(-10deg) translate(-4%,-2%);background:#e3efff}
+.product-scene .ps-ot-documents>div:nth-child(2){transform:rotate(4deg) translate(4%,0);background:#f4f9ff}
+.product-scene .ps-ot-documents>div:last-child{padding:9%;transform:rotate(-3deg)}
+.product-scene .ps-ot-documents .ps-icon{width:1.9em;height:1.9em;margin-bottom:.35em;color:#3974cf}
+.product-scene .ps-ot-documents strong{display:block;font-size:1em}
+.product-scene .ps-ot-documents span{display:block;font-size:max(10px,.81em);color:#8095b0;margin-top:.2em;white-space:nowrap}
+.product-scene .ps-ot-documents i{display:block;width:86%;height:1px;background:#d5e2f3;margin-top:.35em}
+.product-scene .ps-ot-documents i:last-child{width:62%}
+.product-scene .ps-ot-wires{position:absolute;left:34%;top:39%;width:59%;height:38%;stroke:#b9d0f0;stroke-width:1.3}
+.product-scene .ps-ot-workspace{position:absolute;left:43%;right:10%;top:32%;height:39%;border:1px solid #a9c8f2;background:#fff;border-radius:8px;box-shadow:4px 5px 0 #d4e6ff,0 16px 30px -19px #1f60bd70;transform:perspective(800px) rotateY(-5deg) rotateX(2deg)}
+.product-scene .ps-ot-workspace>.ps-window-bar{height:19%;font-size:max(10px,.85em)}
+.product-scene .ps-ot-expert{display:flex;align-items:center;gap:.85em;margin:5% 6% 4%}
+.product-scene .ps-ot-expert>.ps-icon{width:3em;height:3em;background:#245bff;border-radius:25%;padding:.4em;color:#fff;box-shadow:2px 2px 0 #c6daff}
+.product-scene .ps-ot-expert strong{font-size:1.05em;display:block}
+.product-scene .ps-ot-expert div>span{color:#7891b3;font-size:max(10px,.8em);display:block;margin-top:.2em;white-space:nowrap}
+.product-scene .ps-ot-message{margin:0 7%;padding:3% 5%;background:#eff5ff;border:1px solid #d8e6fb;color:#406b9f;font-size:max(10px,.87em);display:flex;align-items:center;justify-content:space-between;border-radius:4px}
+.product-scene .ps-ot-message>i{font-style:normal;color:#245bff;font-size:1.2em}
+.product-scene .ps-ot-context{margin:4% 6% 0;display:flex;align-items:center;gap:1.2em;color:#7591b6;font-size:max(10px,.8em)}
+.product-scene .ps-ot-context>span{display:flex;align-items:center;gap:.35em}
+.product-scene .ps-ot-context .ps-icon{width:1.15em;height:1.15em}
+.product-scene .ps-ot-memory{position:absolute;left:12%;right:13%;top:74%;height:7%;display:flex;align-items:center;gap:.7em;color:#3e6ca8}
+.product-scene .ps-ot-memory>.ps-icon{width:2em;height:2em;color:#245bff}
+.product-scene .ps-ot-memory strong{font-size:max(10px,.9em)}
+.product-scene .ps-ot-memory div{display:flex;align-items:center;gap:1em}
+.product-scene .ps-ot-memory div>span{font-size:max(10px,.8em);color:#8095b0}
+.product-scene .ps-memory-lines{display:flex;align-items:center;gap:4px;height:60%;margin-left:auto}
+.product-scene .ps-memory-lines>i{width:3px;height:45%;background:#98bced;border-radius:1px}
+.product-scene .ps-memory-lines>i:nth-child(2),.product-scene .ps-memory-lines>i:nth-child(4){height:70%;background:#749ee6}
+.product-scene .ps-memory-lines>i:nth-child(3){height:100%;background:#245bff}
+
+@container (max-width:410px){
+  .product-scene .ps-canvas{font-size:9px}
+  .product-scene .ps-header .ps-figure-note,.product-scene .ps-footer,.product-scene .ps-window-bar,.product-scene .ps-lh-lead>span,.product-scene .ps-role div>span,.product-scene .ps-lh-schedule div>span,.product-scene .ps-lh-cloud>span,.product-scene .ps-cp-assets-title>span:last-child,.product-scene .ps-layer-label,.product-scene .ps-cp-base div>span,.product-scene .ps-cp-governance,.product-scene .ps-sh-guide>span,.product-scene .ps-skill div>span,.product-scene .ps-sh-agent>span,.product-scene .ps-sh-types>span,.product-scene .ps-ot-environment>i,.product-scene .ps-ot-documents span,.product-scene .ps-ot-expert div>span,.product-scene .ps-ot-message,.product-scene .ps-ot-context,.product-scene .ps-ot-memory div>span{font-size:9px}
+  .product-scene .ps-lh-window{left:7%;width:86%}
+  .product-scene .ps-lh-lead{left:3%;width:35%}
+  .product-scene .ps-lh-roles{top:21%;bottom:5%;gap:2%}
+  .product-scene .ps-role{gap:.55em;padding:0 4%}
+  .product-scene .ps-role>i{display:none}
+  .product-scene .ps-lh-cloud{left:49%;width:45%;gap:.4em}
+  .product-scene .ps-lh-cloud>span{font-size:9px;max-width:6.2em;white-space:normal;line-height:1.3}
+  .product-scene .ps-cp-assets{left:8%;right:8%}
+  .product-scene .ps-cp-assets-title{padding:0 4%;gap:.5em}
+  .product-scene .ps-cp-assets-title>span:last-child{letter-spacing:-.3px}
+  .product-scene .ps-cp-team{left:12%;right:9%}
+  .product-scene .ps-cp-base{left:6%;right:6%}
+  .product-scene .ps-cp-asset-items{padding:0 1%}
+  .product-scene .ps-cp-asset-items>span{gap:.35em}
+  .product-scene .ps-sh-modules{left:6%;width:46%;top:36%}
+  .product-scene .ps-skill{padding:0 5%;gap:.6em}
+  .product-scene .ps-skill-icon{padding:.35em}
+  .product-scene .ps-sh-guide{left:6%}
+  .product-scene .ps-sh-guide>span{max-width:19em}
+  .product-scene .ps-sh-types{right:6%;gap:.2em}
+  .product-scene .ps-sh-types>span{padding:.15em .4em}
+  .product-scene .ps-sh-agent-face{width:7.3em;height:7.3em}
+  .product-scene .ps-ot-documents{left:10%;width:28%}
+  .product-scene .ps-ot-documents>div:last-child{padding:7%}
+  .product-scene .ps-ot-documents .ps-icon{width:1.8em;height:1.8em}
+  .product-scene .ps-ot-documents i{display:none}
+  .product-scene .ps-ot-workspace{left:42%;right:8%;top:30%;height:44%}
+  .product-scene .ps-ot-expert{gap:.5em;margin:4% 6%}
+  .product-scene .ps-ot-expert div>span{display:none}
+  .product-scene .ps-ot-message{padding:2% 4%;margin:0 5%;font-size:9px}
+  .product-scene .ps-ot-context{margin:3% 6% 0;gap:.9em}
+  .product-scene .ps-ot-memory{left:11%;right:10%;top:75%}
+  .product-scene .ps-ot-memory div{gap:.7em}
+  .product-scene .ps-memory-lines{gap:3px}
+}
+@media(prefers-reduced-motion:reduce){.product-scene .ps-flow,.product-scene .ps-lh-lead>.ps-icon,.product-scene .ps-sh-ring:after{animation:none}}

@@ -1,0 +1,143 @@
+{
+  "schemes": [
+    {
+      "id": "open-field",
+      "title": "OPEN FIELD",
+      "subtitle": "纸白 · 金属曲面",
+      "description": "连续金属曲面与纸白版面，让品牌介绍、四产品切换与完整详情自然展开。",
+      "group": "current",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/open-field/#home",
+      "thumbnailUrl": "./thumbs/open-field.jpg"
+    },
+    {
+      "id": "glass",
+      "title": "玻璃拼图",
+      "subtitle": "深蓝 · 玻璃质感",
+      "description": "以玻璃拼图承载四款产品，从品牌首屏延展到产品内容与详情。",
+      "group": "current",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/glass/#top",
+      "thumbnailUrl": "./thumbs/glass.jpg"
+    },
+    {
+      "id": "brand",
+      "title": "产品空间展廊",
+      "subtitle": "镜头穿行 · 连续叙事",
+      "description": "滚动驱动镜头穿过四个产品空间，沿连续展廊探索产品家族。",
+      "group": "current",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/brand/#intro",
+      "thumbnailUrl": "./thumbs/brand.jpg"
+    },
+    {
+      "id": "spatial",
+      "title": "方块空间 · 当前稿",
+      "subtitle": "能力展开 · 开盒交互",
+      "description": "四产品方块从聚合到展开，沿连续滚动聚焦产品与能力界面。",
+      "group": "current",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/spatial/#overview",
+      "thumbnailUrl": "./thumbs/spatial.jpg"
+    },
+    {
+      "id": "v09",
+      "title": "空间遮挡修复",
+      "subtitle": "空间探索 · V09 固定快照",
+      "description": "统一三轴缩放，调整盒子进退场轨迹，修复相互穿插。",
+      "group": "history",
+      "version": "V09",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v09/#overview",
+      "thumbnailUrl": "./thumbs/v09.jpg"
+    },
+    {
+      "id": "v08",
+      "title": "雾蓝薄纸 · 淡底色",
+      "subtitle": "空间探索 · V08 固定快照",
+      "description": "为线条盒面补充品牌雾蓝实底和遮挡关系，保留 V07 折纸与 V05 节奏。",
+      "group": "history",
+      "version": "V08",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v08/#overview",
+      "thumbnailUrl": "./thumbs/v08.jpg"
+    },
+    {
+      "id": "v07",
+      "title": "线框薄纸 · 双折纸瓣",
+      "subtitle": "空间探索 · V07 固定快照",
+      "description": "线框薄纸与实体纸壳原位切换；双片纸瓣连续回折，沿用 V05 主展开节奏。",
+      "group": "history",
+      "version": "V07",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v07/#overview",
+      "thumbnailUrl": "./thumbs/v07.jpg"
+    },
+    {
+      "id": "v06",
+      "title": "柔光薄壳 · 界面精修",
+      "subtitle": "空间探索 · V06 固定快照",
+      "description": "沿用 V05 展开节奏，加入随折面变化的柔光、薄壳边缘与界面材质层次。",
+      "group": "history",
+      "version": "V06",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v06/#overview",
+      "thumbnailUrl": "./thumbs/v06.jpg"
+    },
+    {
+      "id": "v05",
+      "title": "开盒慢速 · 分段停留",
+      "subtitle": "空间探索 · V05 固定快照",
+      "description": "延长表面展开距离，在半开与接近平展状态留出观察段。",
+      "group": "history",
+      "version": "V05",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v05/#overview",
+      "thumbnailUrl": "./thumbs/v05.jpg"
+    },
+    {
+      "id": "v04",
+      "title": "方块表面 · 连续展开",
+      "subtitle": "空间探索 · V04 固定快照",
+      "description": "完整方块沿共享铰链展开为同一幅产品界面，反向滚动原路合回。",
+      "group": "history",
+      "version": "V04",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v04/#overview",
+      "thumbnailUrl": "./thumbs/v04.jpg"
+    },
+    {
+      "id": "v03",
+      "title": "界面展开 · 连续空间",
+      "subtitle": "空间探索 · V03 固定快照",
+      "description": "同一组产品界面从品牌整体连续展开、聚焦与切换。",
+      "group": "history",
+      "version": "V03",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v03/#overview",
+      "thumbnailUrl": "./thumbs/v03.jpg"
+    },
+    {
+      "id": "v02",
+      "title": "方块空间 · 连续滚动",
+      "subtitle": "空间探索 · V02 固定快照",
+      "description": "方块拆解、四产品聚焦与能力示意展开。",
+      "group": "history",
+      "version": "V02",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v02/#overview",
+      "thumbnailUrl": "./thumbs/v02.jpg"
+    },
+    {
+      "id": "v01",
+      "title": "静态空间 · 点击探索",
+      "subtitle": "空间探索 · V01 固定快照",
+      "description": "第一版空间方案，主要通过产品导航点击切换。",
+      "group": "history",
+      "version": "V01",
+      "date": "2026-10-16",
+      "previewUrl": "./preview/v01/#overview",
+      "thumbnailUrl": "./thumbs/v01.jpg"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7f9">
+  <title>AH · 方案预览</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#preview-title">跳到方案预览</a>
+  <div class="workspace">
+    <header class="workspace-header">
+      <div class="brand" aria-label="AH 方案预览">
+        <span class="brand-mark" aria-hidden="true">a<span>h</span><i></i></span>
+        <div class="brand-copy"><span class="eyebrow">AGENT HOSTING / DESIGN SPACE</span><h1>方案预览<span class="title-dot">.</span></h1></div>
+      </div>
+      <div class="header-actions">
+        <span class="scheme-total"><strong id="scheme-count">—</strong><span>个预览入口</span></span>
+        <span class="header-divider" aria-hidden="true"></span>
+        <span class="public-status"><i aria-hidden="true"></i><span>公开预览</span></span>
+      </div>
+    </header>
+
+    <div id="global-error" class="global-error" role="alert" hidden><span id="global-error-text"></span><button id="retry-load" type="button">重新载入</button></div>
+
+    <main class="workbench">
+      <aside class="catalog" aria-label="设计方案导航">
+        <div class="catalog-header"><div><span class="eyebrow">THE COLLECTION</span><h2>设计方向</h2></div><button id="refresh-list" class="icon-button" type="button" aria-label="刷新方案列表" title="刷新方案列表"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button></div>
+        <p class="catalog-intro">保留每一次探索，找到最合适的方向。</p>
+        <nav id="scheme-list" class="scheme-list" aria-label="选择预览方案"><div class="catalog-loading"><span class="spinner"></span><span>正在收录方案…</span></div></nav>
+        <div class="catalog-footer"><span class="archive-dot" aria-hidden="true"></span><div><span>公开设计档案</span><small>方案与历史版本，统一收录</small></div></div>
+      </aside>
+
+      <section class="preview-panel" aria-labelledby="preview-title">
+        <div class="preview-heading">
+          <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
+          <span class="preview-public-label">PUBLIC PREVIEW</span>
+        </div>
+
+        <div class="preview-toolbar">
+          <div class="device-switch" role="group" aria-label="预览尺寸"><button id="device-desktop" class="device-button is-active" type="button" aria-pressed="true" title="桌面预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>桌面</span></button><button id="device-mobile" class="device-button" type="button" aria-pressed="false" title="手机预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>手机</span></button></div>
+          <div class="preview-tools"><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><span class="toolbar-divider" aria-hidden="true"></span><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>新标签打开</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+        </div>
+
+        <div id="preview-notice" class="preview-notice" role="status" hidden><span id="preview-notice-text"></span><a id="notice-open" target="_blank" rel="noopener noreferrer">打开独立预览 ↗</a></div>
+        <div id="preview-stage" class="preview-stage">
+          <div id="preview-window" class="preview-window">
+            <div class="browser-bar" aria-hidden="true"><div class="browser-dots"><i></i><i></i><i></i></div><span id="preview-address">选择方案以开始预览</span><span class="preview-source">PUBLIC PREVIEW</span></div>
+            <div class="frame-content"><iframe id="preview-frame" title="设计方案预览" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen" hidden></iframe><div id="preview-placeholder" class="preview-placeholder"><div class="placeholder-art" aria-hidden="true"><span></span><i></i><b></b></div><span class="eyebrow">A NEW PERSPECTIVE</span><h3>每一个方向，都值得被看见。</h3><p>从左侧选择方案，展开真实页面预览。</p></div><div id="preview-loading" class="preview-loading" role="status" hidden><span class="spinner"></span><span>正在打开方案预览…</span></div></div>
+          </div>
+        </div>
+        <footer class="preview-footer"><span id="preview-footnote">设计探索 · 切换方案，发现不同方向</span><span class="preview-footnote-right"><i aria-hidden="true"></i>交互式页面预览</span></footer>
+      </section>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="700" viewBox="0 0 920 700" role="img" aria-labelledby="title desc">
+<title id="title">Agent Hosting architectural system</title>
+<desc id="desc">Four independent isometric modules for cloud agents, enterprise assets, skills, and self hosted workspaces.</desc>
+<style>
+.module { --edge: #102A50; --accent: #245BFF; transition: opacity .24s ease; }
+.module .line { fill: none; stroke: #102A50; stroke-width: 1.15; stroke-opacity: .32; stroke-linecap: round; stroke-linejoin: round; }
+.module .fine { fill: none; stroke: #102A50; stroke-width: .75; stroke-opacity: .13; stroke-linecap: round; stroke-linejoin: round; }
+.module .blue-line { fill: none; stroke: #245BFF; stroke-width: 1.4; stroke-opacity: .7; stroke-linecap: round; stroke-linejoin: round; }
+.module .surface { fill: #EAF4FF; fill-opacity: .74; stroke: #102A50; stroke-width: 1.05; stroke-opacity: .26; stroke-linejoin: round; }
+.module .blue { fill: #245BFF; fill-opacity: .09; stroke: #245BFF; stroke-width: 1.05; stroke-opacity: .45; stroke-linejoin: round; }
+.module .solid { fill: #F9FCFF; stroke: #102A50; stroke-width: 1.1; stroke-opacity: .34; stroke-linejoin: round; }
+.module .pin { fill: #F9FCFF; stroke: #102A50; stroke-width: .8; stroke-opacity: .35; }
+.module .blue, .module .blue-line { transition: fill-opacity .24s ease, stroke-opacity .24s ease; }
+.module:hover .blue, .module.is-active .blue { fill-opacity: .18; stroke-opacity: .85; }
+.module:hover .blue-line, .module.is-active .blue-line { stroke-opacity: 1; }
+</style>
+<g id="lighthouse" class="module">
+<polygon class="surface" points="260.00,174.36 457.12,277.40 295.20,362.04 98.08,259.00" style="fill-opacity:.30;stroke-opacity:.09"/>
+<polyline class="fine" points="260.00,190.00 128.00,259.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="293.44,207.48 161.44,276.48" style="stroke-opacity:.07"/>
+<polyline class="fine" points="326.88,224.96 194.88,293.96" style="stroke-opacity:.07"/>
+<polyline class="fine" points="360.32,242.44 228.32,311.44" style="stroke-opacity:.07"/>
+<polyline class="fine" points="393.76,259.92 261.76,328.92" style="stroke-opacity:.07"/>
+<polyline class="fine" points="427.20,277.40 295.20,346.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="260.00,190.00 427.20,277.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="233.60,203.80 400.80,291.20" style="stroke-opacity:.07"/>
+<polyline class="fine" points="207.20,217.60 374.40,305.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="180.80,231.40 348.00,318.80" style="stroke-opacity:.07"/>
+<polyline class="fine" points="154.40,245.20 321.60,332.60" style="stroke-opacity:.07"/>
+<polyline class="fine" points="128.00,259.00 295.20,346.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="271.44,180.34 260.00,174.36 248.56,180.34" style="stroke-opacity:.26"/>
+<polyline class="fine" points="445.68,271.42 457.12,277.40 445.68,283.38" style="stroke-opacity:.26"/>
+<polyline class="fine" points="283.76,356.06 295.20,362.04 306.64,356.06" style="stroke-opacity:.26"/>
+<polyline class="fine" points="109.52,264.98 98.08,259.00 109.52,253.02" style="stroke-opacity:.26"/>
+<polygon class="surface" points="260.00,173.00 427.20,260.40 427.20,131.40 260.00,44.00" style="fill-opacity:.35;stroke-opacity:.13"/>
+<polygon class="surface" points="260.00,173.00 128.00,242.00 128.00,113.00 260.00,44.00" style="fill-opacity:.20;stroke-opacity:.13"/>
+<polygon class="surface" points="128.00,242.00 295.20,329.40 295.20,336.40 128.00,249.00" />
+<polygon class="surface" points="427.20,260.40 295.20,329.40 295.20,336.40 427.20,267.40" />
+<polygon class="solid" points="260.00,173.00 427.20,260.40 295.20,329.40 128.00,242.00" />
+<circle class="pin" cx="260.00" cy="180.36" r="1.25"/>
+<circle class="pin" cx="413.12" cy="260.40" r="1.25"/>
+<circle class="pin" cx="295.20" cy="322.04" r="1.25"/>
+<circle class="pin" cx="142.08" cy="242.00" r="1.25"/>
+<polyline class="line" points="260.00,173.00 260.00,44.00" />
+<polyline class="fine" points="263.52,172.84 263.52,48.84" />
+<polyline class="line" points="427.20,260.40 427.20,131.40" />
+<polyline class="fine" points="423.68,256.56 423.68,132.56" />
+<polyline class="line" points="128.00,242.00 128.00,113.00" />
+<polyline class="fine" points="131.52,241.84 131.52,117.84" />
+<polyline class="line" points="295.20,329.40 295.20,200.40" />
+<polyline class="fine" points="291.68,325.56 291.68,201.56" />
+<polyline class="line" points="128.00,113.00 260.00,44.00 427.20,131.40 295.20,200.40 128.00,113.00" />
+<polyline class="fine" points="128.00,117.00 260.00,48.00 427.20,135.40 295.20,204.40" />
+<polyline class="blue-line" points="260.00,44.00 325.12,78.04" />
+<polygon class="surface" points="194.00,166.38 292.56,217.90 292.56,225.90 194.00,174.38" />
+<polygon class="blue" points="360.32,182.48 292.56,217.90 292.56,225.90 360.32,190.48" />
+<polygon class="blue" points="261.76,130.96 360.32,182.48 292.56,217.90 194.00,166.38" />
+<circle class="pin" cx="261.76" cy="138.32" r="1.25"/>
+<circle class="pin" cx="346.24" cy="182.48" r="1.25"/>
+<circle class="pin" cx="292.56" cy="210.54" r="1.25"/>
+<circle class="pin" cx="208.08" cy="166.38" r="1.25"/>
+<polyline class="fine" points="260.00,142.92 217.76,165.00" />
+<polyline class="fine" points="273.20,149.82 230.96,171.90" />
+<polyline class="fine" points="286.40,156.72 244.16,178.80" />
+<polyline class="fine" points="299.60,163.62 257.36,185.70" />
+<polyline class="fine" points="312.80,170.52 270.56,192.60" />
+<polyline class="fine" points="326.00,177.42 283.76,199.50" />
+<polygon class="surface" points="187.84,219.56 226.56,239.80 226.56,251.80 187.84,231.56" />
+<polygon class="surface" points="292.56,205.30 226.56,239.80 226.56,251.80 292.56,217.30" />
+<polygon class="solid" points="253.84,185.06 292.56,205.30 226.56,239.80 187.84,219.56" />
+<circle class="pin" cx="253.84" cy="192.42" r="1.25"/>
+<circle class="pin" cx="278.48" cy="205.30" r="1.25"/>
+<circle class="pin" cx="226.56" cy="232.44" r="1.25"/>
+<circle class="pin" cx="201.92" cy="219.56" r="1.25"/>
+<polygon class="surface" points="268.80,261.88 307.52,282.12 307.52,294.12 268.80,273.88" />
+<polygon class="surface" points="373.52,247.62 307.52,282.12 307.52,294.12 373.52,259.62" />
+<polygon class="solid" points="334.80,227.38 373.52,247.62 307.52,282.12 268.80,261.88" />
+<circle class="pin" cx="334.80" cy="234.74" r="1.25"/>
+<circle class="pin" cx="359.44" cy="247.62" r="1.25"/>
+<circle class="pin" cx="307.52" cy="274.76" r="1.25"/>
+<circle class="pin" cx="282.88" cy="261.88" r="1.25"/>
+<polyline class="fine" points="254.72,204.84 254.72,154.84" stroke-dasharray="3 5"/>
+<polyline class="fine" points="335.68,247.16 335.68,197.16" stroke-dasharray="3 5"/>
+<circle class="pin" cx="260.00" cy="44.00" r="2.2"/>
+<circle class="pin" cx="427.20" cy="131.40" r="2.2"/>
+<circle class="pin" cx="128.00" cy="113.00" r="2.2"/>
+<circle class="pin" cx="295.20" cy="200.40" r="2.2"/>
+</g>
+<g id="clawpro" class="module">
+<polygon class="surface" points="638.00,177.36 835.12,280.40 673.20,365.04 476.08,262.00" style="fill-opacity:.30;stroke-opacity:.09"/>
+<polyline class="fine" points="638.00,193.00 506.00,262.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="671.44,210.48 539.44,279.48" style="stroke-opacity:.07"/>
+<polyline class="fine" points="704.88,227.96 572.88,296.96" style="stroke-opacity:.07"/>
+<polyline class="fine" points="738.32,245.44 606.32,314.44" style="stroke-opacity:.07"/>
+<polyline class="fine" points="771.76,262.92 639.76,331.92" style="stroke-opacity:.07"/>
+<polyline class="fine" points="805.20,280.40 673.20,349.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="638.00,193.00 805.20,280.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="611.60,206.80 778.80,294.20" style="stroke-opacity:.07"/>
+<polyline class="fine" points="585.20,220.60 752.40,308.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="558.80,234.40 726.00,321.80" style="stroke-opacity:.07"/>
+<polyline class="fine" points="532.40,248.20 699.60,335.60" style="stroke-opacity:.07"/>
+<polyline class="fine" points="506.00,262.00 673.20,349.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="649.44,183.34 638.00,177.36 626.56,183.34" style="stroke-opacity:.26"/>
+<polyline class="fine" points="823.68,274.42 835.12,280.40 823.68,286.38" style="stroke-opacity:.26"/>
+<polyline class="fine" points="661.76,359.06 673.20,365.04 684.64,359.06" style="stroke-opacity:.26"/>
+<polyline class="fine" points="487.52,267.98 476.08,262.00 487.52,256.02" style="stroke-opacity:.26"/>
+<polyline class="fine" points="638.00,195.64 638.00,57.64" />
+<polyline class="fine" points="775.28,267.40 775.28,129.40" />
+<polyline class="fine" points="535.92,249.00 535.92,111.00" />
+<polyline class="fine" points="673.20,320.76 673.20,182.76" />
+<polygon class="surface" points="506.00,233.00 673.20,320.40 673.20,326.40 506.00,239.00" />
+<polygon class="surface" points="805.20,251.40 673.20,320.40 673.20,326.40 805.20,257.40" />
+<polygon class="solid" points="638.00,164.00 805.20,251.40 673.20,320.40 506.00,233.00" />
+<circle class="pin" cx="638.00" cy="171.36" r="1.25"/>
+<circle class="pin" cx="791.12" cy="251.40" r="1.25"/>
+<circle class="pin" cx="673.20" cy="313.04" r="1.25"/>
+<circle class="pin" cx="520.08" cy="233.00" r="1.25"/>
+<polygon class="fine" points="629.20,185.98 665.28,204.84 608.08,234.74 572.00,215.88" />
+<polyline class="fine" points="624.80,194.62 648.56,207.04" />
+<polygon class="fine" points="676.72,210.82 714.56,230.60 657.36,260.50 619.52,240.72" />
+<polyline class="fine" points="672.32,219.46 697.84,232.80" />
+<polygon class="fine" points="726.00,236.58 762.96,255.90 705.76,285.80 668.80,266.48" />
+<polyline class="fine" points="721.60,245.22 746.24,258.10" />
+<polyline class="fine" points="547.36,225.90 603.68,255.34" />
+<polygon class="surface" points="506.00,196.00 673.20,283.40 673.20,289.40 506.00,202.00" />
+<polygon class="surface" points="805.20,214.40 673.20,283.40 673.20,289.40 805.20,220.40" />
+<polygon class="solid" points="638.00,127.00 805.20,214.40 673.20,283.40 506.00,196.00" />
+<circle class="pin" cx="638.00" cy="134.36" r="1.25"/>
+<circle class="pin" cx="791.12" cy="214.40" r="1.25"/>
+<circle class="pin" cx="673.20" cy="276.04" r="1.25"/>
+<circle class="pin" cx="520.08" cy="196.00" r="1.25"/>
+<polygon class="fine" points="629.20,148.98 665.28,167.84 608.08,197.74 572.00,178.88" />
+<polyline class="fine" points="624.80,157.62 648.56,170.04" />
+<polygon class="fine" points="676.72,173.82 714.56,193.60 657.36,223.50 619.52,203.72" />
+<polyline class="fine" points="672.32,182.46 697.84,195.80" />
+<polygon class="fine" points="726.00,199.58 762.96,218.90 705.76,248.80 668.80,229.48" />
+<polyline class="fine" points="721.60,208.22 746.24,221.10" />
+<polyline class="fine" points="547.36,188.90 603.68,218.34" />
+<polygon class="surface" points="506.00,159.00 673.20,246.40 673.20,252.40 506.00,165.00" />
+<polygon class="blue" points="805.20,177.40 673.20,246.40 673.20,252.40 805.20,183.40" />
+<polygon class="blue" points="638.00,90.00 805.20,177.40 673.20,246.40 506.00,159.00" />
+<circle class="pin" cx="638.00" cy="97.36" r="1.25"/>
+<circle class="pin" cx="791.12" cy="177.40" r="1.25"/>
+<circle class="pin" cx="673.20" cy="239.04" r="1.25"/>
+<circle class="pin" cx="520.08" cy="159.00" r="1.25"/>
+<polygon class="fine" points="629.20,111.98 665.28,130.84 608.08,160.74 572.00,141.88" />
+<polyline class="fine" points="624.80,120.62 648.56,133.04" />
+<polygon class="fine" points="676.72,136.82 714.56,156.60 657.36,186.50 619.52,166.72" />
+<polyline class="fine" points="672.32,145.46 697.84,158.80" />
+<polygon class="fine" points="726.00,162.58 762.96,181.90 705.76,211.80 668.80,192.48" />
+<polyline class="fine" points="721.60,171.22 746.24,184.10" />
+<polyline class="fine" points="547.36,151.90 603.68,181.34" />
+<polygon class="surface" points="506.00,122.00 673.20,209.40 673.20,215.40 506.00,128.00" />
+<polygon class="surface" points="805.20,140.40 673.20,209.40 673.20,215.40 805.20,146.40" />
+<polygon class="solid" points="638.00,53.00 805.20,140.40 673.20,209.40 506.00,122.00" />
+<circle class="pin" cx="638.00" cy="60.36" r="1.25"/>
+<circle class="pin" cx="791.12" cy="140.40" r="1.25"/>
+<circle class="pin" cx="673.20" cy="202.04" r="1.25"/>
+<circle class="pin" cx="520.08" cy="122.00" r="1.25"/>
+<polygon class="fine" points="629.20,74.98 665.28,93.84 608.08,123.74 572.00,104.88" />
+<polyline class="fine" points="624.80,83.62 648.56,96.04" />
+<polygon class="fine" points="676.72,99.82 714.56,119.60 657.36,149.50 619.52,129.72" />
+<polyline class="fine" points="672.32,108.46 697.84,121.80" />
+<polygon class="fine" points="726.00,125.58 762.96,144.90 705.76,174.80 668.80,155.48" />
+<polyline class="fine" points="721.60,134.22 746.24,147.10" />
+<polyline class="blue-line" points="547.36,114.90 603.68,144.34" />
+<circle class="pin" cx="638.00" cy="68.64" r="1.65"/>
+<circle class="pin" cx="775.28" cy="140.40" r="1.65"/>
+<circle class="pin" cx="535.92" cy="122.00" r="1.65"/>
+<circle class="pin" cx="673.20" cy="193.76" r="1.65"/>
+<polyline class="blue-line" points="673.20,209.40 736.56,176.28" />
+</g>
+<g id="skillhub" class="module">
+<polygon class="surface" points="260.00,475.36 457.12,578.40 295.20,663.04 98.08,560.00" style="fill-opacity:.30;stroke-opacity:.09"/>
+<polyline class="fine" points="260.00,491.00 128.00,560.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="293.44,508.48 161.44,577.48" style="stroke-opacity:.07"/>
+<polyline class="fine" points="326.88,525.96 194.88,594.96" style="stroke-opacity:.07"/>
+<polyline class="fine" points="360.32,543.44 228.32,612.44" style="stroke-opacity:.07"/>
+<polyline class="fine" points="393.76,560.92 261.76,629.92" style="stroke-opacity:.07"/>
+<polyline class="fine" points="427.20,578.40 295.20,647.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="260.00,491.00 427.20,578.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="233.60,504.80 400.80,592.20" style="stroke-opacity:.07"/>
+<polyline class="fine" points="207.20,518.60 374.40,606.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="180.80,532.40 348.00,619.80" style="stroke-opacity:.07"/>
+<polyline class="fine" points="154.40,546.20 321.60,633.60" style="stroke-opacity:.07"/>
+<polyline class="fine" points="128.00,560.00 295.20,647.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="271.44,481.34 260.00,475.36 248.56,481.34" style="stroke-opacity:.26"/>
+<polyline class="fine" points="445.68,572.42 457.12,578.40 445.68,584.38" style="stroke-opacity:.26"/>
+<polyline class="fine" points="283.76,657.06 295.20,663.04 306.64,657.06" style="stroke-opacity:.26"/>
+<polyline class="fine" points="109.52,565.98 98.08,560.00 109.52,554.02" style="stroke-opacity:.26"/>
+<polygon class="surface" points="212.48,446.44 280.24,481.86 280.24,489.86 212.48,454.44" />
+<polygon class="surface" points="332.16,454.72 280.24,481.86 280.24,489.86 332.16,462.72" />
+<polygon class="solid" points="264.40,419.30 332.16,454.72 280.24,481.86 212.48,446.44" />
+<circle class="pin" cx="264.40" cy="426.66" r="1.25"/>
+<circle class="pin" cx="318.08" cy="454.72" r="1.25"/>
+<circle class="pin" cx="280.24" cy="474.50" r="1.25"/>
+<circle class="pin" cx="226.56" cy="446.44" r="1.25"/>
+<polyline class="fine" points="236.24,444.86 282.88,469.24" />
+<polyline class="fine" points="313.68,458.94 319.84,462.16" />
+<polyline class="fine" points="306.64,462.62 312.80,465.84" />
+<polyline class="fine" points="299.60,466.30 305.76,469.52" />
+<polygon class="fine" points="276.99,439.66 292.83,447.94 276.99,456.22 261.15,447.94" />
+<polyline class="fine" points="264.40,496.58 264.40,435.58" style="stroke-opacity:.11"/>
+<polyline class="fine" points="316.32,523.72 316.32,462.72" style="stroke-opacity:.11"/>
+<polygon class="surface" points="301.36,472.90 369.12,508.32 369.12,516.32 301.36,480.90" />
+<polygon class="blue" points="421.04,481.18 369.12,508.32 369.12,516.32 421.04,489.18" />
+<polygon class="blue" points="353.28,445.76 421.04,481.18 369.12,508.32 301.36,472.90" />
+<circle class="pin" cx="353.28" cy="453.12" r="1.25"/>
+<circle class="pin" cx="406.96" cy="481.18" r="1.25"/>
+<circle class="pin" cx="369.12" cy="500.96" r="1.25"/>
+<circle class="pin" cx="315.44" cy="472.90" r="1.25"/>
+<polyline class="blue-line" points="325.12,471.32 371.76,495.70" />
+<polyline class="fine" points="402.56,485.40 408.72,488.62" />
+<polyline class="fine" points="395.52,489.08 401.68,492.30" />
+<polyline class="fine" points="388.48,492.76 394.64,495.98" />
+<polygon class="blue" points="365.87,466.12 381.71,474.40 365.87,482.68 350.03,474.40" />
+<polyline class="fine" points="353.28,543.04 353.28,462.04" style="stroke-opacity:.11"/>
+<polyline class="fine" points="405.20,570.18 405.20,489.18" style="stroke-opacity:.11"/>
+<polygon class="surface" points="128.88,517.54 177.28,542.84 177.28,550.84 128.88,525.54" />
+<polygon class="surface" points="231.84,514.32 177.28,542.84 177.28,550.84 231.84,522.32" />
+<polygon class="solid" points="183.44,489.02 231.84,514.32 177.28,542.84 128.88,517.54" />
+<circle class="pin" cx="183.44" cy="496.38" r="1.25"/>
+<circle class="pin" cx="217.76" cy="514.32" r="1.25"/>
+<circle class="pin" cx="177.28" cy="535.48" r="1.25"/>
+<circle class="pin" cx="142.96" cy="517.54" r="1.25"/>
+<polyline class="fine" points="152.64,515.96 179.92,530.22" />
+<polyline class="fine" points="213.36,518.54 219.52,521.76" />
+<polyline class="fine" points="206.32,522.22 212.48,525.44" />
+<polyline class="fine" points="199.28,525.90 205.44,529.12" />
+<polygon class="fine" points="185.27,504.88 201.11,513.16 185.27,521.44 169.43,513.16" />
+<polyline class="fine" points="183.44,534.30 183.44,505.30" style="stroke-opacity:.11"/>
+<polyline class="fine" points="216.00,551.32 216.00,522.32" style="stroke-opacity:.11"/>
+<polygon class="surface" points="193.12,521.52 241.52,546.82 241.52,554.82 193.12,529.52" />
+<polygon class="surface" points="296.08,518.30 241.52,546.82 241.52,554.82 296.08,526.30" />
+<polygon class="solid" points="247.68,493.00 296.08,518.30 241.52,546.82 193.12,521.52" />
+<circle class="pin" cx="247.68" cy="500.36" r="1.25"/>
+<circle class="pin" cx="282.00" cy="518.30" r="1.25"/>
+<circle class="pin" cx="241.52" cy="539.46" r="1.25"/>
+<circle class="pin" cx="207.20" cy="521.52" r="1.25"/>
+<polyline class="fine" points="216.88,519.94 244.16,534.20" />
+<polyline class="fine" points="277.60,522.52 283.76,525.74" />
+<polyline class="fine" points="270.56,526.20 276.72,529.42" />
+<polyline class="fine" points="263.52,529.88 269.68,533.10" />
+<polygon class="fine" points="249.51,508.86 265.35,517.14 249.51,525.42 233.67,517.14" />
+<polyline class="fine" points="247.68,563.28 247.68,509.28" style="stroke-opacity:.11"/>
+<polyline class="fine" points="280.24,580.30 280.24,526.30" style="stroke-opacity:.11"/>
+<polygon class="surface" points="247.68,575.56 296.08,600.86 296.08,608.86 247.68,583.56" />
+<polygon class="surface" points="350.64,572.34 296.08,600.86 296.08,608.86 350.64,580.34" />
+<polygon class="solid" points="302.24,547.04 350.64,572.34 296.08,600.86 247.68,575.56" />
+<circle class="pin" cx="302.24" cy="554.40" r="1.25"/>
+<circle class="pin" cx="336.56" cy="572.34" r="1.25"/>
+<circle class="pin" cx="296.08" cy="593.50" r="1.25"/>
+<circle class="pin" cx="261.76" cy="575.56" r="1.25"/>
+<polyline class="fine" points="271.44,573.98 298.72,588.24" />
+<polyline class="fine" points="332.16,576.56 338.32,579.78" />
+<polyline class="fine" points="325.12,580.24 331.28,583.46" />
+<polyline class="fine" points="318.08,583.92 324.24,587.14" />
+<polygon class="fine" points="304.07,562.90 319.91,571.18 304.07,579.46 288.23,571.18" />
+<polyline class="fine" points="302.24,597.32 302.24,563.32" style="stroke-opacity:.11"/>
+<polyline class="fine" points="334.80,614.34 334.80,580.34" style="stroke-opacity:.11"/>
+<polyline class="line" points="134.16,549.22 289.04,630.18" style="stroke-opacity:.2"/>
+</g>
+<g id="octop" class="module">
+<polygon class="surface" points="638.00,478.36 835.12,581.40 673.20,666.04 476.08,563.00" style="fill-opacity:.30;stroke-opacity:.09"/>
+<polyline class="fine" points="638.00,494.00 506.00,563.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="671.44,511.48 539.44,580.48" style="stroke-opacity:.07"/>
+<polyline class="fine" points="704.88,528.96 572.88,597.96" style="stroke-opacity:.07"/>
+<polyline class="fine" points="738.32,546.44 606.32,615.44" style="stroke-opacity:.07"/>
+<polyline class="fine" points="771.76,563.92 639.76,632.92" style="stroke-opacity:.07"/>
+<polyline class="fine" points="805.20,581.40 673.20,650.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="638.00,494.00 805.20,581.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="611.60,507.80 778.80,595.20" style="stroke-opacity:.07"/>
+<polyline class="fine" points="585.20,521.60 752.40,609.00" style="stroke-opacity:.07"/>
+<polyline class="fine" points="558.80,535.40 726.00,622.80" style="stroke-opacity:.07"/>
+<polyline class="fine" points="532.40,549.20 699.60,636.60" style="stroke-opacity:.07"/>
+<polyline class="fine" points="506.00,563.00 673.20,650.40" style="stroke-opacity:.07"/>
+<polyline class="fine" points="649.44,484.34 638.00,478.36 626.56,484.34" style="stroke-opacity:.26"/>
+<polyline class="fine" points="823.68,575.42 835.12,581.40 823.68,587.38" style="stroke-opacity:.26"/>
+<polyline class="fine" points="661.76,660.06 673.20,666.04 684.64,660.06" style="stroke-opacity:.26"/>
+<polyline class="fine" points="487.52,568.98 476.08,563.00 487.52,557.02" style="stroke-opacity:.26"/>
+<polygon class="surface" points="506.00,542.00 673.20,629.40 673.20,638.40 506.00,551.00" />
+<polygon class="surface" points="805.20,560.40 673.20,629.40 673.20,638.40 805.20,569.40" />
+<polygon class="solid" points="638.00,473.00 805.20,560.40 673.20,629.40 506.00,542.00" />
+<circle class="pin" cx="638.00" cy="480.36" r="1.25"/>
+<circle class="pin" cx="791.12" cy="560.40" r="1.25"/>
+<circle class="pin" cx="673.20" cy="622.04" r="1.25"/>
+<circle class="pin" cx="520.08" cy="542.00" r="1.25"/>
+<polygon class="surface" points="638.00,473.00 805.20,560.40 805.20,437.40 638.00,350.00" style="fill-opacity:.48"/>
+<polygon class="surface" points="638.00,473.00 506.00,542.00 506.00,419.00 638.00,350.00" style="fill-opacity:.28"/>
+<polyline class="fine" points="646.80,465.60 646.80,364.60 794.64,441.88 794.64,542.88" />
+<polyline class="fine" points="658.24,388.58 658.24,407.58" />
+<polyline class="fine" points="669.68,394.56 669.68,413.56" />
+<polyline class="fine" points="681.12,400.54 681.12,419.54" />
+<polyline class="fine" points="692.56,406.52 692.56,425.52" />
+<polyline class="fine" points="704.00,412.50 704.00,431.50" />
+<polyline class="line" points="506.00,419.00 638.00,350.00 805.20,437.40 673.20,506.40" />
+<polyline class="line" points="673.20,506.40 673.20,629.40" />
+<polyline class="line" points="506.00,419.00 506.00,542.00" />
+<polyline class="blue-line" points="506.00,419.00 553.52,443.84" />
+<polygon class="surface" points="553.52,527.00 673.20,589.56 673.20,594.56 553.52,532.00" />
+<polygon class="blue" points="750.64,549.08 673.20,589.56 673.20,594.56 750.64,554.08" />
+<polygon class="blue" points="630.96,486.52 750.64,549.08 673.20,589.56 553.52,527.00" />
+<circle class="pin" cx="630.96" cy="493.88" r="1.25"/>
+<circle class="pin" cx="736.56" cy="549.08" r="1.25"/>
+<circle class="pin" cx="673.20" cy="582.20" r="1.25"/>
+<circle class="pin" cx="567.60" cy="527.00" r="1.25"/>
+<polygon class="surface" points="584.32,512.38 670.56,557.46 670.56,567.46 584.32,522.38" />
+<polygon class="surface" points="720.72,531.24 670.56,557.46 670.56,567.46 720.72,541.24" />
+<polygon class="solid" points="634.48,486.16 720.72,531.24 670.56,557.46 584.32,512.38" />
+<circle class="pin" cx="634.48" cy="493.52" r="1.25"/>
+<circle class="pin" cx="706.64" cy="531.24" r="1.25"/>
+<circle class="pin" cx="670.56" cy="550.10" r="1.25"/>
+<circle class="pin" cx="598.40" cy="512.38" r="1.25"/>
+<polygon class="fine" points="638.88,499.30 695.20,528.74 665.28,544.38 608.96,514.94" />
+<polyline class="blue-line" points="645.92,511.16 672.32,524.96" />
+<polyline class="fine" points="639.76,514.38 658.24,524.04" />
+<polyline class="fine" points="792.88,523.84 685.52,579.96" />
+<polyline class="fine" points="792.88,487.84 685.52,543.96" />
+<circle class="pin" cx="638.00" cy="350.00" r="2.2"/>
+<circle class="pin" cx="805.20" cy="437.40" r="2.2"/>
+<circle class="pin" cx="506.00" cy="419.00" r="2.2"/>
+<circle class="pin" cx="673.20" cy="506.40" r="2.2"/>
+</g></svg>

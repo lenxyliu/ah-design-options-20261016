@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102A50">
+  <meta name="description" content="腾讯云 Agent Hosting 产品家族：Lighthouse Agent、ClawPro、SkillHub 与 Octop。空间交互设计预览。">
+  <title>Agent Hosting — 腾讯云智能体托管 · 设计预览</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./cinematic.css">
+  <link rel="stylesheet" href="./workspace.css">
+  <link rel="stylesheet" href="./cube-unfold.css">
+  <link rel="stylesheet" href="./studio-material.css">
+  <link rel="stylesheet" href="./interface-finish.css">
+  <link rel="stylesheet" href="./paper-material.css">
+  <link rel="stylesheet" href="./material-switch.css">
+</head>
+<body data-view="overview" data-material="wire">
+  <a class="skip-link" href="#product-navigation">选择产品</a>
+  <div class="world" id="world">
+    <div id="workspace-stage" aria-label="Agent Hosting 四款独立产品的空间预览"></div>
+    <div class="scene-fallback" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="world-atmosphere" aria-hidden="true"></div>
+    <div id="scene-labels" class="scene-labels" aria-hidden="true"></div>
+  </div>
+
+  <header class="site-header">
+    <button class="brand" id="brand-home" aria-label="Agent Hosting，返回产品家族总览"><span class="tencent">腾讯云</span><span class="brand-divider"></span><span class="brand-product">Agent Hosting</span></button>
+    <nav class="global-nav" aria-label="主导航">
+      <button class="nav-link is-active" data-route="overview">产品家族</button>
+      <button class="nav-link" data-route="applications">应用场景</button>
+      <button class="nav-link" data-route="resources">资源</button>
+      <a class="nav-link version-link" href="../../#v09" rel="noopener" aria-label="回看历史设计版本" target="_top">版本 ↗</a>
+    </nav>
+    <button class="header-explore" id="header-explore">探索产品<span aria-hidden="true">↗</span></button>
+  </header>
+
+  <div id="stage-media-container"></div>
+  <div class="scroll-runway" aria-hidden="true"></div>
+  <main id="main">
+    <section class="overview" aria-labelledby="hero-title">
+      <div class="hero-identity"><p class="eyebrow">TENCENT CLOUD / AGENT HOSTING</p><h1 id="hero-title">Agent <span>Hosting</span><span class="title-point" aria-hidden="true"></span></h1><p class="hero-category">腾讯云智能体托管 · 四款产品，四种开始方式</p></div>
+      <div class="overview-context"><p>云端运行、企业管控、技能与自托管。<br>从你的需要，找到合适的起点。</p><button class="text-link" id="family-guide">如何选择 <span aria-hidden="true">↗</span></button></div>
+      <div class="overview-note"><span class="live-line" aria-hidden="true"></span><span>向下滚动，展开 Agent 的可能</span></div>
+    </section>
+
+    <section class="relation-copy" aria-label="Agent Hosting 与产品家族的关系">
+      <p class="chapter-kicker">01 / THE PRODUCT FAMILY</p>
+      <h2>一个家族。<br>四种开始方式。</h2>
+      <p>Agent Hosting 是共同的产品家族，<br class="desktop-break">四款产品各自解决不同的 Agent 需求。</p>
+      <p class="relation-note">四者并行，各自拥有产品入口。<br>你可以独立选用，并按实际需要组合。</p>
+      <button class="text-link quiet" data-route="family">查看选择指南 <span aria-hidden="true">↗</span></button>
+    </section>
+
+    <section class="focus-copy" id="focus-copy" aria-live="polite" aria-atomic="true" aria-label="当前产品" hidden>
+      <p class="breadcrumb"><button data-route="overview">Agent Hosting</button><span aria-hidden="true">/</span><span id="focus-breadcrumb"></span></p>
+      <p class="focus-category" id="focus-category"></p>
+      <h2 id="focus-title"></h2>
+      <p class="focus-intro" id="focus-intro"></p>
+      <div class="focus-features" id="focus-features"></div>
+      <div class="focus-actions"><button class="primary-button" id="open-detail">深入了解 <span aria-hidden="true">↗</span></button><button class="text-link quiet" data-route="overview">回到总览</button></div>
+    </section>
+    <section class="closing-copy" aria-label="继续探索产品">
+      <p class="chapter-kicker">06 / YOUR NEXT STEP</p>
+      <h2>从你的需要出发。</h2>
+      <p>找到起点，再把想法变成<br>可以持续运行的 Agent。</p>
+      <div class="closing-actions"><button class="primary-button" data-route="family">找到适合我的产品 <span aria-hidden="true">↗</span></button><button class="text-link quiet" data-route="resources">浏览产品资源 →</button></div>
+    </section>
+  </main>
+  <div class="journey-indicator" aria-hidden="true"><span id="journey-number">00</span><i></i><span id="journey-label">INTRODUCTION</span></div>
+  <div class="journey-track" aria-hidden="true"><i id="journey-progress"></i></div>
+  <button class="scroll-cue" id="scroll-cue" aria-label="查看方块表面展开"><span>SCROLL TO UNFOLD</span><i aria-hidden="true">↓</i></button>
+
+  <footer class="product-footer">
+    <div class="family-sign"><span class="family-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>AGENT HOSTING<br><b>PRODUCT FAMILY</b></span></div>
+    <nav class="product-navigation" id="product-navigation" aria-label="产品家族"></nav>
+    <button class="motion-control" id="motion-control" aria-pressed="false" aria-label="减少动态效果"><span aria-hidden="true">◌</span><span>动态</span></button>
+  </footer>
+  <p class="screen-reader-status sr-only" id="status" role="status"></p>
+
+  <dialog class="content-dialog" id="content-dialog" aria-labelledby="dialog-title">
+    <button class="dialog-outside" aria-label="关闭内容，返回产品空间"></button>
+    <div class="dialog-surface">
+      <header class="dialog-header"><button class="dialog-home text-link" data-close-dialog>← 返回空间</button><span class="dialog-breadcrumb">AGENT HOSTING</span><button class="close-button" data-close-dialog aria-label="关闭">×</button></header>
+      <div id="dialog-content" class="dialog-content"></div>
+    </div>
+  </dialog>
+
+  <script type="module" src="./app.js"></script>
+  <script type="module" src="./material-switch.js"></script>
+</body>
+</html>

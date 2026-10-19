@@ -9,7 +9,6 @@ const historicalProducts = [
 const bounded = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
 const smoothUnit = value => value * value * (3 - 2 * value);
 const PRODUCT_SPIN_RATE = Math.PI * 2 / 60;
-const PRODUCT_FRONT_HOLD = 2;
 const HERO_SPIN_RATE = Math.PI * 2 / 160;
 
 /** Exact V07 product endpoints, kept separately from the approved homepage. */
@@ -423,8 +422,7 @@ export function mountSculpture(canvas) {
   let raf = 0, disposed = false, inView = true, pageVisible = !document.hidden;
   let lastTime = 0, elapsed = 0, productSpin = 0, heroSpin = 0, first = true;
   let productClockRunning = false, heroClockRunning = false;
-  let productFacingIndex = null, productEntryPending = false, productSpinStart = 0;
-  let productEntryPosition = 0, productEntryStableTime = 0;
+  let productFacingIndex = null, productSpinStart = 0;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, Number(n) || 0));
   const mix = (a, b, t) => a + (b - a) * t;
   const smooth = n => n * n * (3 - 2 * n);
@@ -510,33 +508,17 @@ export function mountSculpture(canvas) {
     if (target.productMix > .006) {
       if (productFacingIndex !== productTransition.activeIndex) {
         productFacingIndex = productTransition.activeIndex;
-        productEntryPending = true;
+        // The existing fade swaps the active form at its invisible midpoint.
+        // Only that swap establishes a new local front-facing origin; scroll
+        // settling and entry readiness never restart or hold the idle clock.
         productSpinStart = productSpin;
-        productEntryPosition = productTransition.position;
-        productEntryStableTime = 0;
-      }
-      if (Math.abs(productTransition.position - productEntryPosition) > 1e-5) {
-        productEntryPosition = productTransition.position;
-        productEntryStableTime = 0;
-      } else productEntryStableTime += productClockDt;
-      // Keep the incoming sculpture at its approved orientation throughout
-      // entry, then briefly show that exact front before its slow idle turn.
-      // Readiness comes from the real reading stage, not its visual entrance
-      // blend: a header-aligned anchor can legitimately stop below .994.
-      const productReady = typeof state.productReady === 'boolean' ? state.productReady : target.productMix >= .994;
-      const frontDistance = Math.abs(productTransition.position - productFacingIndex);
-      const frontSettled = frontDistance < 1e-5 || (frontDistance <= .01 + 1e-7
-        && productTransition.opacity >= .998 && productEntryStableTime >= .18)
-        // Native keyboard input or an interrupted wheel settle can leave a
-        // visible product between endpoints. Once that exact view is still,
-        // give it the same finite front hold rather than locking it forever.
-        || (productTransition.opacity > .006 && productEntryStableTime >= .35);
-      if (productEntryPending && productReady && frontSettled) {
-        productEntryPending = false;
-        productSpinStart = productSpin + PRODUCT_FRONT_HOLD * PRODUCT_SPIN_RATE;
       }
     }
-    const productDisplaySpin = productEntryPending ? 0 : Math.max(0, productSpin - productSpinStart);
+    const productLocalSpin = Math.max(0, productSpin - productSpinStart);
+    // Slow down smoothly around the approved front instead of stopping there.
+    // Angular speed stays positive (.55–1.45 of the base rate), and each full
+    // underlying sixty-second revolution remains one complete visible turn.
+    const productDisplaySpin = productLocalSpin - .45 * Math.sin(productLocalSpin);
     const fitProducts = state.artBounds && Number.isFinite(state.artBounds.left) && Number.isFinite(state.artBounds.bottom);
     if (Number.isFinite(state.sceneOpacity)) current.opacity = target.opacity;
     const heroAlpha = current.opacity * (1 - current.productMix);
@@ -586,8 +568,8 @@ export function mountSculpture(canvas) {
     canvas.dataset.productSpin = productSpin.toFixed(6);
     canvas.dataset.productSpinRate = String(PRODUCT_SPIN_RATE);
     canvas.dataset.productDisplaySpin = productDisplaySpin.toFixed(6);
-    canvas.dataset.productFacing = productEntryPending ? 'entering-front' : productDisplaySpin === 0 ? 'front-hold' : 'idle-turn';
-    canvas.dataset.productFrontHold = String(PRODUCT_FRONT_HOLD);
+    canvas.dataset.productFacing = 'idle-turn';
+    canvas.dataset.productFrontHold = '0';
     canvas.dataset.heroSpin = heroSpin.toFixed(6);
     canvas.dataset.heroSpinRate = String(HERO_SPIN_RATE);
     canvas.dataset.sculptureHandoff = 'solid-spatial-exit';

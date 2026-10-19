@@ -1,7 +1,7 @@
 {
   "schemeId": "open-field",
-  "revision": "e4a70216c32b4ab9",
-  "contentHash": "e4a70216c32b4ab94b7c5b9ba42140b6173b902c357bc98aff619b9e3138c5b2",
+  "revision": "b632b79078e6f1d6",
+  "contentHash": "b632b79078e6f1d6a087422795e6789b1769fcb3179fb159547806c8f0f927de",
   "files": {
     "app.js": {
       "bytes": 18083,
@@ -20,16 +20,16 @@
       "sha256": "95d318b1d9bf03a296308f4ea02d6eab1ab69414574d91a90dad013317019679"
     },
     "en.html": {
-      "bytes": 9446,
-      "sha256": "127d63ca9912fca53ebd0da37f989d1848d0ebb4916d32c78bcf27183c57100a"
+      "bytes": 9438,
+      "sha256": "8c2ccd59a5b30528a9605e2d2cd2007ce2f33fe11f812debe959c8bbff14bca2"
     },
     "index.html": {
-      "bytes": 9419,
-      "sha256": "95c40d4bc07fae5919968cfa0b54e92f98e97529854a56478b7f7ea56af36d94"
+      "bytes": 9411,
+      "sha256": "31392b96d2707869a1a5ddd8a8cbeab1cb30e0a75767b6256eb2a931c4a58001"
     },
     "pointer-follow.js": {
-      "bytes": 6435,
-      "sha256": "28cb6765f7b2dc7c4d4c88f61b97f2397e53c10316e35cd2ec9b91f70da78243"
+      "bytes": 10297,
+      "sha256": "1c2c9f68301326117646707479b82bb8ef850b7e4b4b836186cae5e313dc691e"
     },
     "product-copy-fit.js": {
       "bytes": 3607,
@@ -52,12 +52,12 @@
       "sha256": "d60a68946f879ab3f338ac2e17dfb34bc00522c9c9b7f99f35fa7c4fb94401bb"
     },
     "sculpture.js": {
-      "bytes": 36315,
-      "sha256": "ed6c58047c5a58357a127987f0821fd2ca1296e1451a3dc08566df3ee434c5f6"
+      "bytes": 35085,
+      "sha256": "f17523ce3bff5c77ddb0b3459455a55b81e7d9bf5672b0886330087a59c140d3"
     },
     "styles.css": {
-      "bytes": 33139,
-      "sha256": "176a71312fa36ae6b7bd3f6b673719f9e6854a54fe0057878a2375079d7bb819"
+      "bytes": 35583,
+      "sha256": "3c50a100e567a37048968a54211a642ce4bf1aaf72765f472087e18a233391ab"
     },
     "vendor/LICENSE-three.txt": {
       "bytes": 1081,

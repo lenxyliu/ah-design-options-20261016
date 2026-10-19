@@ -107,6 +107,53 @@ body.dialog-open .art-pointer{display:none}
 .hero-copy .round-link:hover .round-arrow,.hero-copy .round-link:focus-visible .round-arrow{transform:translate(2px,2px)}
 @media(max-width:800px){.hero-copy .round-link{font-size:12px}.round-link,.product-intro .round-link{gap:10px}.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{width:13px;height:13px}}
 
+/* Applications: an editorial continuation after the complete product journey. */
+.applications-extension{position:relative;z-index:3;padding:92px var(--gutter) 36px;background:var(--paper);color:var(--ink)}
+.applications-extension h2{font-size:clamp(28px,2.7vw,44px);font-weight:400;line-height:1.45;letter-spacing:-.045em;margin:0 0 42px;max-width:1000px;text-wrap:balance}
+.applications-extension h2 em{display:inline-block;max-width:100%;font-family:"Songti SC","STSong",Georgia,"Times New Roman",serif;font-style:normal}
+.applications-extension h3{font-size:clamp(18px,1.65vw,26px);font-weight:400;line-height:1.5;letter-spacing:-.025em;margin:0}
+.applications-extension p{font-size:13px;line-height:1.95;color:#73756b;margin:0}
+.applications-extension a{display:inline-flex;align-items:baseline;gap:9px;width:fit-content;max-width:100%;min-height:36px;padding:9px 0;font-size:12px;line-height:1.5;transition:color .25s}
+.applications-extension a>span{flex:none;font-size:14px;line-height:1}
+.applications-extension a:hover,.applications-extension a:focus-visible{color:var(--blue)}
+.applications-extension .extension-scene-list,.applications-extension .extension-capability-list{border-top:1px solid var(--line)}
+.applications-extension .extension-scene{display:grid;grid-template-columns:26% 1fr 24%;gap:28px;align-items:center;min-height:116px;padding:25px 0;border-bottom:1px solid var(--line)}
+.applications-extension .extension-scene p{max-width:440px}
+.applications-extension .extension-scene>a{justify-self:end}
+.applications-extension .extension-capabilities{margin-top:80px}
+.applications-extension .extension-capability{display:grid;grid-template-columns:26% 1fr;gap:28px;padding:29px 0 25px;border-bottom:1px solid var(--line)}
+.applications-extension .extension-capability h3{padding-top:1px;font-size:24px}
+.applications-extension .extension-capability h3>span{display:block;font-size:11px;line-height:1.65;letter-spacing:0;color:#73756b;margin-top:7px}
+.applications-extension .extension-capability-copy p{max-width:670px}
+.applications-extension .extension-links{display:flex;flex-wrap:wrap;gap:4px 28px;margin-top:9px}
+.applications-extension .extension-links>a:first-child{color:var(--blue)}
+.applications-extension .extension-endpoints{display:flex;align-items:baseline;justify-content:flex-end;flex-wrap:wrap;gap:12px 38px;padding-top:26px}
+.applications-extension .extension-pending{display:inline-flex;align-items:baseline;flex-wrap:wrap;gap:10px;color:#8a8b82;font-size:12px;line-height:1.5}
+.applications-extension .extension-pending [aria-disabled]{cursor:default}
+.applications-extension .extension-pending small{font-size:9px;color:#929389}
+@media(max-width:1000px) and (min-width:801px){
+  .applications-extension .extension-scene{grid-template-columns:23% 1fr 27%;gap:22px}
+  .applications-extension .extension-capability{grid-template-columns:23% 1fr;gap:22px}
+  .applications-extension p{font-size:12px}
+  .applications-extension a{font-size:11px}
+}
+@media(max-width:800px){
+  .applications-extension{padding-top:60px;padding-bottom:24px;scroll-margin-top:-12px}
+  .applications-extension h2{font-size:clamp(26px,5.6vw,37px);line-height:1.55;letter-spacing:-.04em;margin-bottom:30px;max-width:620px;text-wrap:initial}
+  .applications-extension .extension-scene{grid-template-columns:1fr;gap:10px;min-height:0;padding:25px 0 21px}
+  .applications-extension h3{font-size:20px}
+  .applications-extension p{font-size:12px;line-height:1.9;max-width:100%}
+  .applications-extension .extension-scene>a{justify-self:start;margin-top:1px}
+  .applications-extension a{font-size:11px;min-height:38px}
+  .applications-extension .extension-capabilities{margin-top:58px}
+  .applications-extension .extension-capability{grid-template-columns:1fr;gap:19px;padding:26px 0 22px}
+  .applications-extension .extension-capability h3{font-size:23px}
+  .applications-extension .extension-capability h3>span{font-size:11px;margin-top:5px}
+  .applications-extension .extension-links{gap:0 21px;margin-top:12px}
+  .applications-extension .extension-endpoints{justify-content:flex-start;gap:6px 25px;padding-top:21px}
+  .applications-extension .extension-pending{font-size:11px}
+}
+
 /* One liquid-metal pointer throughout the introduction. */
 html.has-custom-pointer,html.has-custom-pointer *{cursor:none!important}
 .art-pointer{z-index:1000;isolation:isolate}

@@ -2,8 +2,9 @@ const PRODUCT_COUNT = 4;
 const TRANSITION_START = 0.9;
 const GESTURE_NAVIGATION_DELAY = 750;
 const TAB_TURN_DURATION = 1000;
-const WHEEL_SETTLE_DELAY = 180;
-const WHEEL_SETTLE_DURATION = 260;
+const WHEEL_SETTLE_DELAY = 100;
+const WHEEL_SETTLE_DURATION = 220;
+const WHEEL_SETTLE_MIN_DURATION = 120;
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const interactiveSelector = 'a,button,input,textarea,select,summary,dialog,[role="button"],[role="tab"],[contenteditable=""],[contenteditable="true"],[data-journey-no-swipe]';
 
@@ -44,6 +45,8 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
   let wheelReset = 0;
   let navigationLockedUntil = 0;
   let navigationFrame = 0;
+  let navigationDirection = 0;
+  let heldInput = false;
   let wheelSettleTimer = 0;
   let wheelSettleDirection = 0;
   let wheelScrollOrigin = 0;
@@ -97,6 +100,7 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
     // vertical reading pauses. Invert the scroll curve so copy and sculpture
     // still use the real scroll sample, including after an interruption.
     const duration = (options.duration || TAB_TURN_DURATION) + Math.max(0, Math.abs(target - from.position) - 1) * 180;
+    navigationDirection = Math.sign(target - from.position);
     let started;
     function turn(time) {
       navigationFrame = 0;
@@ -112,6 +116,7 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
       window.scrollTo({ top: progress === 1 ? destination : top + travel * global, behavior: 'instant' });
       read();
       if (progress < 1) navigationFrame = window.requestAnimationFrame(turn);
+      else navigationDirection = 0;
     }
     navigationFrame = window.requestAnimationFrame(turn);
     return read();
@@ -120,6 +125,7 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
   function cancelNavigation() {
     if (navigationFrame) window.cancelAnimationFrame(navigationFrame);
     navigationFrame = 0;
+    navigationDirection = 0;
     clearTimeout(wheelSettleTimer);
     wheelSettleTimer = 0;
     wheelSettleDirection = 0;
@@ -127,20 +133,27 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
   }
   function queueWheelSettle() {
     clearTimeout(wheelSettleTimer);
+    wheelSettleTimer = 0;
+    // Keep the pending direction while a pointer/touch owns the page. Release
+    // will re-arm this same unfinished handoff instead of abandoning it.
+    if (heldInput || mouseDrag || touch) return;
     wheelSettleTimer = setTimeout(() => {
       wheelSettleTimer = 0;
       const direction = wheelSettleDirection;
       const moved = wheelDidScroll;
+      if (heldInput || mouseDrag || touch) return;
       wheelSettleDirection = 0;
       wheelDidScroll = false;
-      if (!direction || !moved || disposed || navigationFrame || mouseDrag || touch) return;
+      if (!direction || !moved || disposed || navigationFrame) return;
+      if (typeof document !== 'undefined' && document.querySelector?.('dialog[open]')) return;
       const current = read();
       if (!current.active || Math.abs(current.position - Math.round(current.position)) < .001) return;
       // A stopped wheel must leave a full page to read. Finish the small
       // remaining handoff in its input direction, then start the next reading
       // interval near its edge. No timer advances a stable reading screen.
       const target = direction > 0 ? Math.ceil(current.position) : Math.floor(current.position);
-      goTo(target, { duration: WHEEL_SETTLE_DURATION, local: direction > 0 ? .02 : TRANSITION_START - .02 });
+      const duration = Math.max(WHEEL_SETTLE_MIN_DURATION, WHEEL_SETTLE_DURATION * Math.abs(target - current.position));
+      goTo(target, { duration, local: direction > 0 ? .02 : TRANSITION_START - .02 });
     }, WHEEL_SETTLE_DELAY);
   }
   function onNativeScroll() {
@@ -152,19 +165,62 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
   function interruptNavigation(event) {
     // Horizontal trackpad momentum is part of its current gesture. Native
     // vertical scrolling, a new pointer action, or a key takes over at once.
+    if (event.type === 'wheel' && Math.abs(event.deltaX) <= 18 && Math.abs(event.deltaY) <= .1) return;
     if (event.type === 'wheel' && Math.abs(event.deltaX) > Math.abs(event.deltaY) * 1.6) {
+      // A few pixels of cross-axis trackpad noise are not a new gesture. Only
+      // clear a vertical settle when the stage can really act on this swipe.
+      if (Math.abs(event.deltaX) <= 18 || isInteractive(event.target)
+        || (typeof stage.contains === 'function' && !stage.contains(event.target))) return;
+      const current = read();
+      const next = current.selectedIndex + (event.deltaX > 0 ? 1 : -1);
+      if (!current.active || next < 0 || next >= PRODUCT_COUNT) return;
       clearTimeout(wheelSettleTimer);
       wheelSettleTimer = 0;
       wheelSettleDirection = 0;
       wheelDidScroll = false;
       return;
     }
+    let keyboardDirection = 0;
+    if (event.type === 'keydown') {
+      if (['ArrowUp', 'PageUp', 'Home'].includes(event.key)) keyboardDirection = -1;
+      else if (['ArrowDown', 'PageDown', 'End'].includes(event.key)) keyboardDirection = 1;
+      else if (event.key === ' ') keyboardDirection = event.shiftKey ? -1 : 1;
+      else return; // Tab, modifiers and body left/right arrows do not own scroll.
+      if (event.target instanceof Element && event.target.closest('input,textarea,select,[contenteditable=""],[contenteditable="true"]')) return;
+    }
+    if (event.type === 'pointerdown' || event.type === 'touchstart') {
+      if (event.type === 'pointerdown' && (event.isPrimary === false || (event.button !== undefined && event.button !== 0))) return;
+      const direction = wheelSettleDirection || navigationDirection;
+      const moved = wheelDidScroll || Boolean(navigationFrame);
+      cancelNavigation();
+      heldInput = true;
+      const current = read();
+      if (direction && moved && current.active && Math.abs(current.position - Math.round(current.position)) >= .001) {
+        wheelSettleDirection = direction;
+        wheelDidScroll = true;
+        wheelScrollOrigin = window.scrollY;
+      }
+      return;
+    }
     cancelNavigation();
-    if (event.type === 'wheel' && Math.abs(event.deltaY) > .1) {
+    if ((event.type === 'wheel' && Math.abs(event.deltaY) > .1) || keyboardDirection) {
       wheelScrollOrigin = window.scrollY;
-      wheelSettleDirection = event.deltaY > 0 ? 1 : -1;
+      wheelSettleDirection = keyboardDirection || (event.deltaY > 0 ? 1 : -1);
       queueWheelSettle();
     }
+  }
+  function releaseInput(event) {
+    if (event.type === 'touchend' && event.touches?.length) return;
+    if (event.type.startsWith('pointer') || event.type === 'lostpointercapture') clearMouseDrag();
+    if (event.type.startsWith('touch')) touch = null;
+    heldInput = false;
+    if (!disposed && !navigationFrame && wheelSettleDirection && wheelDidScroll) queueWheelSettle();
+  }
+  function releaseLostInput() {
+    clearMouseDrag();
+    touch = null;
+    heldInput = false;
+    if (!disposed && !navigationFrame && wheelSettleDirection && wheelDidScroll) queueWheelSettle();
   }
 
   function isInteractive(target) {
@@ -284,6 +340,10 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
     window.addEventListener(type, interruptNavigation, { capture: true, passive: true });
   }
   window.addEventListener('scroll', onNativeScroll, { passive: true });
+  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture', 'touchend', 'touchcancel']) {
+    window.addEventListener(type, releaseInput, { passive: true });
+  }
+  window.addEventListener('blur', releaseLostInput, { passive: true });
 
   return {
     read,
@@ -293,6 +353,7 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
       disposed = true;
       cancelNavigation();
       touch = null;
+      heldInput = false;
       navigationLockedUntil = 0;
       clearMouseDrag();
       clearTimeout(wheelReset);
@@ -309,6 +370,8 @@ export function createProductJourney({ section, stage, onIndex, onProgress, redu
         window.removeEventListener(type, interruptNavigation, { capture: true });
       }
       window.removeEventListener('scroll', onNativeScroll);
+      for (const type of ['pointerup', 'pointercancel', 'lostpointercapture', 'touchend', 'touchcancel']) window.removeEventListener(type, releaseInput);
+      window.removeEventListener('blur', releaseLostInput);
     },
   };
 }

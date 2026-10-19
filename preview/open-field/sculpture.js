@@ -417,10 +417,12 @@ export function mountSculpture(canvas) {
   });
 
   const state = { section: 'hero', progress: 0, product: 0, productPosition: 0, heroToManifesto: undefined, sceneOpacity: undefined, octopColor: 'purple', pointerX: 0, pointerY: 0, drag: 0, heroDragging: false, anchorX: undefined, anchorY: undefined, sizeFactor: 1, paused: false, reduced: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false };
+  const productFitCache = products.map(() => null);
   const current = { x: 0, y: 0, scale: 1, rx: .25, ry: -.42, rz: -.17, opacity: 1, productMix: 0 };
   let width = 1, height = 1, mobile = false, worldW = 1, worldH = 1;
   let raf = 0, disposed = false, inView = true, pageVisible = !document.hidden;
   let lastTime = 0, elapsed = 0, productSpin = 0, heroSpin = 0, first = true;
+  let productClockRunning = false, heroClockRunning = false;
   let productFacingIndex = null, productEntryPending = false, productSpinStart = 0;
   let productEntryPosition = 0, productEntryStableTime = 0;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, Number(n) || 0));
@@ -462,7 +464,8 @@ export function mountSculpture(canvas) {
   function tick(time) {
     raf = 0;
     if (disposed || !inView || !pageVisible) return;
-    const dt = lastTime ? Math.min((time - lastTime) / 1000, .06) : 1 / 60;
+    const visibleDt = lastTime ? Math.max(0, (time - lastTime) / 1000) : 1 / 60;
+    const dt = Math.min(visibleDt, .06);
     lastTime = time;
     const dynamic = !state.paused && !state.reduced;
     if (dynamic) elapsed += dt;
@@ -470,10 +473,15 @@ export function mountSculpture(canvas) {
     // A continuous underlying clock survives every tab. Each incoming form
     // gets a local front-facing origin while it is invisible at the midpoint.
     // Freeze the clock while paused, reduced, hidden or outside products.
-    if (dynamic && target.productMix > .006 && target.opacity > .006) productSpin += dt * PRODUCT_SPIN_RATE;
+    const productClockActive = dynamic && target.productMix > .006 && target.opacity > .006;
+    const productClockDt = productClockActive ? (productClockRunning ? visibleDt : dt) : 0;
+    productSpin += productClockDt * PRODUCT_SPIN_RATE;
+    productClockRunning = productClockActive;
     // Turn the approved silver/blue pair as one object. Its phase survives
     // reading pauses and handoffs, while pointer dragging temporarily takes over.
-    if (dynamic && !state.heroDragging && target.productMix < .994 && target.opacity > .006) heroSpin += dt * HERO_SPIN_RATE;
+    const heroClockActive = dynamic && !state.heroDragging && target.productMix < .994 && target.opacity > .006;
+    heroSpin += (heroClockActive ? (heroClockRunning ? visibleDt : dt) : 0) * HERO_SPIN_RATE;
+    heroClockRunning = heroClockActive;
     const ease = first || state.reduced ? 1 : 1 - Math.exp(-dt * 7);
     let unsettled = false;
     for (const name of ['x', 'y', 'scale', 'rx', 'ry', 'rz', 'opacity', 'productMix']) {
@@ -496,7 +504,8 @@ export function mountSculpture(canvas) {
     root.updateMatrixWorld(true);
     // The outgoing idea sculpture and the incoming product use independent
     // anchors while sharing the same uninterrupted scroll sample.
-    positionIdeaSculpture(breath);
+    const heroProjectionOpacity = Number.isFinite(state.sceneOpacity) ? target.opacity : current.opacity;
+    if (heroProjectionOpacity * (1 - current.productMix) > .006) positionIdeaSculpture(breath);
     const productTransition = sampleProductTransition(state.productPosition, { reduced: state.reduced });
     if (target.productMix > .006) {
       if (productFacingIndex !== productTransition.activeIndex) {
@@ -509,7 +518,7 @@ export function mountSculpture(canvas) {
       if (Math.abs(productTransition.position - productEntryPosition) > 1e-5) {
         productEntryPosition = productTransition.position;
         productEntryStableTime = 0;
-      } else if (dynamic) productEntryStableTime += dt;
+      } else productEntryStableTime += productClockDt;
       // Keep the incoming sculpture at its approved orientation throughout
       // entry, then briefly show that exact front before its slow idle turn.
       // Readiness comes from the real reading stage, not its visual entrance
@@ -517,7 +526,11 @@ export function mountSculpture(canvas) {
       const productReady = typeof state.productReady === 'boolean' ? state.productReady : target.productMix >= .994;
       const frontDistance = Math.abs(productTransition.position - productFacingIndex);
       const frontSettled = frontDistance < 1e-5 || (frontDistance <= .01 + 1e-7
-        && productTransition.opacity >= .998 && productEntryStableTime >= .18);
+        && productTransition.opacity >= .998 && productEntryStableTime >= .18)
+        // Native keyboard input or an interrupted wheel settle can leave a
+        // visible product between endpoints. Once that exact view is still,
+        // give it the same finite front hold rather than locking it forever.
+        || (productTransition.opacity > .006 && productEntryStableTime >= .35);
       if (productEntryPending && productReady && frontSettled) {
         productEntryPending = false;
         productSpinStart = productSpin + PRODUCT_FRONT_HOLD * PRODUCT_SPIN_RATE;
@@ -525,15 +538,29 @@ export function mountSculpture(canvas) {
     }
     const productDisplaySpin = productEntryPending ? 0 : Math.max(0, productSpin - productSpinStart);
     const fitProducts = state.artBounds && Number.isFinite(state.artBounds.left) && Number.isFinite(state.artBounds.bottom);
-    const poses = fitProducts ? products.map((mesh, index) => fitHistoricalProductPose({
-      index, position: state.productPosition, width, height, artBounds: state.artBounds,
-      rootMatrix: root.matrixWorld, positions: mesh.geometry.attributes.position.array,
-      cameraPosition: camera.position.toArray(), cameraFov: camera.fov, cameraNear: camera.near,
-      reduced: state.reduced, spin: productDisplaySpin
-    })) : sampleProductHandoff(state.productPosition, { reduced: state.reduced, spin: productDisplaySpin });
     if (Number.isFinite(state.sceneOpacity)) current.opacity = target.opacity;
     const heroAlpha = current.opacity * (1 - current.productMix);
     const productAlpha = current.opacity * current.productMix;
+    const poses = sampleProductHandoff(state.productPosition, { reduced: state.reduced, spin: productDisplaySpin }).map((pose, index) => {
+      if (!fitProducts) return pose;
+      // Only the one visible opaque form needs an exact full-vertex fit.
+      // Hidden forms keep their lightweight pose and cached placement; a form
+      // is freshly fitted on the same frame that it becomes visible again.
+      if (productAlpha * pose.weight > .006) {
+        const fitted = fitHistoricalProductPose({
+          index, position: state.productPosition, width, height, artBounds: state.artBounds,
+          rootMatrix: root.matrixWorld, positions: products[index].geometry.attributes.position.array,
+          cameraPosition: camera.position.toArray(), cameraFov: camera.fov, cameraNear: camera.near,
+          reduced: state.reduced, spin: productDisplaySpin
+        });
+        productFitCache[index] = fitted;
+        return fitted;
+      }
+      const cached = productFitCache[index];
+      return { ...cached, ...pose, x: cached?.x ?? pose.x, y: cached?.y ?? pose.y,
+        z: cached?.z ?? pose.z, scale: cached?.scale ?? pose.scale,
+        slotBounds: { ...state.artBounds }, projectedBounds: cached?.projectedBounds ?? null };
+    });
     for (const mesh of [knot, orbit]) {
       mesh.visible = heroAlpha > .006;
       // Keep metal solid through the handoff. Its document-space trajectory
@@ -572,7 +599,7 @@ export function mountSculpture(canvas) {
     canvas.dataset.productRotations = JSON.stringify(poses.map(pose => [pose.rx, pose.ry, pose.rz]));
     canvas.dataset.productTrack = 'historical-single-sculpture';
     canvas.dataset.productFit = fitProducts ? 'whole-object-projection' : 'off';
-    canvas.dataset.productBounds = fitProducts ? JSON.stringify(poses.filter(pose => pose.weight > .006).map(pose => ({
+    canvas.dataset.productBounds = fitProducts ? JSON.stringify(poses.filter(pose => productAlpha * pose.weight > .006).map(pose => ({
       index: pose.index, slot: pose.slotBounds, projected: pose.projectedBounds, scale: pose.scale
     }))) : '';
     canvas.dataset.meshCount = '6';

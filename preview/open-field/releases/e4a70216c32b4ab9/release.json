@@ -1,0 +1,75 @@
+{
+  "schemeId": "open-field",
+  "revision": "e4a70216c32b4ab9",
+  "contentHash": "e4a70216c32b4ab94b7c5b9ba42140b6173b902c357bc98aff619b9e3138c5b2",
+  "files": {
+    "app.js": {
+      "bytes": 18083,
+      "sha256": "f1ec1942f88a4ad613e662b675aca7b241057389bcf8d5267161db0a7ada49be"
+    },
+    "assets/ah-logo.png": {
+      "bytes": 55998,
+      "sha256": "331fbc3c648e6bf1770a973971b7a4935c6baa9e23b909e475b16e144a4a6462"
+    },
+    "assets/ah-symbol.png": {
+      "bytes": 21550,
+      "sha256": "640253ce0e08822aad2cc92f0ee7c773f2ddc1cbba315122f7e01d49d147f2b5"
+    },
+    "copy.js": {
+      "bytes": 6904,
+      "sha256": "95d318b1d9bf03a296308f4ea02d6eab1ab69414574d91a90dad013317019679"
+    },
+    "en.html": {
+      "bytes": 9446,
+      "sha256": "127d63ca9912fca53ebd0da37f989d1848d0ebb4916d32c78bcf27183c57100a"
+    },
+    "index.html": {
+      "bytes": 9419,
+      "sha256": "95c40d4bc07fae5919968cfa0b54e92f98e97529854a56478b7f7ea56af36d94"
+    },
+    "pointer-follow.js": {
+      "bytes": 6435,
+      "sha256": "28cb6765f7b2dc7c4d4c88f61b97f2397e53c10316e35cd2ec9b91f70da78243"
+    },
+    "product-copy-fit.js": {
+      "bytes": 3607,
+      "sha256": "873d2aea6f21d2d9de07ea65dad8f13f41092d5289ad493068bed67bd4f1188d"
+    },
+    "product-journey.js": {
+      "bytes": 17041,
+      "sha256": "81ed8ad4c69128a88e4c1eb37638badffe1c122d781e473c5784170c0b62dc93"
+    },
+    "product-presentation.js": {
+      "bytes": 3834,
+      "sha256": "956bc79096f5c31f701fa323a8a2a8a70f24c7a3132a4e9e979ca55e0151597c"
+    },
+    "products-en.js": {
+      "bytes": 5298,
+      "sha256": "d3dbd4489585b3fa7b47a6f78cd38888a9144a8b4ce5f37da846d3946900b57d"
+    },
+    "products.js": {
+      "bytes": 4499,
+      "sha256": "d60a68946f879ab3f338ac2e17dfb34bc00522c9c9b7f99f35fa7c4fb94401bb"
+    },
+    "sculpture.js": {
+      "bytes": 36315,
+      "sha256": "ed6c58047c5a58357a127987f0821fd2ca1296e1451a3dc08566df3ee434c5f6"
+    },
+    "styles.css": {
+      "bytes": 33139,
+      "sha256": "176a71312fa36ae6b7bd3f6b673719f9e6854a54fe0057878a2375079d7bb819"
+    },
+    "vendor/LICENSE-three.txt": {
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    "vendor/three.core.min.js": {
+      "bytes": 381124,
+      "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de"
+    },
+    "vendor/three.module.min.js": {
+      "bytes": 338908,
+      "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6"
+    }
+  }
+}

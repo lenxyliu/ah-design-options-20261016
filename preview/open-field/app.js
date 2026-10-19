@@ -240,7 +240,12 @@ const observer = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIn
 $$('.begin-heading,.intent-list,.footer-word').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
 function resetPointerPose(){pointerX=pointerY=productPointerX=productPointerY=0;requestPaint();}
 addEventListener('blur',resetPointerPose);
-document.addEventListener('visibilitychange',()=>{resetPointerPose();scene?.setState({paused:paused||document.hidden});if(!document.hidden)requestPaint();});
+document.addEventListener('visibilitychange',()=>{
+  // Tell the presentation clock about the actual suspension. Long visible
+  // frames may then advance safely without consuming time spent in another tab.
+  productPresentation.tick(productPresentation.read().targetPosition,performance.now(),{hidden:document.hidden});
+  resetPointerPose();scene?.setState({paused:paused||document.hidden});if(!document.hidden)requestPaint();
+});
 addEventListener('pagehide',event=>{if(!event.persisted){scene?.dispose();journey?.dispose();copyFit.dispose();}});
 journey=createProductJourney({section:productsSection,stage:$('.product-stage'),reduced:()=>reduced,onProgress:state=>{
   if(!readingPaintFrame){requestPaint();return;}

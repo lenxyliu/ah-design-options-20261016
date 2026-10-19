@@ -67,8 +67,10 @@ export function createProductPresentation({ duration = 280, jumpThreshold = .18,
     const gap = lastTime === null || suspended ? 0 : now - lastTime;
     lastTime = now;
     suspended = false;
-    // A stopped RAF is also a pause; the next visible frame must not jump ahead.
-    advance(gap > maxFrameGap ? 0 : gap);
+    // Visibility and pause are explicit above. A busy visible page may deliver
+    // consecutive long frames; discarding each gap would freeze this bridge
+    // forever. Bound catch-up while still making progress on every live frame.
+    advance(Math.min(gap, maxFrameGap));
     const targetChanged = Math.abs(next - handledTarget) > EPSILON;
     if (targetChanged) {
       const jump = Math.abs(next - handledTarget);

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="description" content="腾讯云 Agent Hosting。让 Agent 在云端运行，让经验成为能力，让智能拥有施展的空间。">
+  <title>Agent Hosting · 智能发生的空间</title>
+  <link rel="icon" href="./assets/ah-symbol.png">
+  <link rel="stylesheet" href="./styles.css?v=20261019-gallery-pointer">
+</head>
+<body>
+  <a href="#manifesto" class="skip-link">跳过视觉，阅读介绍</a>
+  <div class="page-progress" aria-hidden="true"></div>
+  <canvas id="sculpture" aria-hidden="true"></canvas>
+  <div class="scene-fallback" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Agent Hosting 首页"><img src="./assets/ah-logo.png" alt="Agent Hosting"><span class="brand-cloud">腾讯云</span></a>
+    <nav aria-label="主导航"><a href="#manifesto">理念</a><a href="#products">产品</a><a href="#begin" class="nav-start">找到你的起点 <span>↗</span></a><a class="language-switch mono" id="language-switch" href="./en.html" aria-label="Switch to English" lang="en">EN</a></nav>
+  </header>
+  <main>
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-edition mono"><span class="status-dot"></span> 为每一种可能，留出空间</div>
+      <div class="hero-copy">
+        <h1 id="hero-title">让智能，<br><em>有处施展</em><span class="title-dot title-stop" aria-hidden="true">。</span></h1>
+        <p class="hero-cn">每个想法，都有下一步。</p>
+        <p class="hero-description">从一个想法，到一个行动的 Agent。<br>腾讯云 Agent Hosting，让每种可能找到自己的空间。</p>
+        <a class="round-link" href="#products"><span>进入 Agent 的世界</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M5 5L23 23M8 23H23V8"/></svg></span></a>
+      </div>
+      <div class="art-interaction" aria-label="拖动以旋转空间雕塑" role="img"><span class="art-coordinate mono">形态 01 · 开放的可能</span></div>
+      <div class="hero-floor"><a href="#manifesto" class="scroll-note mono"><span>↓</span> 向下滚动，展开可能</a><span class="hero-floor-center mono">让想法，拥有发生的空间。</span><button id="motion-toggle" class="motion-toggle mono" aria-pressed="false">Ⅱ 暂停动态</button></div>
+    </section>
+
+    <section class="manifesto" id="manifesto" aria-labelledby="manifesto-title">
+      <div class="section-label mono"><span>01 / 理念</span><span>一个开放的可能</span></div>
+      <div class="manifesto-art" aria-hidden="true"></div>
+      <div class="manifesto-copy">
+        <h2 id="manifesto-title">好的想法，<br>值得一个<span class="serif-em">发生的空间。</span></h2>
+        <p class="manifesto-intro">Agent Hosting，连接想法与行动。</p>
+        <p class="interactive-sentence">让你的 Agent <button data-preview="0">在云端工作<span>↗</span></button>，<br>让企业的经验 <button data-preview="1">成为共同能力<span>↗</span></button>，<br>让专业技能 <button data-preview="2">打开新的可能<span>↗</span></button>，<br>让每个团队 <button data-preview="3">拥有自己的 AI 空间<span>↗</span></button>。</p>
+        <span class="hover-note mono">选择一个想法，看看它如何发生。 ↗</span>
+      </div>
+      <aside class="word-preview" aria-live="polite"><span class="mono" id="preview-number">01 / 云端 Agent</span><h3 id="preview-name">Lighthouse Agent</h3><p id="preview-text">在云端部署、协作，让 Agent 持续工作。</p><button class="text-link" id="preview-enter">探索这个产品 <span>↗</span></button></aside>
+    </section>
+
+    <section class="products" id="products" aria-labelledby="products-title">
+      <div class="product-stage">
+        <div class="section-label mono"><h2 id="products-title">02 / 四款产品，四种可能</h2><span>滚动逐一探索，也可点击切换。</span></div>
+        <div class="journey-topline mono"><span id="journey-counter">产品 01 / 04</span><span id="journey-hint">继续向下，探索下一款产品</span></div>
+        <div class="product-intro" id="product-panel" role="tabpanel" aria-labelledby="tab-lighthouse" >
+          <span class="product-category mono" id="product-category">01 / 云端 Agent / Lighthouse Agent</span>
+          <h3 id="product-name">想法上线，<br><em>即刻就位。</em></h3>
+          <p class="product-promise" id="product-promise">想法上线。Agent 就位。</p>
+          <p class="product-description" id="product-description">在云端部署主流 Agent，集中配置模型、消息通道与 Skills，让协作与持续运行从这里开始。</p>
+          <div class="product-keywords" id="product-keywords"><span>云端部署</span><span>多 Agent 协作</span><span>运行观测</span></div>
+          <button class="round-link light" id="product-detail"><span>深入了解</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M4 14H24M16 6L24 14L16 22"/></svg></span></button>
+        </div>
+        <div class="product-art-note mono"><span id="product-art-label">01 — 想法进入轨道</span><span>左右滑动，切换产品</span></div>
+        <div class="product-tabs" role="tablist" aria-label="探索四款产品">
+          <button role="tab" id="tab-lighthouse" aria-controls="product-panel" aria-selected="true" data-product="0"><span class="mono">01</span><span>Lighthouse Agent</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-clawpro" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="1"><span class="mono">02</span><span>ClawPro</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-skillhub" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="2"><span class="mono">03</span><span>SkillHub</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-octop" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="3"><span class="mono">04</span><span>Octop</span><span class="tab-arrow">↗</span></button>
+        </div>
+        <div class="journey-footer mono"><span id="journey-next">下一款：ClawPro</span><span aria-hidden="true">↓</span></div>
+        <p class="art-disclaimer mono">曲面装置为品牌交互表达。产品能力请见详情。</p>
+      </div>
+    </section>
+
+    <section class="begin" id="begin" aria-labelledby="begin-title">
+      <div class="section-label mono"><span>03 / 你的下一步</span><span>从这里开始</span></div>
+      <div class="begin-heading"><h2 id="begin-title">你的下一步，<br><em>想让什么发生？</em></h2><p>一个人的灵感，一个团队的经验，<br>或一个全新的产品。都有合适的起点。</p></div>
+      <div class="intent-list">
+        <button data-intent="0"><span class="mono intent-number">01</span><span class="intent-title">让我的 Agent，在云端持续工作。</span><span class="intent-product">Lighthouse Agent</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="1"><span class="mono intent-number">02</span><span class="intent-title">把企业积累，变成团队能力与新产品。</span><span class="intent-product">ClawPro</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="2"><span class="mono intent-number">03</span><span class="intent-title">为 Agent 找到，下一项专业技能。</span><span class="intent-product">SkillHub</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="3"><span class="mono intent-number">04</span><span class="intent-title">在自己的环境，构建 AI 工作空间。</span><span class="intent-product">Octop</span><span class="intent-arrow">↗</span></button>
+      </div>
+    </section>
+    <footer class="site-footer">
+      <p class="footer-kicker mono">为接下来的可能，留出空间。</p>
+      <div class="footer-word">向未来，<em>留出空间。</em><span>↗</span></div>
+      <div class="footer-bottom"><a href="#home" class="footer-brand">Agent Hosting <span>来自腾讯云</span></a><span class="mono">开放场 / 设计探索 10</span><a href="#home">回到顶部 ↑</a></div>
+    </footer>
+  </main>
+  <dialog id="detail-dialog" aria-labelledby="detail-title">
+    <div class="detail-top"><span class="mono">Agent Hosting / 产品介绍</span><button id="detail-close" aria-label="关闭产品详情">关闭 <span>×</span></button></div>
+    <div class="detail-body"><span id="detail-category" class="mono"></span><h2 id="detail-title"></h2><p id="detail-lead"></p><div id="detail-features"></div><div class="detail-scene"><span class="mono">一种可能 / 应用场景</span><p id="detail-scene"></p></div><div id="detail-links"></div><p class="detail-note">本页为设计预览。外部链接通往公开的产品资料；不代表已开通、部署或接入任何服务。</p></div>
+  </dialog>
+  <script type="module" src="./app.js?v=20261019-gallery-pointer"></script>
+</body>
+</html>

@@ -29,7 +29,7 @@ let productPosition=0;
 const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
 const lerp=(a,b,p)=>a+(b-a)*p;
 const smooth=(a,b,v)=>{const p=clamp((v-a)/(b-a));return p*p*(3-2*p);};
-const pointerFollower=createPointerFollower({enabled:()=>!paused&&!reduced});
+const pointerFollower=createPointerFollower({enabled:()=>!paused&&!reduced,getArtBounds:()=>productArtBounds});
 const productPresentation=createProductPresentation();
 let productWasActive=false;
 
@@ -43,7 +43,7 @@ const copyLayers=products.map((p,index)=>{
   const promise=document.createElement('p');promise.className='product-promise';promise.textContent=p.promise;
   const description=document.createElement('p');description.className='product-description';description.textContent=p.description;
   const keywords=document.createElement('div');keywords.className='product-keywords';keywords.replaceChildren(...p.keywords.map(k=>{const span=document.createElement('span');span.textContent=k;return span;}));
-  const button=document.createElement('button');button.className='round-link light';button.setAttribute('aria-label',t.detailsLabel.replace('{name}',p.name));button.innerHTML=`<span class="round-arrow">↗</span><span>${t.details}</span>`;button.addEventListener('click',()=>openDetail(index));
+  const button=document.createElement('button');button.className='round-link light';button.setAttribute('aria-label',t.detailsLabel.replace('{name}',p.name));button.innerHTML=`<span>${t.details}</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M4 14H24M16 6L24 14L16 22"/></svg></span>`;button.addEventListener('click',()=>openDetail(index));
   layer.append(category,title,promise,description,keywords,button);return layer;
 });
 copyHost.replaceChildren(...copyLayers);

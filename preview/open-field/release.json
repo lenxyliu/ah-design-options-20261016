@@ -1,11 +1,11 @@
 {
   "schemeId": "open-field",
-  "revision": "61c57158ffb300fd",
-  "contentHash": "61c57158ffb300fd5a406b485458b3521a27eb515c7380a65c1dbcb7f19dfb58",
+  "revision": "09a7304d8eb5b26a",
+  "contentHash": "09a7304d8eb5b26a8eb81ab08fca8c0f0270f3d70875dfe582be90714df9d0f7",
   "files": {
     "app.js": {
-      "bytes": 17450,
-      "sha256": "6fda3d62f3887174bb4666b7c4af44c50fe52fb9f7f514b05515241738341ba7"
+      "bytes": 17580,
+      "sha256": "58fa2a354dd5f12f4c653064e6ccc6d16e34c099878c01b6e4074dbef6b75c54"
     },
     "assets/ah-logo.png": {
       "bytes": 55998,
@@ -16,20 +16,20 @@
       "sha256": "640253ce0e08822aad2cc92f0ee7c773f2ddc1cbba315122f7e01d49d147f2b5"
     },
     "copy.js": {
-      "bytes": 6893,
-      "sha256": "b847bafb8a82a05a075efb61c25e500a55d08afd51f5c61b63fc24d56985b25f"
+      "bytes": 6904,
+      "sha256": "95d318b1d9bf03a296308f4ea02d6eab1ab69414574d91a90dad013317019679"
     },
     "en.html": {
-      "bytes": 9251,
-      "sha256": "7af0fc1022a85e4d58aa1e016b99baf07f29ff4190eded35b980d74af345c39d"
+      "bytes": 9448,
+      "sha256": "0d97ec6cfd94e5ce1fedaa412bbb0d4909fc2956c0f6b8f2426744581a564b52"
     },
     "index.html": {
-      "bytes": 9213,
-      "sha256": "1e504602f5c46e9dd882a62246b2c625db002f80cb0888d92c435936bb202e93"
+      "bytes": 9421,
+      "sha256": "7edcb8681bf4583be4eda7910773fb538dd11f379835c221deb12bdf8030fad7"
     },
     "pointer-follow.js": {
-      "bytes": 3232,
-      "sha256": "804cf519b0f2be096a5e621c791d287f31da663ea60540a94dfb4ccf7d17cc68"
+      "bytes": 5764,
+      "sha256": "30f7025912a91ee6a2496a9b60ea2647782f6655332173bb2aed678b501fdb17"
     },
     "product-copy-fit.js": {
       "bytes": 3607,
@@ -56,8 +56,8 @@
       "sha256": "0a1aa21fcf2286ee4547a545a651f328f9a78e6d9ca12bc4a8c89e43e90eb9c9"
     },
     "styles.css": {
-      "bytes": 31330,
-      "sha256": "dc050cc0a437073b17bca43425115b1334a12d95e95a4f9c0a119e8dab4b2ad2"
+      "bytes": 33073,
+      "sha256": "4a390a72da369e7cf910ca19e368d0439f9e208cacc5c1864518de42a68ebfdd"
     },
     "vendor/LICENSE-three.txt": {
       "bytes": 1081,

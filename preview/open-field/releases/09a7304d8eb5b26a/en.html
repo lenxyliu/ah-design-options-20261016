@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f2ed">
+  <meta name="description" content="Tencent Cloud Agent Hosting. A place for agents to run, expertise to grow, and ideas to become real.">
+  <title>Agent Hosting — Intelligence. Given space.</title>
+  <link rel="icon" href="./assets/ah-symbol.png">
+  <link rel="stylesheet" href="./styles.css?v=20261019-gallery-pointer">
+</head>
+<body>
+  <a href="#manifesto" class="skip-link">Skip visuals and read the introduction</a>
+  <div class="page-progress" aria-hidden="true"></div>
+  <canvas id="sculpture" aria-hidden="true"></canvas>
+  <div class="scene-fallback" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Agent Hosting home"><img src="./assets/ah-logo.png" alt="Agent Hosting"><span class="brand-cloud">Tencent Cloud</span></a>
+    <nav aria-label="Main navigation"><a href="#manifesto">The idea</a><a href="#products">Products</a><a href="#begin" class="nav-start">Get started <span>↗</span></a><a class="language-switch mono" id="language-switch" href="./index.html" aria-label="切换到中文版" lang="zh-CN">中文</a></nav>
+  </header>
+  <main>
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-edition mono"><span class="status-dot"></span> A NEW FIELD OF POSSIBILITY</div>
+      <div class="hero-copy">
+        <h1 id="hero-title">Intelligence.<br><em>Given space.</em><span class="title-dot">●</span></h1>
+        <p class="hero-cn">A place for every possibility.</p>
+        <p class="hero-description">From an idea to an agent that acts.<br>Make room for what comes next, with Tencent Cloud Agent Hosting.</p>
+        <a class="round-link" href="#products"><span>Explore the world of agents</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M5 5L23 23M8 23H23V8"/></svg></span></a>
+      </div>
+      <div class="art-interaction" aria-label="Drag to rotate the sculpture" role="img"><span class="art-coordinate mono">FIG. 01 — THE OPEN FIELD</span></div>
+      <div class="hero-floor"><a href="#manifesto" class="scroll-note mono"><span>↓</span> SCROLL TO UNFOLD</a><span class="hero-floor-center mono">IDEAS NEED ROOM TO BECOME REAL.</span><button id="motion-toggle" class="motion-toggle mono" aria-pressed="false">Ⅱ Pause motion</button></div>
+    </section>
+
+    <section class="manifesto" id="manifesto" aria-labelledby="manifesto-title">
+      <div class="section-label mono"><span>01 / THE IDEA</span><span>An open field of possibility</span></div>
+      <div class="manifesto-art" aria-hidden="true"></div>
+      <div class="manifesto-copy">
+        <h2 id="manifesto-title">Good ideas deserve<br><span class="serif-em">room to become real.</span></h2>
+        <p class="manifesto-intro">Agent Hosting connects ideas with action.</p>
+        <p class="interactive-sentence">Give your agent <button data-preview="0">a place in the cloud<span>↗</span></button>.<br>Turn your expertise into <button data-preview="1">a shared capability<span>↗</span></button>.<br>Find the skills that <button data-preview="2">open new possibilities<span>↗</span></button>.<br>Build an AI workspace <button data-preview="3">on your own terms<span>↗</span></button>.</p>
+        <span class="hover-note mono">Choose an idea. See where it takes you. ↗</span>
+      </div>
+      <aside class="word-preview" aria-live="polite"><span class="mono" id="preview-number">01 / CLOUD AGENTS</span><h3 id="preview-name">Lighthouse Agent</h3><p id="preview-text">Deploy, collaborate and keep Agents working in the cloud.</p><button class="text-link" id="preview-enter">Explore this product <span>↗</span></button></aside>
+    </section>
+
+    <section class="products" id="products" aria-labelledby="products-title">
+      <div class="product-stage">
+        <div class="section-label mono"><h2 id="products-title">02 / FOUR WAYS FORWARD</h2><span>Scroll through all four. Or choose one below.</span></div>
+        <div class="journey-topline mono"><span id="journey-counter">PRODUCT 01 / 04</span><span id="journey-hint">SCROLL TO EXPLORE THE NEXT PRODUCT</span></div>
+        <div class="product-intro" id="product-panel" role="tabpanel" aria-labelledby="tab-lighthouse" >
+          <span class="product-category mono" id="product-category">01 / CLOUD AGENTS / Lighthouse Agent</span>
+          <h3 id="product-name">Ideas online.<br><em>Agents ready.</em></h3>
+          <p class="product-promise" id="product-promise">Bring an idea. Put an Agent to work.</p>
+          <p class="product-description" id="product-description">Deploy leading Agents in the cloud. Configure models, messaging channels and Skills in one place, then build collaboration and ongoing workflows from there.</p>
+          <div class="product-keywords" id="product-keywords"><span>Cloud deployment</span><span>Multi-Agent collaboration</span><span>Runtime visibility</span></div>
+          <button class="round-link light" id="product-detail"><span>Explore the product</span><span class="round-arrow" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M4 14H24M16 6L24 14L16 22"/></svg></span></button>
+        </div>
+        <div class="product-art-note mono"><span id="product-art-label">01 — AN IDEA IN ORBIT</span><span>DRAG TO SWITCH PRODUCTS</span></div>
+        <div class="product-tabs" role="tablist" aria-label="Explore four products">
+          <button role="tab" id="tab-lighthouse" aria-controls="product-panel" aria-selected="true" data-product="0"><span class="mono">01</span><span>Lighthouse Agent</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-clawpro" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="1"><span class="mono">02</span><span>ClawPro</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-skillhub" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="2"><span class="mono">03</span><span>SkillHub</span><span class="tab-arrow">↗</span></button>
+          <button role="tab" id="tab-octop" aria-controls="product-panel" aria-selected="false" tabindex="-1" data-product="3"><span class="mono">04</span><span>Octop</span><span class="tab-arrow">↗</span></button>
+        </div>
+        <div class="journey-footer mono"><span id="journey-next">NEXT: ClawPro</span><span aria-hidden="true">↓</span></div>
+        <p class="art-disclaimer mono">Sculptures are brand expressions. See product details for capabilities.</p>
+      </div>
+    </section>
+
+    <section class="begin" id="begin" aria-labelledby="begin-title">
+      <div class="section-label mono"><span>03 / YOUR NEXT MOVE</span><span>Start here</span></div>
+      <div class="begin-heading"><h2 id="begin-title">What would you like<br><em>to make happen?</em></h2><p>An individual idea. A team's expertise.<br>Or a whole new product. There is a place to begin.</p></div>
+      <div class="intent-list">
+        <button data-intent="0"><span class="mono intent-number">01</span><span class="intent-title">Give my agent a place to keep working in the cloud.</span><span class="intent-product">Lighthouse Agent</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="1"><span class="mono intent-number">02</span><span class="intent-title">Turn enterprise expertise into shared capabilities and new products.</span><span class="intent-product">ClawPro</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="2"><span class="mono intent-number">03</span><span class="intent-title">Find my agent's next professional skill.</span><span class="intent-product">SkillHub</span><span class="intent-arrow">↗</span></button>
+        <button data-intent="3"><span class="mono intent-number">04</span><span class="intent-title">Build an AI workspace in my own environment.</span><span class="intent-product">Octop</span><span class="intent-arrow">↗</span></button>
+      </div>
+    </section>
+    <footer class="site-footer">
+      <p class="footer-kicker mono">MAKE ROOM FOR WHAT COMES NEXT.</p>
+      <div class="footer-word">An open <em>future.</em><span>↗</span></div>
+      <div class="footer-bottom"><a href="#home" class="footer-brand">Agent Hosting <span>by Tencent Cloud</span></a><span class="mono">OPEN FIELD / DESIGN EXPLORATION 10</span><a href="#home">Back to top ↑</a></div>
+    </footer>
+  </main>
+  <dialog id="detail-dialog" aria-labelledby="detail-title">
+    <div class="detail-top"><span class="mono">AGENT HOSTING / PRODUCT NOTES</span><button id="detail-close" aria-label="Close product details">Close <span>×</span></button></div>
+    <div class="detail-body"><span id="detail-category" class="mono"></span><h2 id="detail-title"></h2><p id="detail-lead"></p><div id="detail-features"></div><div class="detail-scene"><span class="mono">A POSSIBILITY / IN PRACTICE</span><p id="detail-scene"></p></div><div id="detail-links"></div><p class="detail-note">A design preview. External links lead to public product resources. No services have been activated, deployed, or connected.</p></div>
+  </dialog>
+  <script type="module" src="./app.js?v=20261019-gallery-pointer"></script>
+</body>
+</html>

@@ -42,17 +42,17 @@ html[lang="en"] .hero-description{max-width:430px}html[lang="en"] .product-promi
 @media(max-width:800px){.manifesto-art{left:3%;right:57%;top:auto;bottom:150px;height:250px}.hero-floor{right:var(--gutter);gap:16px}.manifesto>.section-label{max-width:100%;justify-content:space-between;gap:15px}.manifesto-copy{background:var(--paper)}.product-copy-layer .product-keywords{min-height:12px}}
 @media(prefers-reduced-motion:reduce){.product-copy-layer{will-change:auto}}
 
-/* A translucent, input-free echo of the native pointer. */
-.pointer-follower{position:fixed;top:0;left:0;width:0;height:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .18s;--cursor-color:#3159f5}
+/* A small inertial mark; the sculpture alone gets a directional drag cue. */
+.pointer-follower{position:fixed;top:0;left:0;width:0;height:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .16s;--cursor-color:#3159f5;--pointer-stretch:4px;--pointer-angle:0deg;color:var(--cursor-color)}
 .pointer-follower.is-visible{opacity:1}
-.pointer-follower>span{position:absolute;left:0;top:0;pointer-events:none;transform:translate(-50%,-50%);border-radius:50%}
-.pointer-glow{width:64px;height:64px;background:radial-gradient(circle,color-mix(in srgb,var(--cursor-color) 13%,transparent),transparent 70%);transition:width .25s,height .25s,opacity .25s}
-.pointer-ring{width:24px;height:24px;border:1px solid color-mix(in srgb,var(--cursor-color) 48%,transparent);transition:width .25s,height .25s,border-color .25s,opacity .25s}
-.pointer-follower.is-over-art .pointer-ring{width:30px;height:30px}
-.pointer-follower.is-interactive .pointer-ring{width:38px;height:38px;border-color:color-mix(in srgb,var(--cursor-color) 70%,transparent)}
-.pointer-follower.is-interactive .pointer-glow{width:76px;height:76px}
-.pointer-follower.is-pressed .pointer-ring{width:16px;height:16px}
-.pointer-follower.is-pressed .pointer-glow{opacity:.45}
+.pointer-follower>span{position:absolute;left:0;top:0;pointer-events:none}
+.pointer-dot{width:var(--pointer-stretch);height:4px;border-radius:3px;background:currentColor;transform:translate(-50%,-50%) rotate(var(--pointer-angle));transition:opacity .14s}
+.pointer-cue{width:24px;height:12px;opacity:0;transform:translate(-50%,-50%);transition:opacity .16s,scale .2s var(--ease)}
+.pointer-cue svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.pointer-follower.is-over-art .pointer-dot{opacity:0}
+.pointer-follower.is-over-art .pointer-cue{opacity:1}
+.pointer-follower.is-interactive{opacity:0}
+.pointer-follower.is-pressed .pointer-cue{scale:.8}
 body.dialog-open .pointer-follower{opacity:0}
 @media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.pointer-follower{display:none}}
 
@@ -95,3 +95,17 @@ body.dialog-open .pointer-follower{opacity:0}
 .is-copy-scrollable .product-intro::-webkit-scrollbar{width:4px}
 .is-copy-scrollable .product-intro::-webkit-scrollbar-track{background:#252d21}
 .is-copy-scrollable .product-intro::-webkit-scrollbar-thumb{background:#66765d;border-radius:4px}
+
+/* Exhibition-style directions: a text label, a fine rule, and an open arrow. */
+.title-dot.title-stop{font-family:"Songti SC","STSong",serif;font-size:.66em;font-weight:400;vertical-align:baseline;letter-spacing:-.1em;margin-left:.06em;line-height:0}
+.round-link{position:relative;gap:22px;width:max-content;max-width:100%;padding:8px 0 12px;line-height:1.4}
+.hero-copy .round-link{font-size:14px;margin-top:3px}
+.round-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;opacity:.27;transform:scaleX(.44);transform-origin:left;transition:transform .45s var(--ease),opacity .3s}
+.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{display:block;flex:none;width:28px;height:28px;border:0;border-radius:0;background:none;color:inherit;translate:var(--pointer-shift-x,0px) var(--pointer-shift-y,0px);transform:none;transition:translate .15s,transform .4s var(--ease)}
+.round-arrow svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:square;stroke-linejoin:miter}
+.round-link:hover,.round-link:focus-visible{color:var(--blue)}
+.round-link.light:hover,.round-link.light:focus-visible{color:var(--accent)}
+.round-link:hover::after,.round-link:focus-visible::after{transform:scaleX(1);opacity:.7}
+.round-link:hover .round-arrow,.round-link:focus-visible .round-arrow{background:none;color:inherit;transform:translateX(3px)}
+.hero-copy .round-link:hover .round-arrow,.hero-copy .round-link:focus-visible .round-arrow{transform:translate(3px,3px)}
+@media(max-width:800px){.hero-copy .round-link{font-size:12px}.round-link,.product-intro .round-link{gap:18px}.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{width:24px;height:24px}}

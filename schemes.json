@@ -2,16 +2,17 @@
   "schemes": [
     {
       "id": "daylight",
-      "title": "DAYLIGHT · 日常发生",
-      "subtitle": "云白 · 场景轮播与触感矩阵",
-      "description": "以日光般的浅色层次串起五个工作场景；四产品卡片随鼠标倾转、分层视差，保留完整中英文预览。",
+      "title": "DAYLIGHT · 开放图谱",
+      "subtitle": "非对称构图 · 宽幅场景 · 产品档案",
+      "description": "以四产品立体陈列、五个宽幅工作场景和可展开产品档案，呈现 Agent Hosting 的开放工作图谱。鼠标驱动物件转向与图层视差，完整中英文预览。",
       "group": "current",
       "date": "2026-10-19",
-      "previewVersion": "66ebccaa27bfe9cc",
+      "previewVersion": "97cbb1d0b23fa5ae",
       "canDestroy": true,
       "hosted": false,
-      "previewUrl": "./preview/daylight/?_v=66ebccaa27bfe9cc#home",
-      "thumbnailUrl": "./thumbs/daylight.png"
+      "previewUrl": "./preview/daylight/releases/97cbb1d0b23fa5ae/?_v=97cbb1d0b23fa5ae#home",
+      "thumbnailUrl": "./thumbs/daylight-v2.png",
+      "updatedAt": "2026-10-19T07:24:36.538Z"
     },
     {
       "id": "open-field",

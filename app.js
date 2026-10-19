@@ -210,7 +210,7 @@
   function renderVotePanel() {
     const selected = state.schemes.find((scheme) => scheme.id === state.selectedId);
     const voted = Boolean(selected && state.votes.loaded && state.votes.myVote === selected.id);
-    elements.voteButton.hidden = !selected;
+    byId('vote-display').hidden = !selected;
     byId('archive-current').hidden = !selected || state.archived.has(selected.id);
     const count = selected ? voteCount(selected.id) : null;
     elements.schemeVotes.textContent = count === null ? '—' : String(count);
@@ -218,7 +218,6 @@
     elements.inlineVoteCount.textContent = count === null ? '—' : String(count);
     elements.voteButton.querySelector('.title-vote-label').textContent = state.voteBusy ? '保存中' : voted ? '已投' : '投票';
     const voteLabel = `${state.voteBusy ? '正在提交投票' : voted ? '已投票，点击撤回' : '投给这个方案'} · ${count === null ? '票数读取中' : count + ' 票'}`;
-    elements.voteButton.title = voteLabel;
     elements.voteButton.setAttribute('aria-label', voteLabel);
     elements.voteButton.classList.toggle('is-voted', voted);
     elements.voteButton.setAttribute('aria-pressed', String(voted));

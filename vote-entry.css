@@ -30,7 +30,9 @@
 .title-vote{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;width:auto;height:auto;min-height:28px;padding:4px 0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#315ce7;font:500 11px/1.4 var(--font);white-space:nowrap;cursor:pointer}
 .title-vote:hover,.title-vote.is-voted{border:0;background:transparent;box-shadow:none;color:#2349c5;text-decoration:underline;text-underline-offset:3px}
 .title-vote:disabled{background:transparent;border:0;opacity:.5;cursor:wait;text-decoration:none}
-.title-vote .inline-vote-count{position:static;min-width:0;width:auto;height:auto;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:inherit;font:inherit;line-height:inherit}
+.vote-display{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;font:500 11px/1.4 var(--font);white-space:nowrap}
+.vote-display>.vote-divider{display:block;flex:0 0 1px;width:1px;height:11px;background:#cbd3e1;pointer-events:none}
+.vote-display>.inline-vote-count{position:static;min-width:0;width:auto;height:auto;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#7b89a1;font:inherit;font-variant-numeric:tabular-nums;line-height:inherit;cursor:default;pointer-events:none;text-decoration:none}
 @media(max-width:620px){#scheme-list .scheme-item{width:220px;padding:5px 4px;grid-template-columns:minmax(0,1fr) 28px}.title-vote{min-height:28px}}
 
 /* The menu is selection-only. Current-scheme controls live by the title. */

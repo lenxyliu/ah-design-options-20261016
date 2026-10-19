@@ -139,7 +139,7 @@ function paintScroll() {
   $('.page-progress').style.transform=`scaleX(${y / Math.max(1,document.documentElement.scrollHeight-h)})`;
   const pose=sculptureLayout(y,h,section);
   const productMix=pose.productMix;
-  scene?.setState({section,progress,product:selected,productPosition,pointerX:paused||reduced?0:lerp(pointerX,productPointerX,productMix),pointerY:paused||reduced?0:lerp(pointerY,productPointerY,productMix),drag:drag*(1-productMix),heroDragging:dragging,paused,reduced,...pose,octopColor:params.get('octop')==='red'?'red':'purple'});
+  scene?.setState({section,progress,product:selected,productPosition,productReady:journeyState?.active,pointerX:paused||reduced?0:lerp(pointerX,productPointerX,productMix),pointerY:paused||reduced?0:lerp(pointerY,productPointerY,productMix),drag:drag*(1-productMix),heroDragging:dragging,paused,reduced,...pose,octopColor:params.get('octop')==='red'?'red':'purple'});
   if(productMix>=.994)scene?.flush(performance.now());
   pointerFollower.refresh();
   const switcher=$('#language-switch');

@@ -4,14 +4,33 @@ export function createPointerFollower({ enabled = () => true, getArtBounds = () 
   const follower = document.createElement('div');
   follower.className = 'art-pointer';
   follower.setAttribute('aria-hidden', 'true');
-  follower.innerHTML = '<span class="pointer-cue"><svg viewBox="0 0 24 12" fill="none" aria-hidden="true"><path class="cursor-outline" d="M2 6H22 M6 2L2 6L6 10 M18 2L22 6L18 10"/><path d="M2 6H22 M6 2L2 6L6 10 M18 2L22 6L18 10"/></svg></span>';
+  follower.innerHTML = '<span class="pointer-lens"></span>';
   follower.style.display = 'none';
   document.body.append(follower);
 
   let owner = null, hasMouse = false, pressed = false, frame = 0, lastTime = 0;
   let x = 0, y = 0, targetX = 0, targetY = 0, color = '';
+  let speed = 0, shape = 0, shapeVelocity = 0, angle = 0;
   const interactive = 'a,button,input,select,textarea,summary,[role="button"],[role="tab"],[contenteditable=""],[contenteditable="true"]';
   const allowed = () => finePointer.matches && enabled() && !document.hidden && !document.body.classList.contains('dialog-open');
+  const wrapAngle = value => ((value + 180) % 360 + 360) % 360 - 180;
+
+  function paintShape() {
+    follower.style.setProperty('--cursor-angle', `${angle.toFixed(3)}deg`);
+    follower.style.setProperty('--cursor-stretch', (1 + shape * .28).toFixed(4));
+    follower.style.setProperty('--cursor-squash', (1 - shape * .18).toFixed(4));
+  }
+
+  function resetShape() {
+    speed = 0; shape = 0; shapeVelocity = 0; angle = 0;
+    paintShape();
+  }
+
+  function moving() {
+    return Math.hypot(targetX - x, targetY - y) >= .1
+      || speed >= 2 || shape >= .001 || Math.abs(shapeVelocity) >= .02;
+  }
+  resetShape();
 
   function deactivate() {
     // Remove both sides synchronously: a fading custom cursor would briefly
@@ -22,6 +41,7 @@ export function createPointerFollower({ enabled = () => true, getArtBounds = () 
     owner = null; lastTime = 0;
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
+    resetShape();
   }
 
   function hide() {
@@ -32,16 +52,35 @@ export function createPointerFollower({ enabled = () => true, getArtBounds = () 
     frame = 0;
     if (!allowed()) { hide(); return; }
     if (!owner || !hasMouse) return;
-    const dt = lastTime ? Math.min((time - lastTime) / 1000, .06) : 1 / 60;
+    const dt = lastTime ? Math.max(.001, Math.min((time - lastTime) / 1000, .06)) : 1 / 60;
     lastTime = time;
     const ease = 1 - Math.exp(-dt * 38);
+    const oldX = x, oldY = y;
     x += (targetX - x) * ease;
     y += (targetY - y) * ease;
     const settled = Math.hypot(targetX - x, targetY - y) < .1;
     if (settled) { x = targetX; y = targetY; }
+    const dx = x - oldX, dy = y - oldY;
+    const instantSpeed = Math.hypot(dx, dy) / dt;
+    speed += (instantSpeed - speed) * (1 - Math.exp(-dt * 36));
+    if (instantSpeed > 20) {
+      const direction = Math.atan2(dy, dx) * 180 / Math.PI;
+      angle = wrapAngle(angle + wrapAngle(direction - angle) * (1 - Math.exp(-dt * 26)));
+    }
+    // A bounded, lightly damped shape responds independently from the hotspot.
+    // Substeps retain its soft 140–180ms return even after a slow frame.
+    const shapeTarget = speed > 15 ? Math.min(1, speed / 900) : 0;
+    const steps = Math.ceil(dt / (1 / 120)), step = dt / steps;
+    for (let i = 0; i < steps; i++) {
+      shapeVelocity += ((shapeTarget - shape) * 1600 - shapeVelocity * 64) * step;
+      shape += shapeVelocity * step;
+      if (shape < 0) { shape = 0; shapeVelocity = Math.max(0, shapeVelocity); }
+      if (shape > 1) { shape = 1; shapeVelocity = Math.min(0, shapeVelocity); }
+    }
     follower.style.transform = `translate3d(${x}px,${y}px,0)`;
-    if (!settled) frame = requestAnimationFrame(tick);
-    else lastTime = 0;
+    if (moving()) frame = requestAnimationFrame(tick);
+    else { speed = 0; shape = 0; shapeVelocity = 0; lastTime = 0; }
+    paintShape();
   }
 
   function refresh() {
@@ -69,7 +108,7 @@ export function createPointerFollower({ enabled = () => true, getArtBounds = () 
     const nextColor = product ? getComputedStyle(product).getPropertyValue('--accent').trim() : '#3159f5';
     if (nextColor !== color) { color = nextColor; follower.style.setProperty('--cursor-color', color); }
     follower.classList.toggle('is-pressed', pressed);
-    if (!frame && Math.hypot(targetX - x, targetY - y) >= .1) frame = requestAnimationFrame(tick);
+    if (!frame && moving()) frame = requestAnimationFrame(tick);
   }
 
   function onPointer(event) {

@@ -422,6 +422,7 @@ export function mountSculpture(canvas) {
   let raf = 0, disposed = false, inView = true, pageVisible = !document.hidden;
   let lastTime = 0, elapsed = 0, productSpin = 0, heroSpin = 0, first = true;
   let productFacingIndex = null, productEntryPending = false, productSpinStart = 0;
+  let productEntryPosition = 0, productEntryStableTime = 0;
   const clamp = (n, min, max) => Math.max(min, Math.min(max, Number(n) || 0));
   const mix = (a, b, t) => a + (b - a) * t;
   const smooth = n => n * n * (3 - 2 * n);
@@ -502,11 +503,22 @@ export function mountSculpture(canvas) {
         productFacingIndex = productTransition.activeIndex;
         productEntryPending = true;
         productSpinStart = productSpin;
+        productEntryPosition = productTransition.position;
+        productEntryStableTime = 0;
       }
+      if (Math.abs(productTransition.position - productEntryPosition) > 1e-5) {
+        productEntryPosition = productTransition.position;
+        productEntryStableTime = 0;
+      } else if (dynamic) productEntryStableTime += dt;
       // Keep the incoming sculpture at its approved orientation throughout
       // entry, then briefly show that exact front before its slow idle turn.
-      if (productEntryPending && target.productMix >= .994
-        && Math.abs(productTransition.position - productFacingIndex) < 1e-5) {
+      // Readiness comes from the real reading stage, not its visual entrance
+      // blend: a header-aligned anchor can legitimately stop below .994.
+      const productReady = typeof state.productReady === 'boolean' ? state.productReady : target.productMix >= .994;
+      const frontDistance = Math.abs(productTransition.position - productFacingIndex);
+      const frontSettled = frontDistance < 1e-5 || (frontDistance <= .01 + 1e-7
+        && productTransition.opacity >= .998 && productEntryStableTime >= .18);
+      if (productEntryPending && productReady && frontSettled) {
         productEntryPending = false;
         productSpinStart = productSpin + PRODUCT_FRONT_HOLD * PRODUCT_SPIN_RATE;
       }

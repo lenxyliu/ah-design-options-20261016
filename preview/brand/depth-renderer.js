@@ -12,7 +12,7 @@ const finite = (value, fallback) => Number.isFinite(Number(value)) ? Number(valu
  * A real, shared 3D corridor. The exhibition's damped scroll loop is the only
  * frame clock: this module intentionally never starts requestAnimationFrame.
  */
-export function createDepthExperience({ container } = {}) {
+export function createDepthExperience({ container, worldBuilder = buildProductWorld, cameraSampler = sampleDepthCamera, mobileSceneScale = 1, choreographyFactory } = {}) {
   let renderer;
   let scene;
   let camera;
@@ -20,6 +20,7 @@ export function createDepthExperience({ container } = {}) {
   let sunlightTarget;
   let canvas;
   let worlds = [];
+  let choreography;
   let disposed = false;
   let contextLost = false;
   let ready = false;
@@ -104,10 +105,11 @@ export function createDepthExperience({ container } = {}) {
 
     try {
       const { index, progress } = lastState;
-      const pose = sampleDepthCamera(index, progress, { mobile });
+      const pose = cameraSampler(index, progress, { mobile });
       const worldZ = -WORLD_SPACING * index;
-      camera.position.set(pose.position[0], pose.position[1], pose.position[2] + worldZ);
-      target.set(pose.target[0], pose.target[1], pose.target[2] + worldZ);
+      const sceneScale = mobile ? mobileSceneScale : 1;
+      camera.position.set(pose.position[0] * sceneScale, pose.position[1] * sceneScale, pose.position[2] + worldZ);
+      target.set(pose.target[0] * sceneScale, pose.target[1] * sceneScale, pose.target[2] + worldZ);
       camera.fov = pose.fov || 48;
       camera.lookAt(target);
       camera.updateProjectionMatrix();
@@ -118,7 +120,17 @@ export function createDepthExperience({ container } = {}) {
       sunlight.position.set(-1000, 1650, shadowCenterZ + 1500);
       sunlightTarget.position.set(100, -150, shadowCenterZ - 900);
       sunlightTarget.updateMatrixWorld();
-      for (let i = 0; i < worlds.length; i += 1) worlds[i].visible = Math.abs(i - index) <= 1;
+      for (let i = 0; i < worlds.length; i += 1) {
+        worlds[i].visible = Math.abs(i - index) <= 1;
+        worlds[i].scale.set(sceneScale, sceneScale, 1);
+      }
+      const performance=choreography?.update({...lastState,mobile});
+      if(performance){
+        container.dataset.ipPose=performance.pose;
+        container.dataset.ipX=performance.position[0].toFixed(2);
+        container.dataset.ipZ=performance.position[2].toFixed(2);
+        container.dataset.ipHandoff=performance.handoff.toFixed(3);
+      }
 
       renderer.render(scene, camera);
       ready = true;
@@ -165,6 +177,7 @@ export function createDepthExperience({ container } = {}) {
       canvas.removeEventListener('webglcontextlost', onContextLost);
       canvas.removeEventListener('webglcontextrestored', onContextRestored);
     }
+    choreography?.dispose();
     releaseScene();
     if (renderer) {
       renderer.renderLists.dispose();
@@ -173,7 +186,7 @@ export function createDepthExperience({ container } = {}) {
     }
     canvas?.remove();
     if (container) {
-      for (const key of ['depthIndex', 'depthProgress', 'cameraZ', 'cameraX', 'cameraY']) {
+      for (const key of ['depthIndex', 'depthProgress', 'cameraZ', 'cameraX', 'cameraY','ipPose','ipX','ipZ','ipHandoff']) {
         delete container.dataset[key];
       }
     }
@@ -244,7 +257,7 @@ export function createDepthExperience({ container } = {}) {
     scene.add(rim);
 
     for (let index = 0; index < WORLD_COUNT; index += 1) {
-      const world = buildProductWorld(THREE, index);
+      const world = worldBuilder(THREE, index);
       world.position.z -= WORLD_SPACING * index;
       world.name ||= `product-world-${index}`;
       world.traverse((object) => {
@@ -263,6 +276,7 @@ export function createDepthExperience({ container } = {}) {
       scene.add(world);
     }
 
+    choreography=choreographyFactory?.({THREE,scene,camera,worlds,onInvalidate:()=>{if(!disposed)render(lastState);}});
     container.appendChild(canvas);
     resize();
     // Establish the enhancement class before the exhibition measures chapter
@@ -274,6 +288,7 @@ export function createDepthExperience({ container } = {}) {
     canvas.style.visibility = 'hidden';
   } catch (error) {
     showFallback();
+    choreography?.dispose();
     releaseScene();
     if (renderer) {
       canvas?.removeEventListener('webglcontextlost', onContextLost);

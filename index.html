@@ -4,26 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6f7f9">
-  <title>AH · 方案预览</title>
+  <title>AH · 方案工作台</title>
   <link rel="icon" type="image/png" href="./brand/agent-hosting-symbol.png">
-  <link rel="stylesheet" href="./styles.css?v=20261019-vote-display">
-  <link rel="stylesheet" href="./layout-refinement.css?v=20261019-vote-display">
-  <script src="./app.js?v=20261019-vote-display" defer></script>
-  <link rel="stylesheet" href="./vote-entry.css?v=20261019-vote-display">
+  <link rel="stylesheet" href="./styles.css?v=20261019-local-parity">
+  <link rel="stylesheet" href="./layout-refinement.css?v=20261019-local-parity">
+  <script src="./app.js?v=20261019-local-parity" defer></script>
+  <link rel="stylesheet" href="./vote-entry.css?v=20261019-local-parity">
 </head>
 <body>
   <a class="skip-link" href="#preview-title">跳到方案预览</a>
   <div class="workspace">
     <header class="workspace-header">
-      <div class="brand" aria-label="Agent Hosting 方案预览">
+      <div class="brand" aria-label="AH 方案工作台">
         <img class="brand-symbol" src="./brand/agent-hosting-symbol.png" alt="Agent Hosting" width="44" height="44">
-        <div class="brand-copy"><span class="eyebrow">AGENT HOSTING / DESIGN SPACE</span><h1>方案预览<span class="title-dot">.</span></h1></div>
+        <div class="brand-copy"><span class="eyebrow">AGENT HOSTING / DESIGN SPACE</span><h1>方案工作台<span class="title-dot">.</span></h1></div>
       </div>
       <div class="header-actions">
-        <button id="open-archives" class="button archives-entry" type="button" title="查看当前浏览器归档的方案"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h16v12H4zM3 4h18v4H3zM9 12h6"/></svg><span>已归档</span><span id="archive-count" class="count-badge">0</span></button>
-
         <span class="scheme-total"><strong id="scheme-count">—</strong><span>个预览入口</span></span>
         <span class="header-divider" aria-hidden="true"></span>
+        <button id="open-archives" class="button button-quiet archive-open" type="button" aria-haspopup="dialog" title="查看当前浏览器归档的方案"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v5H4zM6 9v11h12V9M10 13h4"/></svg><span>已归档</span><span id="archive-count" class="count-badge">0</span></button>
         <span class="public-status"><i aria-hidden="true"></i><span>公开预览</span></span>
       </div>
     </header>
@@ -32,16 +31,15 @@
 
     <main class="workbench">
       <aside class="catalog" aria-label="设计方案导航">
-        <div class="catalog-header"><div><span class="eyebrow">THE COLLECTION</span><h2>设计方向</h2></div><button id="refresh-list" class="icon-button" type="button" aria-label="刷新方案列表" title="刷新方案列表"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button></div>
-        <p class="catalog-intro">主方案与历史版本分别按票数排行。<br>归档只整理当前浏览器，不影响其他人。</p>
+        <div class="catalog-header"><div><span class="eyebrow">YOUR COLLECTION</span><h2>设计方案</h2></div><button id="refresh-list" class="icon-button" type="button" aria-label="刷新方案列表" title="刷新方案列表"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button></div>
+        <p class="catalog-intro">按票数排序 · 同票按收录顺序</p>
         <nav id="scheme-list" class="scheme-list" aria-label="选择预览方案"><div class="catalog-loading"><span class="spinner"></span><span>正在收录方案…</span></div></nav>
-        <div class="catalog-footer"><span class="archive-dot" aria-hidden="true"></span><div><span>公开设计档案</span><small>方案与历史版本，统一收录</small></div></div>
+        <div class="catalog-footer"><span class="local-dot" aria-hidden="true"></span><div><span>公开设计档案</span><small>方案与历史版本，统一收录</small></div></div>
       </aside>
 
       <section class="preview-panel" aria-labelledby="preview-title">
         <div class="preview-heading">
-          <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><div class="preview-title-row"><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><span id="preview-archive-state" class="preview-archive-state" hidden>已归档</span><span id="vote-display" class="vote-display" hidden><button id="vote-current" class="title-vote" type="button" aria-pressed="false" aria-label="投给当前方案" disabled><span class="title-vote-label">投票</span></button><span class="vote-divider" aria-hidden="true"></span><span id="inline-vote-count" class="inline-vote-count">—</span></span><span class="title-actions"><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>独立预览</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a><button id="archive-current" class="button button-quiet title-archive" type="button" title="归档当前方案" aria-label="归档当前方案" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v5H4zM6 9v11h12V9M10 13h4"/></svg><span>归档</span></button></span></div><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
-          <span class="preview-public-label">PUBLIC PREVIEW</span>
+          <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><div class="preview-title-row"><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><span id="vote-display" class="inline-voting vote-display" hidden><button id="vote-current" class="title-vote" type="button" aria-pressed="false" aria-label="投给当前方案"><span class="title-vote-label">投票</span></button><span class="vote-divider" aria-hidden="true"></span><strong id="inline-vote-count" class="inline-vote-count">—</strong></span><span id="preview-archive-state" class="archived-status" hidden>已归档</span><span class="title-actions"><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true" title="在新标签页打开当前方案的完整页面"><span>独立预览</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a><button id="archive-current" class="button button-quiet title-archive" type="button" title="归档当前方案" aria-label="归档当前方案" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v5H4zM6 9v11h12V9M10 13h4"/></svg><span>归档</span></button></span></div><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
         </div>
 
         <div class="sr-only"><span>当前方案 <span id="scheme-vote-count">—</span> 票，总计 <span id="total-vote-count">—</span> 票。</span><p id="vote-status" role="status" aria-live="polite">正在读取票数…</p></div>
@@ -64,11 +62,11 @@
     <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
     <div id="vote-error" class="toast vote-error-toast" role="alert" hidden><span id="vote-error-text"></span><button id="vote-retry" type="button">重试读取票数</button></div>
   </div>
-  <dialog id="archives-dialog" class="dialog archives-dialog" aria-labelledby="archives-title" aria-describedby="archives-description">
+  <dialog id="archives-dialog" class="dialog archive-dialog archives-dialog" aria-labelledby="archives-title" aria-describedby="archives-description">
     <button id="close-archives" class="icon-button dialog-close" type="button" aria-label="关闭已归档方案"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
     <span class="eyebrow">PERSONAL COLLECTION</span><h2 id="archives-title">已归档方案</h2>
-    <p id="archives-description">归档只整理当前浏览器的列表，不影响其他人、共享票数或方案页面。可随时预览或恢复。</p>
-    <div id="archives-list" class="archives-list"></div>
+    <p id="archives-description" class="archive-description">归档只整理当前浏览器的列表，不影响其他人、共享票数或方案页面。可随时预览或恢复。</p>
+    <div id="archives-list" class="archive-list archives-list"></div>
     <p class="archives-footer">清除本站浏览器数据会清除归档记录。</p>
   </dialog>
 </body>

@@ -7,7 +7,7 @@
   const elements = {
     list: byId('scheme-list'), count: byId('scheme-count'), title: byId('preview-title'),
     description: byId('preview-description'), group: byId('preview-group'), version: byId('preview-version'),
-    frame: byId('preview-frame'), placeholder: byId('preview-placeholder'), loading: byId('preview-loading'),
+    frame: byId('preview-frame'), previewWindow: byId('preview-window'), frameSlot: byId('preview-frame').parentElement, browserBar: document.querySelector('.browser-bar'), placeholder: byId('preview-placeholder'), loading: byId('preview-loading'),
     stage: byId('preview-stage'), address: byId('preview-address'), open: byId('open-preview'),
     notice: byId('preview-notice'), noticeText: byId('preview-notice-text'), noticeOpen: byId('notice-open'),
     footnote: byId('preview-footnote'), globalError: byId('global-error'), toast: byId('toast'),
@@ -18,6 +18,8 @@
   let loadRequest = 0;
   let voteRequest = 0;
   let voterIdentity;
+  let viewportFitFrame = 0;
+  const previewViewports = { desktop: { width: 1280, height: 720 }, mobile: { width: 390, height: 844 } };
 
   function node(tag, className, text) {
     const element = document.createElement(tag);
@@ -43,6 +45,31 @@
       const url = new URL(value, document.baseURI);
       return ['http:', 'https:'].includes(url.protocol) ? url.href : null;
     } catch { return null; }
+  }
+
+  function currentPreviewURL(scheme = state.schemes.find((item) => item.id === state.selectedId)) {
+    const fallback = scheme && safeURL(scheme.previewUrl);
+    if (!fallback || scheme.id !== state.selectedId) return fallback;
+    try {
+      const base = new URL(fallback);
+      const current = new URL(elements.frame.contentWindow.location.href);
+      const directory = new URL('.', base).pathname;
+      if (current.origin !== base.origin || !current.pathname.startsWith(directory)) return fallback;
+      if (scheme.previewVersion) current.searchParams.set('_v', scheme.previewVersion);
+      return current.href;
+    } catch { return fallback; }
+  }
+
+  function syncCurrentPreviewLinks() {
+    const url = currentPreviewURL();
+    if (!url) return;
+    elements.open.href = url;
+    elements.noticeOpen.href = url;
+    const item = [...elements.list.querySelectorAll('.scheme-item')].find((entry) => entry.dataset.catalogScheme === state.selectedId);
+    const link = item?.querySelector('.scheme-preview-link');
+    if (link) link.href = url;
+    const parsed = new URL(url);
+    elements.address.textContent = `${parsed.host}${parsed.pathname === '/' ? '' : parsed.pathname}`;
   }
 
   function formatDate(value) {
@@ -124,7 +151,7 @@
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('aria-hidden', 'true');
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', { vote: 'm8 11 3 3 6-6M5 4h14v16H5z', preview: 'M14 4h6v6M20 4 10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5', archive: 'M4 8h16v12H4zM3 4h18v4H3zM9 12h6' }[kind]);
+    path.setAttribute('d', { vote: 'm8 11 3 3 6-6M5 4h14v16H5z', preview: 'M14 4h6v6M20 4 10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5', archive: 'M4 8h16v12H4zM3 4h18v4H3zM9 12h6', shield: 'm12 3 7 3v5c0 4.5-3.2 7.7-7 10-3.8-2.3-7-5.5-7-10V6l7-3Zm-3 9 2 2 4-4' }[kind]);
     svg.append(path); return svg;
   }
 
@@ -162,14 +189,15 @@
     const fragment = document.createDocumentFragment();
     const schemes = rankedSchemes(undefined, { includeArchived: true }).filter((scheme) => state.archived.has(scheme.id));
     for (const scheme of schemes) {
-      const item = node('div', 'archives-item'); const copy = node('div', 'archives-item-copy');
-      copy.append(node('strong', '', scheme.title), node('span', '', scheme.group === 'history' ? '历史版本' : '主方案'));
+      const item = node('div', 'archive-item archives-item'); const copy = node('div', 'archive-item-copy archives-item-copy');
+      copy.append(node('strong', 'archive-item-title', scheme.title), node('span', 'archive-item-meta', scheme.group === 'history' ? '历史版本' : '主方案'));
       const preview = node('button', 'button archive-preview', '预览'); preview.type = 'button';
       preview.setAttribute('aria-label', `预览已归档方案${scheme.title}`);
       preview.addEventListener('click', () => { elements.archivesDialog.close(); selectScheme(scheme.id, { allowArchived: true }); });
       const restore = node('button', 'button restore-button', '恢复'); restore.type = 'button';
       restore.setAttribute('aria-label', `恢复${scheme.title}到方案列表`); restore.addEventListener('click', () => restoreScheme(scheme.id));
-      item.append(copy, preview, restore); fragment.append(item);
+      const actions = node('div', 'archive-item-actions'); actions.append(preview, restore);
+      item.append(copy, actions); fragment.append(item);
     }
     if (!schemes.length) fragment.append(node('p', 'catalog-empty', '还没有归档方案。'));
     elements.archivesList.replaceChildren(fragment);
@@ -221,7 +249,9 @@
     elements.voteButton.setAttribute('aria-label', voteLabel);
     elements.voteButton.classList.toggle('is-voted', voted);
     elements.voteButton.setAttribute('aria-pressed', String(voted));
-    elements.voteButton.disabled = !selected || !state.votes.loaded || state.voteBusy;
+    elements.voteButton.removeAttribute('title');
+    elements.inlineVoteCount.removeAttribute('title');
+    elements.voteButton.disabled = !selected || state.voteBusy;
     let status;
     if (state.voteBusy) status = '正在保存你的选择…';
     else if (!state.votes.loaded) status = state.voteReading ? '正在读取票数…' : '票数暂不可用，请重试。';
@@ -351,7 +381,7 @@
       const group = node('section', 'scheme-group'); group.dataset.schemeGroup = groupId;
       group.setAttribute('aria-label', groupId === 'history' ? '历史版本' : '主方案');
       const heading = node('div', 'group-heading');
-      heading.append(node('span', '', groupId === 'history' ? '历史版本' : '主方案'), node('span', '', String(schemes.length)));
+      heading.append(node('span', '', groupId === 'history' ? '历史版本' : '主方案'), node('span', '', String(schemes.length).padStart(2, '0')));
       const items = node('div', 'scheme-group-items');
       schemes.forEach((scheme, index) => {
         const item = node('div', 'scheme-item'); item.dataset.catalogScheme = scheme.id;
@@ -362,7 +392,14 @@
         if (thumbnailURL) { const img = document.createElement('img'); img.src = thumbnailURL; img.alt = ''; img.loading = 'lazy'; img.addEventListener('error', () => thumb.replaceChildren(graphic()), { once: true }); thumb.append(img); } else thumb.append(graphic());
         const copy = node('span', 'scheme-copy'); copy.append(node('span', 'scheme-title', scheme.title));
         if (scheme.subtitle) copy.append(node('span', 'scheme-subtitle', scheme.subtitle));
-        const meta = node('span', 'scheme-meta'); const date = formatDate(scheme.date); if (date) meta.append(node('span', '', date)); copy.append(meta);
+        const meta = node('span', 'scheme-meta'); const date = formatDate(scheme.date); if (date) meta.append(node('span', '', date));
+        if (scheme.canDestroy === false) {
+          const protection = node('span', 'meta-protected');
+          protection.append(actionIcon('shield'), node('span', '', '保留'));
+          protection.title = scheme.protectionReason || '此方案受保护，暂不可销毁';
+          meta.append(protection);
+        }
+        copy.append(meta);
         const mark = node('span', 'scheme-selected-mark'); mark.append(checkIcon()); mark.hidden = scheme.id !== state.selectedId;
         button.append(thumb, copy, mark); button.addEventListener('click', () => selectScheme(scheme.id)); button.classList.toggle('is-selected', scheme.id === state.selectedId);
         if (scheme.id === state.selectedId) button.setAttribute('aria-current', 'true');
@@ -385,7 +422,7 @@
     state.archivePreview = state.archived.has(id) ? id : null;
     const changed = state.selectedId !== id;
     state.selectedId = id;
-    document.title = `${scheme.title} · AH 方案预览`;
+    document.title = `${scheme.title} · AH 方案工作台`;
     elements.frame.title = `${scheme.title} · 设计方案预览`;
     elements.title.textContent = scheme.title;
     elements.archiveState.hidden = !state.archived.has(id);
@@ -442,12 +479,14 @@
       clearTimeout(state.loadingTimer);
       elements.loading.hidden = true;
       elements.notice.hidden = true;
+      syncCurrentPreviewLinks();
     };
     elements.frame.onerror = () => {
       clearTimeout(state.loadingTimer);
       elements.loading.hidden = true;
       showPreviewNotice('预览加载失败。可以重新载入，或在新标签中打开页面。');
     };
+    fitPreviewViewport();
     elements.frame.src = url;
     state.loadingTimer = setTimeout(() => {
       elements.loading.hidden = true;
@@ -475,12 +514,44 @@
     elements.version.textContent = 'DESIGN EXPLORATION';
     elements.address.textContent = '选择方案以开始预览';
     elements.footnote.textContent = '设计探索 · 切换方案，发现不同方向';
-    document.title = 'AH · 方案预览';
+    document.title = 'AH · 方案工作台';
     renderCatalog();
     renderVotePanel();
   }
 
+  function fitPreviewViewport() {
+    const viewport = previewViewports[state.device];
+    const stageStyle = getComputedStyle(elements.stage);
+    const windowStyle = getComputedStyle(elements.previewWindow);
+    const px = (value) => Number.parseFloat(value) || 0;
+    const availableWidth = elements.stage.clientWidth - px(stageStyle.paddingLeft) - px(stageStyle.paddingRight);
+    const availableHeight = elements.stage.clientHeight - px(stageStyle.paddingTop) - px(stageStyle.paddingBottom);
+    const borderWidth = px(windowStyle.borderLeftWidth) + px(windowStyle.borderRightWidth);
+    const borderHeight = px(windowStyle.borderTopWidth) + px(windowStyle.borderBottomWidth);
+    const chromeHeight = elements.browserBar.offsetHeight;
+    if (availableWidth <= borderWidth || availableHeight <= chromeHeight + borderHeight) return;
+    const scale = Math.min(1, (availableWidth - borderWidth) / viewport.width,
+      (availableHeight - chromeHeight - borderHeight) / viewport.height);
+    const displayWidth = viewport.width * scale;
+    const displayHeight = viewport.height * scale;
+    elements.previewWindow.style.width = `${displayWidth + borderWidth}px`;
+    elements.previewWindow.style.height = `${displayHeight + chromeHeight + borderHeight}px`;
+    elements.frameSlot.style.height = `${displayHeight}px`;
+    elements.frame.style.width = `${viewport.width}px`;
+    elements.frame.style.height = `${viewport.height}px`;
+    elements.frame.style.transform = `scale(${scale})`;
+  }
+
+  function queuePreviewViewportFit() {
+    cancelAnimationFrame(viewportFitFrame);
+    viewportFitFrame = requestAnimationFrame(() => {
+      viewportFitFrame = 0;
+      fitPreviewViewport();
+    });
+  }
+
   function setDevice(device) {
+    if (!previewViewports[device]) return;
     state.device = device;
     elements.stage.classList.toggle('is-mobile', device === 'mobile');
     for (const value of ['desktop', 'mobile']) {
@@ -488,7 +559,9 @@
       button.classList.toggle('is-active', value === device);
       button.setAttribute('aria-pressed', String(value === device));
     }
+    fitPreviewViewport();
   }
+
 
   byId('archive-current').addEventListener('click', () => { if (state.selectedId) archiveScheme(state.selectedId); });
   byId('open-archives').addEventListener('click', openArchives);
@@ -502,17 +575,21 @@
     if (elements.archivesDialog.open) renderArchives();
   });
   elements.voteButton.addEventListener('click', () => {
+    if (!state.votes.loaded) { loadVotes(); return; }
     if (state.selectedId) submitVote(state.votes.myVote === state.selectedId ? null : state.selectedId);
   });
   elements.voteRetry.addEventListener('click', loadVotes);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) loadVotes(); });
   const votePoll = setInterval(() => { if (!document.hidden) loadVotes(); }, 15000);
   window.addEventListener('pagehide', (event) => { if (!event.persisted) clearInterval(votePoll); });
+  for (const link of [elements.open, elements.noticeOpen]) {
+    for (const event of ['pointerdown', 'click', 'auxclick', 'contextmenu', 'focus']) link.addEventListener(event, syncCurrentPreviewLinks);
+  }
   byId('device-desktop').addEventListener('click', () => setDevice('desktop'));
   byId('device-mobile').addEventListener('click', () => setDevice('mobile'));
   byId('reload-preview').addEventListener('click', () => {
     const scheme = state.schemes.find((item) => item.id === state.selectedId);
-    const previewURL = scheme && safeURL(scheme.previewUrl);
+    const previewURL = scheme && currentPreviewURL(scheme);
     if (previewURL) {
       const url = new URL(previewURL);
       url.searchParams.set('_previewReload', String(Date.now()));
@@ -525,5 +602,9 @@
     const id = getHashId();
     if (state.schemes.some((scheme) => scheme.id === id)) selectScheme(id, { updateHash: false, allowArchived: state.archived.has(id) });
   });
+  const previewResizeObserver = new ResizeObserver(queuePreviewViewportFit);
+  previewResizeObserver.observe(elements.stage);
+  window.addEventListener('resize', queuePreviewViewportFit);
+  fitPreviewViewport();
   loadSchemes({ initial: true }).catch(() => {});
 })();

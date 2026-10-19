@@ -35,3 +35,5 @@ body.is-reduced-motion .depth-stage.has-depth~.exhibition-rail .end-chapter{marg
 .depth-stage.has-depth~.exhibition-rail .immersive-copy::before{content:"";position:absolute;inset:-30% -16% -20% -22%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 34% 50%,#f8fbff 0%,#f8fbffed 45%,#f8fbff00 74%)}
 body.is-reduced-motion .depth-stage.has-depth~.exhibition-rail .immersive-copy::before{display:none}
 @media(max-width:760px){.depth-stage.has-depth~.exhibition-rail .immersive-copy{background:none}.depth-stage.has-depth~.exhibition-rail .immersive-copy::before{inset:-6% -12% -15%;background:linear-gradient(#f8fbff 40%,#f8fbffed 60%,#f8fbff00)}}
+
+.variant-tag{position:absolute;left:5%;top:68px;font-size:8px;color:#7f98b8;letter-spacing:.7px}.scheme-switch{font-size:9px;color:#245bff;white-space:nowrap;border-bottom:1px solid #c9d9f1;padding:3px 0}.journey-meta{gap:17px}@media(max-width:760px){.variant-tag{left:7%;top:60px;font-size:7px}.scheme-switch{font-size:8px}.journey-meta{gap:10px}.journey-meta p{font-size:7px}}

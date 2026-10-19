@@ -1,0 +1,58 @@
+/* The companion stands on a small projected floor, clear of the reading rail. */
+.hall-companion-host{position:absolute;inset:0;z-index:20;pointer-events:none;overflow:visible}
+.hall-companion{--hc-opacity:0;--hc-pass-x:0px;--hc-pass-y:0px;--hc-scale:1;--hc-lean-x:0deg;--hc-lean-y:0deg;position:absolute;right:clamp(22px,5vw,82px);bottom:12px;width:190px;height:194px;pointer-events:none;opacity:var(--hc-opacity);transform:translate3d(var(--hc-pass-x),var(--hc-pass-y),0) scale(var(--hc-scale));transform-origin:50% 100%;isolation:isolate;color:#102A50;font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}
+.hc-ground{position:absolute;left:13px;right:13px;bottom:14px;height:26px;border:1px solid #9bb9ec66;border-radius:50%;background:radial-gradient(ellipse,#34649d2b 0%,#34649d12 46%,#eaf4ff00 73%);transform:perspective(170px) rotateX(26deg);pointer-events:none}
+.hc-mascot{appearance:none;position:absolute;inset:0;display:block;padding:0;border:0;background:none;pointer-events:auto;color:inherit;border-radius:50% 50% 12px 12px;cursor:pointer;outline-offset:3px;-webkit-tap-highlight-color:transparent}
+.hc-mascot:focus-visible{outline:2px solid #245BFF;outline-offset:3px}
+.hc-art{position:absolute;inset:0 0 13px;display:flex;align-items:flex-end;justify-content:center;perspective:500px;transform:rotateX(var(--hc-lean-x)) rotateY(var(--hc-lean-y));transform-origin:50% 88%;transition:transform .22s ease-out;pointer-events:none}
+.hc-character{display:block;flex:none;height:172px;width:auto;max-width:none;object-fit:contain;object-position:center bottom;transform-origin:50% 85%;filter:drop-shadow(0 8px 5px #102a5010);user-select:none;-webkit-user-drag:none}
+.hall-companion[data-state="dispatch"] .hc-character{height:184px;margin-left:12px}
+.hall-companion[data-state="completed"] .hc-character{height:179px;margin-left:9px}
+.hc-invitation{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;font-size:10px;line-height:16px;font-weight:400;letter-spacing:.3px;color:#34649D;text-shadow:0 1px 6px #f8fbff;transition:color .2s,opacity .2s}
+.hc-invitation>span{font-size:14px;color:#245BFF}
+.hall-companion[data-open="true"] .hc-invitation{opacity:.4}
+.hc-sparklets{position:absolute;left:54%;bottom:39%;width:1px;height:1px;pointer-events:none}
+.hc-sparklets i{position:absolute;inset:0 auto auto 0;display:block;width:11px;height:13px;border-radius:3px;background:#245BFF;box-shadow:inset 0 1px 2px #ffffffaa,0 2px 4px #102a5015;opacity:0}
+.hc-sparklets i:nth-child(2){width:9px;height:11px;background:#4bd6e5}
+.hc-sparklets i:nth-child(3){width:9px;height:10px;background:#f5c844}
+.hc-panel{position:absolute;right:116px;bottom:153px;width:306px;pointer-events:auto;padding:18px 19px 16px;background:#ffffffed;border:1px solid #c7d9f0;border-radius:15px 15px 3px 15px;box-shadow:0 12px 35px -18px #244b8566;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)}
+.hc-panel[hidden]{display:none!important}
+.hc-panel:after{content:"";position:absolute;right:-1px;bottom:-13px;width:16px;height:16px;background:#ffffffeb;border-right:1px solid #c7d9f0;transform:skewY(38deg);clip-path:polygon(0 0,100% 0,100% 100%);pointer-events:none}
+.hc-panel-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.hc-stage{font-size:9px;line-height:1.5;color:#6d819c;letter-spacing:.5px}
+.hc-close{display:flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;margin:-5px -6px -3px 0;border:0;border-radius:50%;background:none;color:#6d819c;font-size:21px;line-height:1;cursor:pointer}
+.hc-close:hover{background:#EAF4FF;color:#245BFF}
+.hc-product{margin:0 0 10px;font-size:17px;line-height:1.4;font-weight:500;letter-spacing:-.3px;color:#102A50}
+.hc-message{margin:0;font-size:11px;line-height:1.85;color:#647d9f}
+.hc-actions{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:15px}
+.hc-actions button{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0;border:0;border-radius:0;background:none;font-size:10px;font-weight:400;line-height:1.8;text-align:left;cursor:pointer}
+.hc-actions .hc-next{color:#245BFF;font-weight:500}
+.hc-actions .hc-guide{color:#6d819c}
+.hc-actions button>span{font-size:14px;line-height:1}
+.hc-actions button:hover{color:#102A50}
+.hc-close:focus-visible,.hc-actions button:focus-visible{outline:2px solid #245BFF;outline-offset:4px}
+.hall-companion[data-reduced="true"]{transform:none}
+.hall-companion[data-reduced="true"] .hc-art{transition:none;transform:none}
+@media(hover:hover) and (pointer:fine){.hc-mascot:hover .hc-invitation{color:#245BFF}.hc-mascot:hover .hc-art{filter:drop-shadow(0 3px 10px #245bff09)}}
+@media(max-width:760px){
+ .hall-companion{right:20px;bottom:17px;width:112px;height:122px}
+ .hc-ground{left:8px;right:8px;bottom:13px;height:18px}
+ .hc-art{bottom:15px}
+ .hc-character{height:101px}
+ .hall-companion[data-state="dispatch"] .hc-character{height:110px;margin-left:7px}
+ .hall-companion[data-state="completed"] .hc-character{height:107px;margin-left:5px}
+ .hc-invitation{font-size:8px;line-height:14px;gap:6px;letter-spacing:0}
+ .hc-invitation>span{font-size:12px}
+ .hc-panel{right:0;bottom:124px;width:min(282px,calc(100vw - 42px));padding:15px 17px 14px;border-radius:12px 12px 3px 12px}
+ .hc-panel-top{margin-bottom:6px}
+ .hc-product{font-size:16px;margin-bottom:8px}
+ .hc-message{font-size:10px;line-height:1.8}
+ .hc-actions{margin-top:12px;gap:7px}
+ .hc-actions button{font-size:10px;min-height:26px}
+ .hc-close{width:28px;height:28px}
+ .hc-sparklets i{width:8px;height:10px}
+ .hc-sparklets i:nth-child(2){width:7px;height:8px}
+ .hc-sparklets i:nth-child(3){width:7px;height:8px}
+}
+@media(max-width:760px) and (max-height:700px){.hall-companion{bottom:9px}.hc-panel{bottom:116px;padding:12px 15px;width:min(270px,calc(100vw - 42px))}.hc-message{line-height:1.7}.hc-product{font-size:15px}.hc-actions{margin-top:9px;gap:4px}}
+@media(prefers-reduced-motion:reduce){.hall-companion,.hc-art,.hc-invitation{transition:none!important}.hc-art{transform:none!important}}

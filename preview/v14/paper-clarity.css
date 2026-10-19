@@ -1,0 +1,66 @@
+/* V14 · Opaque print on the original paper, with light confined to the folds.
+   Each print window is a flat child of its physical leaf. No 3D hinge is masked. */
+.world {
+  background: linear-gradient(145deg, #FFFFFF 0%, #EAF4FF 58%,
+    color-mix(in srgb, #EAF4FF 90%, #3895FF) 100%);
+}
+.cube-lens::before {
+  background: radial-gradient(ellipse 58% 65% at 31% 43%,
+    rgb(56 149 255 / .055), transparent 82%);
+}
+.paper-print {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  clip-path: inset(0 0 calc((1 - var(--print-reveal, 0)) * 100%) 0);
+}
+body[data-material] .unfold-sheet,
+body[data-material] .unfold-cap { --paper-grain: .032; }
+body[data-material] .surface-crop { opacity: 1; }
+body[data-material] .surface-coat {
+  background: #FFFFFF;
+  opacity: 1;
+  clip-path: inset(calc(var(--print-reveal, 0) * 100%) 0 0 0);
+}
+/* The unveiled UI is always full-contrast. Paper sheen never whitens its ink. */
+body[data-material] .sheet-laminate {
+  background: linear-gradient(145deg,
+    rgb(52 100 157 / calc(var(--face-dark, .08) * .22)),
+    rgb(52 100 157 / calc(var(--face-dark, .08) * .48)));
+}
+body[data-material] .sheet-laminate::before {
+  opacity: calc(var(--paper-grain, .042) * (1 - var(--print-reveal, 0)));
+}
+body[data-material] .sheet-left .surface-coat { background: #EAF4FF; }
+body[data-material] .sheet-right .surface-coat {
+  background: color-mix(in srgb, #EAF4FF 94%, #34649D);
+}
+body[data-material] .sheet-left .sheet-laminate {
+  box-shadow: inset -7px 0 7px -5px rgb(16 42 80 / calc(.34 * var(--crease-depth, 0))),
+    inset -1px 0 0 rgb(255 255 255 / calc(.8 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .76), inset 0 -1px 0 rgb(52 100 157 / .30);
+}
+body[data-material] .sheet-right .sheet-laminate {
+  box-shadow: inset 7px 0 7px -5px rgb(16 42 80 / calc(.34 * var(--crease-depth, 0))),
+    inset 1px 0 0 rgb(255 255 255 / calc(.8 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .76), inset 0 -1px 0 rgb(52 100 157 / .30);
+}
+body[data-material] .sheet-center .sheet-laminate {
+  box-shadow: inset 4px 0 6px -4px rgb(16 42 80 / calc(.22 * var(--crease-depth, 0))),
+    inset -4px 0 6px -4px rgb(16 42 80 / calc(.22 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .82), inset 0 -1px 0 rgb(52 100 157 / .28),
+    inset 1px 0 0 rgb(255 255 255 / .7), inset -1px 0 0 rgb(52 100 157 / .22);
+}
+/* Firm local shadows, with a lighter room around them. No broad gray wash. */
+body[data-material] .studio-shadow {
+  background: radial-gradient(ellipse 39% 38% at 45% 49%,
+    rgb(16 42 80 / .36), rgb(52 100 157 / .18) 42%, transparent 100%),
+    radial-gradient(ellipse, rgb(52 100 157 / .15) 10%, rgb(52 100 157 / .06) 45%, transparent 74%);
+}
+@media (max-width: 799px) {
+  .world {
+    background: linear-gradient(160deg, #FFFFFF 0%, #EAF4FF 52%,
+      color-mix(in srgb, #EAF4FF 91%, #3895FF) 100%);
+  }
+}

@@ -1,0 +1,203 @@
+/* V10 · Uncoated blue / Ice paper refinement.
+   Leaf materials only: this file does not touch a 3D ancestor, a hinge,
+   the V05 scroll stops or the dimensions of the unfolding geometry.
+   Optional animation inputs:
+     --print-reveal : 0 → 1; falls back to the existing --surface-reveal.
+     --paper-grain  : texture contrast (default .042).
+     --crease-depth: contact/score strength (default 1).
+   Light is removed as the printed interface becomes fully readable, so three
+   hinged crops finish as one clean 720 × 450 canvas rather than three cards. */
+
+.unfold-sheet,
+.unfold-cap,
+.stock-backing,
+.cap-backing {
+  --stock-grain: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27172%27 height=%27172%27%3E%3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.84 .32%27 numOctaves=%273%27 stitchTiles=%27stitch%27 result=%27n%27/%3E%3CfeColorMatrix in=%27n%27 type=%27matrix%27 values=%270 0 0 0 .062745 0 0 0 0 .164706 0 0 0 0 .313725 .8 0 0 0 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");
+}
+
+/* Opaque, softly lit stock: the wire option keeps its mist-blue body. */
+body[data-material="wire"] .unfold-sheet,
+body[data-material="wire"] .unfold-cap {
+  --wire-stock: color-mix(in srgb, #102A50 85%, #EAF4FF);
+  background: color-mix(in srgb, var(--wire-stock) calc(100% - var(--paper-presence) * 100%), #FFFFFF);
+}
+body[data-material="wire"] .sheet-left,
+body[data-material="wire"] .sheet-right {
+  --wire-stock: color-mix(in srgb, #102A50 90%, #EAF4FF);
+}
+body[data-material="wire"] .cap-top,
+body[data-material="wire"] .return-top {
+  --wire-stock: color-mix(in srgb, #102A50 79%, #EAF4FF);
+}
+body[data-material="wire"] .cap-bottom,
+body[data-material="wire"] .return-bottom {
+  --wire-stock: color-mix(in srgb, #102A50 93%, #EAF4FF);
+}
+body[data-material="paper"] .unfold-sheet,
+body[data-material="paper"] .unfold-cap {
+  background: #FFFFFF;
+}
+
+/* Ink is exposed on the same sheet; no extra front or screen is introduced. */
+body[data-material] .surface-crop {
+  opacity: var(--print-reveal, var(--surface-reveal));
+}
+body[data-material] .surface-coat {
+  opacity: calc(1 - var(--print-reveal, var(--surface-reveal)));
+}
+.surface-coat::before,
+.surface-coat::after {
+  background: none;
+  box-shadow: none;
+}
+.surface-coat::after { opacity: 0; }
+
+/* Broad diffuse light and very fine fibres replace the plastic clearcoat.
+   Both sheets and caps share the same grain; the image contains only Ink RGB
+   with varying alpha. The full interface receives no texture or per-leaf light. */
+body[data-material] .sheet-laminate {
+  opacity: calc(1 - var(--print-reveal, var(--surface-reveal)));
+  background:
+    radial-gradient(ellipse 175% 145% at var(--spec-x, 24%) var(--spec-y, 0%), rgb(234 244 255 / calc(.018 + var(--face-spec, .01) * .45)), transparent 83%),
+    linear-gradient(145deg, rgb(234 244 255 / .025), transparent 44%, rgb(16 42 80 / calc(var(--face-dark, .08) * .85)));
+  box-shadow: inset 0 .7px 0 rgb(255 255 255 / .20), inset 0 -.7px 0 rgb(52 100 157 / .10);
+}
+.sheet-laminate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--stock-grain);
+  background-size: 172px 172px;
+  opacity: var(--paper-grain, .042);
+}
+body[data-material] .sheet-left .sheet-laminate {
+  box-shadow: inset -5px 0 8px -5px rgb(16 42 80 / calc(var(--hinge-ao, .1) * var(--crease-depth, 1))), inset 0 .7px 0 rgb(255 255 255 / .19);
+}
+body[data-material] .sheet-right .sheet-laminate {
+  box-shadow: inset 5px 0 8px -5px rgb(16 42 80 / calc(var(--hinge-ao, .1) * var(--crease-depth, 1))), inset 0 .7px 0 rgb(255 255 255 / .19);
+}
+body[data-material] .sheet-center .sheet-laminate {
+  box-shadow: inset 4px 0 7px -5px rgb(16 42 80 / calc(var(--hinge-ao, .1) * var(--crease-depth, 1))), inset -4px 0 7px -5px rgb(16 42 80 / calc(var(--hinge-ao, .1) * var(--crease-depth, 1))), inset 0 .7px 0 rgb(255 255 255 / .19);
+}
+
+/* A compressed fibre score has a dark shoulder and a soft light shoulder.
+   It is deliberately a small contact detail rather than a glowing outline. */
+body[data-material] .paper-crease {
+  opacity: calc(var(--crease-depth, var(--crease-active)) * (1 - var(--object-shade)) * .78);
+  background: linear-gradient(90deg, transparent 0%, rgb(52 100 157 / .18) 23%, rgb(255 255 255 / .66) 45%, rgb(234 244 255 / .54) 57%, rgb(52 100 157 / .11) 76%, transparent 100%);
+  box-shadow: none;
+}
+body[data-material] .paper-cross-score {
+  height: 1.6px;
+  background: linear-gradient(180deg, rgb(16 42 80 / .12), rgb(52 100 157 / .13) .45px, rgb(255 255 255 / .72) .8px, rgb(234 244 255 / .65) 1.2px, transparent);
+  opacity: calc((.34 + .34 * var(--return-fold)) * (1 - var(--object-shade)));
+  box-shadow: none;
+}
+
+/* Sparse cut edges: geometry still owns the ~1 px leaf walls.
+   Only the light-facing edge catches a thin fibre, not the full rectangle. */
+body[data-material] .surface-seam {
+  opacity: calc(1 - var(--print-reveal, var(--surface-reveal)));
+  box-shadow: inset 0 .7px 0 rgb(234 244 255 / .15), inset 0 -.7px 0 rgb(16 42 80 / .14);
+}
+body[data-material] .sheet-wall,
+body[data-material] .wall-outer,
+body[data-material] .cap-edge,
+body[data-material] .center-wall {
+  background: linear-gradient(180deg, rgb(255 255 255 / .78), #EAF4FF 42%, rgb(52 100 157 / .34));
+  box-shadow: none;
+  opacity: calc((1 - var(--object-shade)) * .72);
+}
+body[data-material="wire"] .sheet-wall,
+body[data-material="wire"] .wall-outer,
+body[data-material="wire"] .cap-edge,
+body[data-material="wire"] .center-wall {
+  background: color-mix(in srgb, color-mix(in srgb, #102A50 70%, #EAF4FF) calc(100% - var(--paper-presence) * 100%), #EAF4FF);
+}
+body[data-material] .unfold-cap {
+  backface-visibility: hidden;
+  box-shadow: inset 0 .7px 0 rgb(255 255 255 / .29), inset 0 -.7px 0 rgb(52 100 157 / .13);
+}
+body[data-material] .unfold-cap::before {
+  opacity: 1;
+  background:
+    linear-gradient(rgb(16 42 80 / var(--object-shade)), rgb(16 42 80 / var(--object-shade))),
+    radial-gradient(ellipse 175% 145% at var(--spec-x, 24%) var(--spec-y, 0%), rgb(234 244 255 / calc(.015 + var(--face-spec, .01) * .4)), transparent 83%),
+    linear-gradient(145deg, transparent 20%, rgb(52 100 157 / calc(var(--face-dark, .08) * .9)));
+}
+body[data-material] .unfold-cap::after {
+  display: block;
+  background-image: var(--stock-grain);
+  background-color: transparent;
+  background-size: 172px 172px;
+  opacity: calc(var(--paper-grain, .042) * (1 - var(--object-shade)));
+}
+body[data-material] .unfold-rear {
+  box-shadow: none;
+}
+
+.cap-edge,
+.center-wall {
+  position: absolute;
+  pointer-events: none;
+  backface-visibility: visible;
+}
+.cap-edge { transform-origin: 0 0; }
+
+/* Reverse-side paper stock is its own opaque leaf. Geometry owns its
+   dimensions and rotation; this face never receives product UI or clearcoat. */
+.stock-backing,
+.cap-backing {
+  position: absolute;
+  pointer-events: none;
+  backface-visibility: hidden;
+  background: #EAF4FF;
+  box-shadow: inset 0 .6px 0 rgb(255 255 255 / .26), inset 0 -.6px 0 rgb(52 100 157 / .11);
+}
+body[data-material="wire"] .stock-backing,
+body[data-material="wire"] .cap-backing {
+  --back-stock: color-mix(in srgb, #102A50 88%, #EAF4FF);
+  background: color-mix(in srgb, var(--back-stock) calc(100% - var(--paper-presence) * 100%), #FFFFFF);
+}
+body[data-material="paper"] .stock-backing,
+body[data-material="paper"] .cap-backing {
+  background: color-mix(in srgb, #EAF4FF calc(100% - var(--paper-presence) * 100%), #FFFFFF);
+}
+.stock-backing::before,
+.cap-backing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: var(--stock-grain);
+  background-size: 172px 172px;
+  opacity: calc(var(--paper-grain, .042) * (1 - var(--object-shade)));
+}
+.stock-backing::after,
+.cap-backing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgb(16 42 80 / var(--object-shade)), rgb(16 42 80 / var(--object-shade))),
+    radial-gradient(ellipse 170% 135% at var(--spec-x, 20%) var(--spec-y, 0%), rgb(234 244 255 / .035), transparent 82%),
+    linear-gradient(150deg, transparent 20%, rgb(52 100 157 / calc(var(--face-dark, .07) * .8)));
+}
+
+/* The completed print stays uniform across the three physical crops. */
+body[data-material] .unfold-sheet .ah-product-surface .aps-action {
+  background: #245BFF;
+  box-shadow: 0 1px 2px rgb(16 42 80 / .06);
+  border-color: transparent;
+}
+body[data-material] .unfold-sheet .ah-product-surface .aps-bar {
+  background: #FFFFFF;
+  box-shadow: none;
+}
+body[data-material] .unfold-sheet .ah-product-surface .aps-square {
+  background: #102A50;
+  box-shadow: none;
+  border-color: transparent;
+}

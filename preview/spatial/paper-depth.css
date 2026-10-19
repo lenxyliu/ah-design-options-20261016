@@ -1,0 +1,90 @@
+/* V13 · White stock in a cool studio. Material and light only.
+   V12 dimensions and shared joints, V05 observation holds are retained. */
+.world {
+  background: radial-gradient(ellipse 75% 85% at 29% 43%, color-mix(in srgb, #EAF4FF 92%, #34649D), transparent 86%),
+    linear-gradient(145deg, #FFFFFF 0%, #EAF4FF 64%, color-mix(in srgb, #EAF4FF 93%, #3895FF) 100%);
+}
+.cube-lens::before {
+  background: radial-gradient(ellipse 48% 58% at 31% 42%, rgb(52 100 157 / .055), transparent 78%),
+    radial-gradient(ellipse 60% 45% at 22% 12%, rgb(255 255 255 / .22), transparent 80%);
+}
+/* Broad projection and a narrow core convey height without a heavy outline. */
+body[data-material] .studio-shadow {
+  background: radial-gradient(ellipse 42% 39% at 45% 49%, rgb(16 42 80 / .34) 0%, rgb(52 100 157 / .19) 40%, transparent 100%),
+    radial-gradient(ellipse at 50% 50%, rgb(52 100 157 / .23) 9%, rgb(52 100 157 / .10) 43%, transparent 73%);
+  filter: blur(8px);
+  opacity: var(--paper-shadow, .44) !important;
+}
+body[data-material] .unfold-sheet,
+body[data-material] .unfold-cap { --paper-grain: .052; }
+/* Every outer leaf has White pigment. Its normal, not a blue fill, gives volume. */
+body[data-material] .sheet-left,
+body[data-material] .sheet-right { background: #FFFFFF; }
+body[data-material] .stock-backing,
+body[data-material] .cap-backing { background: color-mix(in srgb, #EAF4FF 72%, #FFFFFF); }
+body[data-material] .sheet-laminate {
+  opacity: var(--paper-read, 1);
+  background: radial-gradient(ellipse 180% 155% at var(--spec-x, 24%) var(--spec-y, 0%), rgb(255 255 255 / .16), transparent 79%),
+    linear-gradient(145deg, rgb(52 100 157 / calc(var(--face-dark, .08) * .50)), rgb(52 100 157 / calc(.024 + var(--face-dark, .08) * 1.08)));
+}
+/* Fold shoulders are inset on the existing paper, never a floating strip. */
+body[data-material] .sheet-left .sheet-laminate {
+  box-shadow: inset -8px 0 10px -6px rgb(16 42 80 / calc(.31 * var(--crease-depth, 0))), inset -1px 0 0 rgb(255 255 255 / calc(.65 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .72), inset 0 -1px 0 rgb(52 100 157 / .25);
+}
+body[data-material] .sheet-right .sheet-laminate {
+  box-shadow: inset 8px 0 10px -6px rgb(16 42 80 / calc(.31 * var(--crease-depth, 0))), inset 1px 0 0 rgb(255 255 255 / calc(.65 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .72), inset 0 -1px 0 rgb(52 100 157 / .25);
+}
+body[data-material] .sheet-center .sheet-laminate {
+  box-shadow: inset 5px 0 8px -5px rgb(16 42 80 / calc(.24 * var(--crease-depth, 0))), inset -5px 0 8px -5px rgb(16 42 80 / calc(.24 * var(--crease-depth, 0))),
+    inset 0 1px 0 rgb(255 255 255 / .78), inset 0 -1px 0 rgb(52 100 157 / .28), inset 1px 0 0 rgb(255 255 255 / .62), inset -1px 0 0 rgb(52 100 157 / .19);
+}
+body[data-material] .surface-seam {
+  opacity: var(--paper-read, 1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .70), inset 0 -1px 0 rgb(52 100 157 / .22);
+}
+body[data-material] .unfold-cap {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .78), inset 0 -1px 0 rgb(52 100 157 / .28), inset 1px 0 0 rgb(255 255 255 / .55), inset -1px 0 0 rgb(52 100 157 / .20);
+}
+body[data-material] .unfold-cap::before {
+  background: linear-gradient(rgb(234 244 255 / var(--object-shade)), rgb(234 244 255 / var(--object-shade))),
+    linear-gradient(145deg, rgb(52 100 157 / calc(.018 + var(--face-dark, .08) * .46)), rgb(52 100 157 / calc(.025 + var(--face-dark, .08) * 1.04)));
+}
+body[data-material] .cap-top,
+body[data-material] .return-top {
+  box-shadow: inset 0 3px 7px -4px rgb(16 42 80 / calc(.30 * var(--crease-depth, 0))), inset 0 1px 0 rgb(255 255 255 / .8), inset 0 -1px 0 rgb(52 100 157 / .27), inset -1px 0 0 rgb(52 100 157 / .18);
+}
+body[data-material] .cap-bottom,
+body[data-material] .return-bottom {
+  box-shadow: inset 0 -3px 7px -4px rgb(16 42 80 / calc(.30 * var(--crease-depth, 0))), inset 0 1px 0 rgb(255 255 255 / .66), inset 0 -1px 0 rgb(52 100 157 / .32), inset -1px 0 0 rgb(52 100 157 / .22);
+}
+body[data-material] .paper-cross-score {
+  height: 2px;
+  opacity: calc((.65 + .25 * var(--return-fold)) * (1 - var(--object-shade)));
+  background: linear-gradient(180deg, rgb(16 42 80 / .27), rgb(52 100 157 / .17) .65px, rgb(255 255 255 / .84) 1px, rgb(234 244 255 / .5) 1.5px, transparent);
+}
+/* Bright cut fibre above a cool dark underside. Physical thickness stays .8125. */
+body[data-material] .sheet-wall,
+body[data-material] .wall-outer,
+body[data-material] .cap-edge,
+body[data-material] .center-wall {
+  background: linear-gradient(180deg, #FFFFFF 0%, #EAF4FF 28%, color-mix(in srgb, #EAF4FF 66%, #34649D) 72%, #34649D 100%);
+  opacity: calc(var(--edge-exposure, 1) * (1 - var(--object-shade)) * (.28 + .72 * var(--paper-read, 1)) * .95);
+}
+.stock-backing::after,
+.cap-backing::after {
+  background: linear-gradient(rgb(234 244 255 / var(--object-shade)), rgb(234 244 255 / var(--object-shade))),
+    linear-gradient(150deg, rgb(52 100 157 / calc(var(--face-dark, .07) * .55)), rgb(52 100 157 / calc(.025 + var(--face-dark, .07) * 1.2)));
+}
+.paper-joint,
+.joint-back {
+  background-image: linear-gradient(rgb(234 244 255 / var(--object-shade)), rgb(234 244 255 / var(--object-shade))), var(--joint-grain),
+    linear-gradient(180deg, rgb(52 100 157 / calc(.045 + var(--face-dark, .04) * 1.4)), rgb(52 100 157 / calc(.075 + var(--face-dark, .04) * 1.7)));
+  background-size: auto, 172px 172px, auto;
+}
+@media (max-width: 799px) {
+  .world { background: radial-gradient(ellipse 110% 55% at 47% 30%, color-mix(in srgb, #EAF4FF 91%, #34649D), transparent 95%),
+    linear-gradient(160deg, #FFFFFF 0%, #EAF4FF 55%, color-mix(in srgb, #EAF4FF 94%, #3895FF) 100%); }
+  body[data-material] .studio-shadow { filter: blur(5px); }
+}

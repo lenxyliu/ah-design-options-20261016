@@ -33,14 +33,40 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
       const score=document.createElement('div');score.className='paper-cross-score';score.setAttribute('aria-hidden','true');cap.append(score);
       return{hinge,flap};
     });
+    // A paper hinge is a connected ribbon, not two separately offset plates.
+    // The ribbons own their endpoints; adjoining panels use those same points.
+    const makeJoint=parent=>Array.from({length:10},()=>{
+      const face=document.createElement('div');face.className='paper-joint';face.setAttribute('aria-hidden','true');
+      face.style.cssText='position:absolute;left:0;top:0;width:240px;transform-origin:0 0;backface-visibility:visible;pointer-events:none';parent.append(face);
+      return{face,angle:0};
+    });
+    const lidJoints=caps.map(()=>makeJoint(object));
+    const returnJoints=caps.map(cap=>makeJoint(cap.parentNode));
     const creases=['left','right'].map(side=>{
       const strip=document.createElement('div');strip.className='paper-crease crease-'+side;strip.setAttribute('aria-hidden','true');object.querySelector('.hinge-'+side).append(strip);return strip;
     });
     const sheets=[...object.querySelectorAll('.unfold-sheet')];
+    // Reveal opaque print through a window on the same physical leaf. Its
+    // source crop stays at the original coordinates; no replacement UI enters.
     sheets.forEach(sheet=>{
+      const window=document.createElement('div');window.className='paper-print';
+      const crop=sheet.querySelector('.surface-crop');crop.before(window);window.append(crop);
+    });
+    const stockThickness=52/64;
+    const sheetBacks=sheets.map((sheet,part)=>{
+      const center=part===1,parent=center?object:sheet.parentNode;
+      const backing=document.createElement('div');backing.className='stock-backing backing-'+['left','center','right'][part];backing.setAttribute('aria-hidden','true');parent.append(backing);return backing;
+    });
+    const capLeaves=[...caps,...returns.map(item=>item.flap)];
+    const capBacks=capLeaves.map((cap,part)=>{
+      const backing=document.createElement('div');backing.className='cap-backing '+(part%2?'backing-bottom':'backing-top');backing.setAttribute('aria-hidden','true');cap.parentNode.append(backing);
+      const edges=(part<2?['left','right']:['outer','left','right']).map(edge=>{const wall=document.createElement('div');wall.className='cap-edge edge-'+edge+(edge==='outer'?' edge-top':'');wall.setAttribute('aria-hidden','true');cap.parentNode.append(wall);return wall;});
+      return{backing,edges};
+    });
+    sheets.forEach((sheet,part)=>{
       const laminate=document.createElement('div');laminate.className='sheet-laminate';laminate.setAttribute('aria-hidden','true');sheet.append(laminate);
-      if(sheet.classList.contains('sheet-center'))return;
-      for(const edge of ['top','bottom','outer']){const wall=document.createElement('div');wall.className='sheet-wall wall-'+edge;wall.setAttribute('aria-hidden','true');sheet.parentNode.append(wall);}
+      const center=part===1,parent=center?object:sheet.parentNode;
+      for(const edge of center?['top','bottom','left','right']:['top','bottom','outer']){const wall=document.createElement('div');wall.className='sheet-wall wall-'+edge+(center?' center-wall':'');wall.setAttribute('aria-hidden','true');parent.append(wall);}
     });
     const shadow=document.createElement('div');shadow.className='studio-shadow';shadow.setAttribute('aria-hidden','true');rig.append(shadow);
     const surfaces=[...object.querySelectorAll('.surface-crop')].map((crop,part)=>{
@@ -48,7 +74,7 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     });
     object.addEventListener('click',()=>onSelect(product.id));object.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onSelect(product.id);}});
     rig.append(object);
-    return{object,surfaces,sheets,shadow,caps,returns,creases,id:product.id,center:object.querySelector('.sheet-center'),left:object.querySelector('.hinge-left'),right:object.querySelector('.hinge-right'),top:object.querySelector('.hinge-top'),bottom:object.querySelector('.hinge-bottom'),rear:object.querySelector('.unfold-rear'),pin:object.querySelector('.face-pin'),lastStage:-1};
+    return{object,surfaces,sheets,sheetBacks,capBacks,stockThickness,lidJoints,returnJoints,shadow,caps,returns,creases,id:product.id,center:object.querySelector('.sheet-center'),left:object.querySelector('.hinge-left'),right:object.querySelector('.hinge-right'),top:object.querySelector('.hinge-top'),bottom:object.querySelector('.hinge-bottom'),rear:object.querySelector('.unfold-rear'),pin:object.querySelector('.face-pin'),lastStage:-1};
   });
   let width=innerWidth,height=innerHeight,mobile=width<800,scale=1,progress=0,target=0,raf=0,last=0,ready=false,disposed=false,draws=0;
   let reduced=Boolean(window.__AH_REDUCED_MOTION||matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -66,7 +92,8 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
   function clearedFamily(){const state=family();state.poses.forEach((p,i)=>{if(i){p.z=parkedPose(i).z;p.shade=.96;}});return state;}
   function closing(){const s=intro();s.cx=mobile?.5:.33;s.cy=mobile?.35:.50;s.poses.forEach(p=>{p.s*=.86;p.x*=.86;p.y*=.86;});return s;}
   function interp(a,b,t){return{cx:mix(a.cx,b.cx,t),cy:mix(a.cy,b.cy,t),poses:a.poses.map((pose,i)=>Object.fromEntries(Object.entries(pose).map(([key,value])=>[key,mix(value,b.poses[i][key],t)])))};}
-  function sample(p){
+  let keyframes=[];
+  function rebuildKeyframes(){
     const keys=[{p:0,s:intro()},{p:.055,s:intro()},{p:.075,s:lifted()},{p:.125,s:lifted(true)},{p:.14,s:family()},{p:.19,s:family()},{p:.20,s:clearedFamily()}];
     for(let i=0;i<4;i++){
       const start=.2+i*.16;
@@ -76,7 +103,10 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     const closingApproach=closing();closingApproach.poses.forEach((p,i)=>{p.z=parkedPose(i).z;p.shade=.85;});
     keys.push({p:.848,s:depart(3)},{p:.86,s:parked()},{p:.90,s:closingApproach});
     keys.push({p:.95,s:closing()},{p:1,s:closing()});
-    let a=keys[0],b=keys.at(-1);for(let i=1;i<keys.length;i++){if(p<=keys[i].p){a=keys[i-1];b=keys[i];break;}}
+    keyframes=keys;
+  }
+  function sample(p){
+    let a=keyframes[0],b=keyframes.at(-1);for(let i=1;i<keyframes.length;i++){if(p<=keyframes[i].p){a=keyframes[i-1];b=keyframes[i];break;}}
     const t=clamp((p-a.p)/(b.p-a.p||1));return interp(a.s,b.s,reduced?(t<.5?0:1):ease(t));
   }
   // Allocate scroll distance to visible hinge stages, with observation holds.
@@ -86,11 +116,23 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     for(let i=1;i<unfoldStops.length;i++){const a=unfoldStops[i-1],b=unfoldStops[i];if(local<=b[0])return mix(a[1],b[1],ease((local-a[0])/(b[0]-a[0])));}
     return 0;
   }
+  function jointRibbon(parts,points,direction,parentAngle=0){
+    parts.forEach((part,i)=>{
+      const a=points[i],b=points[i+1],dy=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dy,dz);
+      part.face.style.display=length<.00001?'none':'block';if(length<.00001)return;
+      const ty=dy/length,tz=dz/length,ny=-direction*tz,nz=direction*ty;
+      // Keep the CSS box one exact pixel tall; the transform owns its length.
+      // This avoids a separate layout rounding at every ribbon segment.
+      part.face.style.height='1px';
+      part.face.style.transform=`matrix3d(${direction},0,0,0,0,${dy},${dz},0,0,${ny},${nz},0,${direction<0?120:-120},${a[0]},${a[1]},1)`;
+      part.angle=Math.atan2(-ny,nz)*180/Math.PI+parentAngle;
+    });
+  }
   function surfaceGeometry(node,amount,index){
     const fold=reduced?(amount>.5?1:0):amount;
     const wing=fold*90;
     const grow=ease((fold-.18)/.82);
-    const H=mix(240,450,grow),D=mix(240,12,ease((fold-.22)/.78));
+    const H=Math.round(mix(240,450,grow)*32)/32,D=mix(240,12,ease((fold-.22)/.78));
     // Each lid is two real 120px paper leaves. Its outer leaf folds back,
     // then both leaves tuck behind the interface without telescoping away.
     const capDepth=120,capWidth=240;
@@ -99,30 +141,63 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     // Fold outward first, then around the back of the same edge. Front-load
     // the return so the final reading approach does not hide a fast flip.
     const capAngle=fold<=.50?90-wing:fold<=.60?mix(45,0,ease((fold-.50)/.10)):180*ease(1-(1-backT)*(1-backT));
-    const reveal=ease((fold-.15)/.72);
+    // The stock brightens first, then its existing interface ink develops on
+    // that very same surface. All three crops share one reveal and source.
+    const reveal=ease((fold-.16)/.30);
     node.object.style.setProperty('--surface-reveal',String(reveal));
+    node.object.style.setProperty('--print-reveal',String(reveal));
+    // Keep paper light through the observation holds; hand it to the uniform
+    // product print only during the final flattening. Geometry is unchanged.
+    node.object.style.setProperty('--paper-read',String(1-ease((fold-.82)/.18)));
     node.object.style.setProperty('--fold-seam',String((1-ease((fold-.8)/.2))*.38));
     node.object.style.setProperty('--cap-label',String(1-ease(fold/.42)));
     node.object.style.setProperty('--shell-label',String(1-ease((fold-.08)/.26)));
     node.object.style.setProperty('--hinge-ao',String(.16*Math.pow(1-fold,1.5)));
     node.object.style.setProperty('--shell-open',String(fold));
     node.object.style.setProperty('--cap-rim',String(ease((fold-.82)/.18)));
-    node.object.style.setProperty('--paper-presence',String(ease(fold/.40)));
+    node.object.style.setProperty('--paper-presence',String(ease((fold-.10)/.75)));
     node.object.style.setProperty('--crease-active',String(Math.sin(fold*Math.PI)));
+    node.object.style.setProperty('--crease-depth',String(Math.sin(fold*Math.PI)*(1-ease((fold-.88)/.12))));
     node.object.style.setProperty('--return-fold',String(ease((fold-.45)/.33)));
+    node.object.style.setProperty('--edge-exposure',String(ease((fold-.06)/.18)));
     const centerZ=D/2;
     node.center.style.height=H+'px';node.center.style.transform=`translate3d(-120px,${-H/2}px,${centerZ}px)`;
     node.left.style.transform=`translate3d(-120px,0,${centerZ}px) rotateY(${-90+wing}deg)`;
     node.right.style.transform=`translate3d(120px,0,${centerZ}px) rotateY(${90-wing}deg)`;
     node.left.firstElementChild.style.height=H+'px';node.left.firstElementChild.style.top=-H/2+'px';
     node.right.firstElementChild.style.height=H+'px';node.right.firstElementChild.style.top=-H/2+'px';
-    const tuck=ease((fold-.60)/.40)*1.3;
+    // Allow the actual stock and its return leaf to clear the front canvas.
+    // The old sub-pixel gap let the return tip cross its own interface.
+    const tuck=ease((fold-.55)/.25)*8;
     node.top.style.transform=`translate3d(0,${-H/2}px,${centerZ-tuck}px) rotateX(${capAngle}deg)`;
     node.bottom.style.transform=`translate3d(0,${H/2}px,${centerZ-tuck}px) rotateX(${-capAngle}deg)`;
     node.caps.forEach((cap,i)=>{cap.style.width=capWidth+'px';cap.style.height=capDepth+'px';cap.style.left=-capWidth/2+'px';cap.style.top=i===0?-capDepth+'px':'0';});
     node.returns.forEach(({hinge,flap},i)=>{
-      hinge.style.transform=`translate3d(0,${i?capDepth:-capDepth}px,-.8px) rotateX(${i?-returnAngle:returnAngle}deg)`;
+      // Rotate around the paper's back, so a closed lid is exactly coplanar.
+      // The tiny bend radius also keeps the folded stocks from interpenetrating.
+      const bendRadius=node.stockThickness+.1;
+      hinge.style.transform=`translate3d(0,${i?capDepth:-capDepth}px,${-bendRadius}px) rotateX(${i?-returnAngle:returnAngle}deg) translateZ(${bendRadius}px)`;
       flap.style.width=capWidth+'px';flap.style.height=capDepth+'px';flap.style.left=-capWidth/2+'px';flap.style.top=(i?0:-capDepth)+'px';
+      const direction=i?1:-1,points=node.returnJoints[i].map((_,j)=>j/node.returnJoints[i].length);points.push(1);
+      const arc=points.map(t=>{const angle=returnAngle*t*Math.PI/180;return[direction*capDepth+direction*bendRadius*Math.sin(angle),-bendRadius+bendRadius*Math.cos(angle)];});
+      jointRibbon(node.returnJoints[i],arc,direction,i?-capAngle:capAngle);
+    });
+    node.lidJoints.forEach((parts,i)=>{
+      const direction=i?1:-1,angle=capAngle*Math.PI/180,handle=tuck*.5*(.12+.88*Math.sin(angle)),edge=direction*H/2;
+      const p0=[0,centerZ],p1=[direction*handle,centerZ],p2=[-direction*Math.cos(angle)*handle,centerZ-tuck+Math.sin(angle)*handle],p3=[0,centerZ-tuck];
+      const points=Array.from({length:parts.length+1},(_,j)=>{const t=j/parts.length,u=1-t;return[edge+u*u*u*p0[0]+3*u*u*t*p1[0]+3*u*t*t*p2[0]+t*t*t*p3[0],u*u*u*p0[1]+3*u*u*t*p1[1]+3*u*t*t*p2[1]+t*t*t*p3[1]];});
+      jointRibbon(parts,points,direction);
+    });
+    const thickness=node.stockThickness;
+    node.capBacks.forEach(({backing,edges},part)=>{
+      const top=part%2===0,leafTop=top?-capDepth:0;
+      backing.style.cssText=`left:-120px;top:${leafTop}px;width:240px;height:${capDepth}px;transform:translateZ(${-thickness}px) rotateY(180deg)`;
+      for(const wall of edges){
+        const outer=wall.classList.contains('edge-outer'),left=wall.classList.contains('edge-left');
+        wall.style.left=(outer||left?-120:120)+'px';wall.style.top=(outer?(top?-capDepth:capDepth):leafTop)+'px';
+        wall.style.width=(outer?240:thickness)+'px';wall.style.height=(outer?thickness:capDepth)+'px';
+        wall.style.transform=`rotate${outer?'X(-90':'Y(90'}deg)`;
+      }
     });
     node.creases.forEach((strip,i)=>{
       const angle=i?90-wing:-90+wing;strip.style.height=H+'px';strip.style.top=-H/2+'px';strip.style.transform=`translateZ(.55px) rotateY(${-angle/2}deg)`;
@@ -131,18 +206,18 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     node.pin.style.transform=`translate3d(-112px,${H/2+15}px,${centerZ+1}px)`;
     node.surfaces.forEach(({crop,sourceX})=>{crop.style.top=-(450-H)/2+'px';crop.style.left=-sourceX+'px';});
     node.sheets.forEach((sheet,part)=>{
-      // Overlap only coplanar panels; an overlap on a closed corner intersects it.
-      // Three CSS pixels still cover one device pixel at the smallest viewport.
-      sheet.style.width=(240+(part<2?3:0)*ease((fold-.90)/.10))+'px';
+      // All paper panels retain their physical width throughout the fold.
+      sheet.style.width='240px';
       const x=part===0?-240:0,center=part===1;
-      if(center)return;
+      const backing=node.sheetBacks[part];backing.style.left=(center?-120:x)+'px';backing.style.top=-H/2+'px';backing.style.width=sheet.style.width;backing.style.height=H+'px';backing.style.transform=`translateZ(${center?centerZ-thickness:-thickness}px) rotateY(180deg)`;
       // The thin wing walls inherit exactly the same hinge as their front.
-      const parent=sheet.parentNode;
-      for(const wall of parent.querySelectorAll(':scope > .sheet-wall')){
+      const parent=center?node.object:sheet.parentNode;
+      for(const wall of parent.querySelectorAll(center?':scope > .center-wall':':scope > .sheet-wall')){
         wall.style.left=(center?-120:x)+'px';wall.style.width='240px';
-        if(wall.classList.contains('wall-outer')){
-          wall.style.width='1.1px';wall.style.height=H+'px';wall.style.top=-H/2+'px';wall.style.left=(part===0?-240:240)+'px';wall.style.transform='translateZ(-.55px) rotateY(90deg)';
-        }else{wall.style.height='1.1px';wall.style.top=(wall.classList.contains('wall-top')?-H/2:H/2)+'px';wall.style.transform='translateZ(-.55px) rotateX(-90deg)';}
+        const vertical=wall.classList.contains('wall-outer')||wall.classList.contains('wall-left')||wall.classList.contains('wall-right');
+        if(vertical){
+          wall.style.width=thickness+'px';wall.style.height=H+'px';wall.style.top=-H/2+'px';wall.style.left=(center?(wall.classList.contains('wall-left')?-120:120):(part===0?-240:240))+'px';wall.style.transform=`translateZ(${center?centerZ:0}px) rotateY(90deg)`;
+        }else{wall.style.height=thickness+'px';wall.style.top=(wall.classList.contains('wall-top')?-H/2:H/2)+'px';wall.style.transform=`translateZ(${center?centerZ:0}px) rotateX(-90deg)`;}
       }
     });
     const step=Math.min(2,Math.floor(reveal*3));if(step!==node.lastStage){node.surfaces.forEach(({surface})=>surface.setStage(reveal));node.lastStage=step;}
@@ -154,18 +229,31 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     lens.style.perspective=`${mobile?1500:2200}px`;
     rig.style.transform=`translate3d(${(state.cx-.5)*width}px,${(state.cy-.5)*height}px,0)`;
     shown=nodes.map((node,i)=>{
-      const pose=state.poses[i],amount=opening(progress,i),morph=surfaceGeometry(node,amount,i);
+      const pose=state.poses[i],amount=opening(progress,i),fold=reduced?(amount>.5?1:0):amount;
+      // A parked or held sheet has identical physical geometry. Keep its
+      // existing faces instead of rewriting every ribbon and cut wall.
+      const morph=node.morph?.fold===fold?node.morph:(node.morph=surfaceGeometry(node,fold,i));
       const rx=mix(pose.rx,1,morph.fold),ry=mix(pose.ry,-4,morph.fold),rz=mix(pose.rz,0,morph.fold);
       const faces=[node.center,node.sheets[0],node.sheets[2],...node.caps,...node.returns.map(r=>r.flap)];
       const angles=[0,morph.leftAngle,morph.rightAngle,morph.capAngle,-morph.capAngle,morph.capAngle+morph.returnAngle,-morph.capAngle-morph.returnAngle];
-      const lighting=faces.map((face,j)=>{
-        const n=faceNormal(angles[j],j>2?'x':'y',rx,ry,rz),diffuse=Math.max(0,dot(n,keyLight)),specular=Math.pow(Math.max(0,dot(n,halfLight)),18);
-        const read=j<3?1-morph.reveal:1;
-        face.style.setProperty('--face-dark',String((.13*(1-diffuse))*read));
-        face.style.setProperty('--face-spec',String((.008+.025*specular)*read));
-        face.style.setProperty('--spec-x',(48+n[0]*95)+'%');face.style.setProperty('--spec-y',(10+n[1]*65)+'%');
-        return{diffuse,specular};
-      });
+      const lightKey=[rx,ry,rz,...angles].join(',');
+      let lighting=node.lighting;
+      if(lightKey!==node.lightKey){
+        lighting=faces.map((face,j)=>{
+          const n=faceNormal(angles[j],j>2?'x':'y',rx,ry,rz),diffuse=Math.max(0,dot(n,keyLight)),specular=Math.pow(Math.max(0,dot(n,halfLight)),18);
+          face.style.setProperty('--face-dark',String(.22*(1-diffuse)));
+          face.style.setProperty('--face-spec',String(.008+.025*specular));
+          face.style.setProperty('--spec-x',(48+n[0]*95)+'%');face.style.setProperty('--spec-y',(10+n[1]*65)+'%');
+          const backing=j<3?node.sheetBacks[[1,0,2][j]]:node.capBacks[j-3].backing;
+          const backDiffuse=Math.max(0,-dot(n,keyLight));backing.style.setProperty('--face-dark',String(.10*(1-backDiffuse)));backing.style.setProperty('--face-spec','.008');
+          return{diffuse,specular};
+        });
+        for(const part of [...node.lidJoints.flat(),...node.returnJoints.flat()]){
+          const normal=faceNormal(part.angle,'x',rx,ry,rz);
+          part.face.style.setProperty('--face-dark',String(.08*(1-Math.abs(dot(normal,keyLight)))));
+        }
+        node.lightKey=lightKey;node.lighting=lighting;
+      }
       let size=pose.s,x=pose.x,y=pose.y;
       if(mobile&&width/height>.75){const hero=1-ease((progress-.055)/.085);size*=1-.10*hero;}
       const objectScale=size*scale;
@@ -180,10 +268,10 @@ export function createCubeUnfoldStage({container,onSelect=()=>{},onReady=()=>{}}
     });
     draws++;if(!ready){ready=true;onReady();}
   }
-  function frame(time){raf=0;if(disposed||document.hidden)return;const dt=Math.min(.05,(time-(last||time))/1000);last=time;reduced=Boolean(window.__AH_REDUCED_MOTION||matchMedia('(prefers-reduced-motion: reduce)').matches);progress=mix(progress,target,reduced?1:1-Math.exp(-dt*16));if(Math.abs(progress-target)<.000015)progress=target;apply();if(progress!==target)request();}
+  function frame(time){raf=0;if(disposed||document.hidden)return;const dt=last?Math.min(.05,(time-last)/1000):1/60;last=time;reduced=Boolean(window.__AH_REDUCED_MOTION||matchMedia('(prefers-reduced-motion: reduce)').matches);progress=mix(progress,target,reduced?1:1-Math.exp(-dt*16));if(Math.abs(progress-target)<.000015)progress=target;apply();if(progress!==target)request();else last=0;}
   function request(){if(!raf&&!disposed&&!document.hidden)raf=requestAnimationFrame(frame);}
   function setProgress(p){target=clamp(Number(p)||0);request();}
-  function resize(){width=innerWidth;height=innerHeight;mobile=width<800;scale=mobile?Math.min(width*.92/720,height*.38/450):Math.min(width/1440,height/930,1.18);request();}
+  function resize(){width=innerWidth;height=innerHeight;mobile=width<800;scale=mobile?Math.min(width*.92/720,height*.38/450):Math.min(width/1440,height/930,1.18);rebuildKeyframes();request();}
   function visibility(){if(document.hidden){if(raf)cancelAnimationFrame(raf);raf=0;last=0;}else request();}
   nodes.forEach((n,i)=>n.center.dataset.identity='cube-front-'+products[i].id);
   window.addEventListener('resize',resize);document.addEventListener('visibilitychange',visibility);resize();

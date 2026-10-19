@@ -170,14 +170,14 @@ function updateScroll(){
   $('#journey-label').textContent=p<.1?'INTRODUCTION':p<.2?'THE PRODUCT FAMILY':p<.84?product.name.toUpperCase():'YOUR NEXT STEP';
   $('#scroll-cue').style.opacity=String(1-smooth(p/.065));$('#scroll-cue').inert=p>.08;
   document.querySelectorAll('.product-button').forEach((b,i)=>b.style.setProperty('--chapter-progress',i===index?String(local):i<index?'1':'0'));
-  if(!dialog.open){const path=product?'product/'+product.id:'overview';history.replaceState(null,'','#'+path);lastBase=path;}
+  if(!dialog.open){const path=product?'product/'+product.id:'overview';if(location.hash!=='#'+path)history.replaceState(null,'','#'+path);lastBase=path;}
 }
 function requestScroll(){if(!scrollFrame)scrollFrame=requestAnimationFrame(updateScroll);}
 window.addEventListener('scroll',requestScroll,{passive:true});window.addEventListener('resize',requestScroll);
 $('#scroll-cue').addEventListener('click',()=>jumpTo(.20+.16*.36));
 route();requestScroll();
 try{
-  const {createCubeUnfoldStage}=await import('./cube-unfold-stage.js?v=09-spatial');
+  const {createCubeUnfoldStage}=await import('./cube-unfold-stage.js?v=14-crisp-print');
   scene=createCubeUnfoldStage({container:$('#workspace-stage'),onSelect:id=>navigate('product/'+id),onReady:()=>document.body.classList.add('scene-ready')});
   scene.setProgress(currentProgress);
   if(reduced)document.body.classList.add('reduce-motion');

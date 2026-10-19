@@ -532,15 +532,25 @@
     const borderHeight = px(windowStyle.borderTopWidth) + px(windowStyle.borderBottomWidth);
     const chromeHeight = elements.browserBar.offsetHeight;
     if (availableWidth <= borderWidth || availableHeight <= chromeHeight + borderHeight) return;
-    const scale = Math.min(1, (availableWidth - borderWidth) / viewport.width,
-      (availableHeight - chromeHeight - borderHeight) / viewport.height);
-    const displayWidth = viewport.width * scale;
-    const displayHeight = viewport.height * scale;
+    let viewportWidth = viewport.width;
+    let viewportHeight = viewport.height;
+    let scale;
+    if (state.device === 'desktop') {
+      // Fill the panel; keep a desktop layout when the panel is narrow.
+      viewportWidth = Math.max(viewport.width, availableWidth - borderWidth);
+      scale = (availableWidth - borderWidth) / viewportWidth;
+      viewportHeight = (availableHeight - chromeHeight - borderHeight) / scale;
+    } else {
+      scale = Math.min(1, (availableWidth - borderWidth) / viewportWidth,
+        (availableHeight - chromeHeight - borderHeight) / viewportHeight);
+    }
+    const displayWidth = viewportWidth * scale;
+    const displayHeight = viewportHeight * scale;
     elements.previewWindow.style.width = `${displayWidth + borderWidth}px`;
     elements.previewWindow.style.height = `${displayHeight + chromeHeight + borderHeight}px`;
     elements.frameSlot.style.height = `${displayHeight}px`;
-    elements.frame.style.width = `${viewport.width}px`;
-    elements.frame.style.height = `${viewport.height}px`;
+    elements.frame.style.width = `${viewportWidth}px`;
+    elements.frame.style.height = `${viewportHeight}px`;
     elements.frame.style.transform = `scale(${scale})`;
   }
 

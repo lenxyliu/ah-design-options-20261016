@@ -3,7 +3,7 @@
 (() => {
   const byId = (id) => document.getElementById(id);
   const state = { schemes: [], selectedId: null, device: 'desktop', loadingTimer: null,
-    votes: { counts: {}, totalVotes: null, myVote: null, loaded: false }, voteReading: false, voteBusy: false, voteError: '' };
+    votes: { counts: {}, totalVotes: null, myVote: null, loaded: false }, voteReading: false, voteBusy: false, voteError: '', archived: readArchives(), archivePreview: null };
   const elements = {
     list: byId('scheme-list'), count: byId('scheme-count'), title: byId('preview-title'),
     description: byId('preview-description'), group: byId('preview-group'), version: byId('preview-version'),
@@ -11,7 +11,7 @@
     stage: byId('preview-stage'), address: byId('preview-address'), open: byId('open-preview'),
     notice: byId('preview-notice'), noticeText: byId('preview-notice-text'), noticeOpen: byId('notice-open'),
     footnote: byId('preview-footnote'), globalError: byId('global-error'), toast: byId('toast'),
-    voting: byId('scheme-voting'), schemeVotes: byId('scheme-vote-count'), totalVotes: byId('total-vote-count'),
+    archiveCount: byId('archive-count'), archiveState: byId('preview-archive-state'), archivesDialog: byId('archives-dialog'), archivesList: byId('archives-list'), inlineVoteCount: byId('inline-vote-count'), schemeVotes: byId('scheme-vote-count'), totalVotes: byId('total-vote-count'),
     voteButton: byId('vote-current'), voteStatus: byId('vote-status'), voteError: byId('vote-error'), voteErrorText: byId('vote-error-text'), voteRetry: byId('vote-retry')
   };
   let toastTimer;
@@ -100,11 +100,82 @@
     return state.votes.loaded ? (state.votes.counts[id] || 0) : null;
   }
 
-  function rankedSchemes() {
+  const ARCHIVE_KEY = 'ah-public-archives';
+  const groupId = (scheme) => scheme.group === 'history' ? 'history' : 'main';
+
+  function readArchives() {
+    try {
+      const value = JSON.parse(localStorage.getItem('ah-public-archives') || '[]');
+      return new Set(Array.isArray(value) ? value.filter((id) => typeof id === 'string') : []);
+    } catch { return new Set(); }
+  }
+
+  function visibleSchemes() { return state.schemes.filter((scheme) => !state.archived.has(scheme.id)); }
+
+  function rankedSchemes(group, { includeArchived = false } = {}) {
     return state.schemes.map((scheme, index) => ({ scheme, index }))
-      .sort((a, b) => (voteCount(b.scheme.id) || 0) - (voteCount(a.scheme.id) || 0) || a.index - b.index)
+      .filter(({ scheme }) => (!group || groupId(scheme) === group) && (includeArchived || !state.archived.has(scheme.id)))
+      .sort((a, b) => (groupId(a.scheme) === 'history') - (groupId(b.scheme) === 'history')
+        || (voteCount(b.scheme.id) || 0) - (voteCount(a.scheme.id) || 0) || a.index - b.index)
       .map(({ scheme }) => scheme);
   }
+
+  function actionIcon(kind) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none'); svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', { vote: 'm8 11 3 3 6-6M5 4h14v16H5z', preview: 'M14 4h6v6M20 4 10 14M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5', archive: 'M4 8h16v12H4zM3 4h18v4H3zM9 12h6' }[kind]);
+    svg.append(path); return svg;
+  }
+
+  function saveArchives(next) {
+    try { localStorage.setItem(ARCHIVE_KEY, JSON.stringify([...next])); }
+    catch { notify('归档未保存，请允许浏览器保存本站数据后重试。'); return false; }
+    state.archived = next; return true;
+  }
+
+  function updateArchiveCount() {
+    elements.archiveCount.textContent = String(state.schemes.filter((scheme) => state.archived.has(scheme.id)).length);
+  }
+
+  function archiveScheme(id) {
+    if (state.archived.has(id)) return;
+    const before = rankedSchemes(); const index = before.findIndex((scheme) => scheme.id === id);
+    if (!saveArchives(new Set([...state.archived, id]))) return;
+    const next = before.slice(index + 1).concat(before.slice(0, index)).find((scheme) => !state.archived.has(scheme.id));
+    if (state.archivePreview === id) state.archivePreview = null;
+    renderCatalog();
+    if (state.selectedId === id) { if (next) selectScheme(next.id); else clearPreview(); }
+    updateArchiveCount(); if (elements.archivesDialog.open) renderArchives();
+    notify('已归档到当前浏览器，可在「已归档」中恢复。其他人的列表不受影响。');
+  }
+
+  function restoreScheme(id) {
+    const next = new Set(state.archived); next.delete(id);
+    if (!saveArchives(next)) return;
+    if (state.archivePreview === id) state.archivePreview = null;
+    renderCatalog(); if (!state.selectedId || state.selectedId === id) selectScheme(id);
+    updateArchiveCount(); renderArchives(); notify('已恢复到方案列表。');
+  }
+
+  function renderArchives() {
+    const fragment = document.createDocumentFragment();
+    const schemes = rankedSchemes(undefined, { includeArchived: true }).filter((scheme) => state.archived.has(scheme.id));
+    for (const scheme of schemes) {
+      const item = node('div', 'archives-item'); const copy = node('div', 'archives-item-copy');
+      copy.append(node('strong', '', scheme.title), node('span', '', scheme.group === 'history' ? '历史版本' : '主方案'));
+      const preview = node('button', 'button archive-preview', '预览'); preview.type = 'button';
+      preview.setAttribute('aria-label', `预览已归档方案${scheme.title}`);
+      preview.addEventListener('click', () => { elements.archivesDialog.close(); selectScheme(scheme.id, { allowArchived: true }); });
+      const restore = node('button', 'button restore-button', '恢复'); restore.type = 'button';
+      restore.setAttribute('aria-label', `恢复${scheme.title}到方案列表`); restore.addEventListener('click', () => restoreScheme(scheme.id));
+      item.append(copy, preview, restore); fragment.append(item);
+    }
+    if (!schemes.length) fragment.append(node('p', 'catalog-empty', '还没有归档方案。'));
+    elements.archivesList.replaceChildren(fragment);
+  }
+
+  function openArchives() { renderArchives(); if (!elements.archivesDialog.open) elements.archivesDialog.showModal(); }
 
   function catalogView() {
     const active = document.activeElement;
@@ -116,7 +187,7 @@
   function restoreCatalogView(view) {
     if (!view) return;
     if (view.focusId && view.focusAction) {
-      const item = [...elements.list.children].find((entry) => entry.dataset.catalogScheme === view.focusId);
+      const item = [...elements.list.querySelectorAll('.scheme-item')].find((entry) => entry.dataset.catalogScheme === view.focusId);
       const target = item?.querySelector(`[data-catalog-action="${view.focusAction}"]`);
       if (target && !target.disabled && document.activeElement !== target) target.focus({ preventScroll: true });
     }
@@ -126,23 +197,23 @@
 
   function paintCatalogVotes({ reorder = false, preserveView = true } = {}) {
     const view = preserveView ? catalogView() : null;
-    const items = new Map([...elements.list.children].map((item) => [item.dataset.catalogScheme, item]));
-    rankedSchemes().forEach((scheme, index) => {
+    const items = new Map([...elements.list.querySelectorAll('.scheme-item')].map((item) => [item.dataset.catalogScheme, item]));
+    for (const group of ['main', 'history']) rankedSchemes(group).forEach((scheme, index) => {
       const item = items.get(scheme.id);
       if (!item) return;
       const count = voteCount(scheme.id);
       const voted = state.votes.loaded && state.votes.myVote === scheme.id;
       item.querySelector('.scheme-rank').textContent = `#${String(index + 1).padStart(2, '0')}`;
       item.querySelector('.scheme-rank').setAttribute('aria-label', `第 ${index + 1} 名`);
-      item.querySelector('.scheme-vote-count').textContent = count === null ? '— 票' : `${count} 票`;
+      item.querySelector('.scheme-vote-count').textContent = count === null ? '—' : String(count);
       const button = item.querySelector('.scheme-vote-button');
-      button.textContent = voted ? '已投 · 撤回' : '投一票';
+      button.title = `${voted ? '已投票，点击撤回' : '投给这个方案'} · ${count === null ? '票数读取中' : count + ' 票'}`;
       button.classList.toggle('is-voted', voted);
       button.setAttribute('aria-pressed', String(voted));
       button.setAttribute('aria-label', voted ? `撤回投给${scheme.title}的一票` : `投票给${scheme.title}`);
       button.disabled = state.voteBusy || !state.votes.loaded;
       item.classList.toggle('has-vote', voted);
-      if (reorder) elements.list.append(item);
+      if (reorder) elements.list.querySelector(`[data-scheme-group="${group}"] .scheme-group-items`)?.append(item);
     });
     restoreCatalogView(view);
   }
@@ -150,11 +221,14 @@
   function renderVotePanel() {
     const selected = state.schemes.find((scheme) => scheme.id === state.selectedId);
     const voted = Boolean(selected && state.votes.loaded && state.votes.myVote === selected.id);
-    elements.voting.hidden = !selected;
+    elements.voteButton.hidden = !selected;
     const count = selected ? voteCount(selected.id) : null;
     elements.schemeVotes.textContent = count === null ? '—' : String(count);
     elements.totalVotes.textContent = state.votes.loaded ? String(state.votes.totalVotes) : '—';
-    elements.voteButton.textContent = state.voteBusy ? '正在提交…' : voted ? '已投票，撤回' : '投给这个方案';
+    elements.inlineVoteCount.textContent = count === null ? '—' : String(count);
+    const voteLabel = `${state.voteBusy ? '正在提交投票' : voted ? '已投票，点击撤回' : '投给这个方案'} · ${count === null ? '票数读取中' : count + ' 票'}`;
+    elements.voteButton.title = voteLabel;
+    elements.voteButton.setAttribute('aria-label', voteLabel);
     elements.voteButton.classList.toggle('is-voted', voted);
     elements.voteButton.setAttribute('aria-pressed', String(voted));
     elements.voteButton.disabled = !selected || !state.votes.loaded || state.voteBusy;
@@ -258,10 +332,12 @@
       elements.globalError.hidden = true;
       elements.count.textContent = String(state.schemes.length);
       const preferred = initial ? [getHashId(), rememberedId(), 'open-field'] : [state.selectedId, getHashId(), 'open-field'];
-      const selected = preferred.map((id) => state.schemes.find((scheme) => scheme.id === id)).find(Boolean) || state.schemes[0];
+      const selected = preferred.map((id) => state.schemes.find((scheme) => scheme.id === id && (!state.archived.has(id) || state.archivePreview === id))).find(Boolean) || rankedSchemes()[0];
       const selectionChanged = selected?.id !== state.selectedId;
       renderCatalog();
-      if (selected) selectScheme(selected.id, { force: initial || selectionChanged });
+      updateArchiveCount();
+      if (elements.archivesDialog.open) renderArchives();
+      if (selected) selectScheme(selected.id, { force: initial || selectionChanged, allowArchived: state.archivePreview === selected.id });
       else clearPreview();
       loadVotes();
     } catch (error) {
@@ -279,79 +355,64 @@
   }
 
   function renderCatalog() {
-    const view = catalogView();
-    const fragment = document.createDocumentFragment();
-    rankedSchemes().forEach((scheme, index) => {
-        const item = node('div', 'scheme-item');
-        item.dataset.catalogScheme = scheme.id;
+    const view = catalogView(); const fragment = document.createDocumentFragment();
+    for (const groupId of ['main', 'history']) {
+      const schemes = rankedSchemes(groupId);
+      const group = node('section', 'scheme-group'); group.dataset.schemeGroup = groupId;
+      group.setAttribute('aria-label', groupId === 'history' ? '历史版本' : '主方案');
+      const heading = node('div', 'group-heading');
+      heading.append(node('span', '', groupId === 'history' ? '历史版本' : '主方案'), node('span', '', String(schemes.length)));
+      const items = node('div', 'scheme-group-items');
+      schemes.forEach((scheme, index) => {
+        const item = node('div', 'scheme-item'); item.dataset.catalogScheme = scheme.id;
         const ranking = node('div', 'scheme-ranking');
-        ranking.append(node('span', 'scheme-rank', `#${String(index + 1).padStart(2, '0')}`),
-          node('span', `scheme-group-label${scheme.group === 'history' ? ' is-history' : ''}`, scheme.group === 'history' ? '历史' : '主方案'),
-          node('span', 'scheme-vote-count', '— 票'));
-        const button = node('button', 'scheme-button');
-        button.type = 'button';
-        button.dataset.schemeId = scheme.id;
-        button.dataset.catalogAction = 'select';
-        button.setAttribute('aria-label', `预览${scheme.title}${scheme.subtitle ? `，${scheme.subtitle}` : ''}`);
-        const thumb = node('span', 'scheme-thumb');
-        const graphic = () => node('span', `scheme-graphic graphic-${index % 3}`);
-        const thumbnailURL = scheme.thumbnailUrl && safeURL(scheme.thumbnailUrl);
-        if (thumbnailURL) {
-          const img = document.createElement('img');
-          img.src = thumbnailURL;
-          img.alt = '';
-          img.loading = 'lazy';
-          img.addEventListener('error', () => thumb.replaceChildren(graphic()), { once: true });
-          thumb.append(img);
-        } else thumb.append(graphic());
-        const copy = node('span', 'scheme-copy');
-        copy.append(node('span', 'scheme-title', scheme.title));
-        if (scheme.subtitle) copy.append(node('span', 'scheme-subtitle', scheme.subtitle));
-        const meta = node('span', 'scheme-meta');
-        const date = formatDate(scheme.date);
-        if (date) meta.append(node('span', '', date));
-        copy.append(meta);
-        const mark = node('span', 'scheme-selected-mark');
-        mark.append(checkIcon());
-        mark.hidden = scheme.id !== state.selectedId;
-        button.append(thumb, copy, mark);
-        button.addEventListener('click', () => selectScheme(scheme.id));
-        button.classList.toggle('is-selected', scheme.id === state.selectedId);
-        if (scheme.id === state.selectedId) button.setAttribute('aria-current', 'true');
-        item.append(ranking, button);
-        const previewLink = node('a', 'scheme-preview-link', '新标签页预览 ↗');
-        const previewURL = safeURL(scheme.previewUrl);
-        previewLink.target = '_blank';
-        previewLink.rel = 'noopener noreferrer';
-        previewLink.dataset.catalogAction = 'preview';
-        previewLink.setAttribute('aria-label', `在新标签页预览${scheme.title}`);
-        if (previewURL) previewLink.href = previewURL;
-        else {
-          previewLink.setAttribute('aria-disabled', 'true');
-          previewLink.tabIndex = -1;
-        }
-        item.append(previewLink);
-        const voteButton = node('button', 'scheme-vote-button', '投一票');
-        voteButton.type = 'button';
-        voteButton.dataset.catalogAction = 'vote';
+        ranking.append(node('span', 'scheme-rank', `#${String(index + 1).padStart(2, '0')}`), node('span', `scheme-group-label${groupId === 'history' ? ' is-history' : ''}`, groupId === 'history' ? '历史' : '主方案'));
+        const actions = node('div', 'scheme-inline-actions');
+        const previewLink = node('a', 'scheme-preview-link'); previewLink.append(actionIcon('preview'));
+        const previewURL = safeURL(scheme.previewUrl); previewLink.target = '_blank'; previewLink.rel = 'noopener noreferrer';
+        previewLink.dataset.catalogAction = 'preview'; previewLink.title = '在新标签中打开'; previewLink.setAttribute('aria-label', `在新标签页预览${scheme.title}`);
+        if (previewURL) previewLink.href = previewURL; else { previewLink.setAttribute('aria-disabled', 'true'); previewLink.tabIndex = -1; }
+        const voteButton = node('button', 'scheme-vote-button'); voteButton.type = 'button'; voteButton.dataset.catalogAction = 'vote';
+        voteButton.append(actionIcon('vote'), node('span', 'scheme-vote-count', '—'));
         voteButton.addEventListener('click', () => submitVote(state.votes.myVote === scheme.id ? null : scheme.id));
-        item.append(voteButton);
-        fragment.append(item);
-    });
-    if (!state.schemes.length) fragment.append(node('p', 'catalog-empty', '暂时还没有收录方案。'));
-    elements.list.replaceChildren(fragment);
-    paintCatalogVotes({ preserveView: false });
-    restoreCatalogView(view);
+        const archiveButton = node('button', 'scheme-archive-button'); archiveButton.type = 'button'; archiveButton.dataset.catalogAction = 'archive';
+        archiveButton.title = '归档到当前浏览器'; archiveButton.setAttribute('aria-label', `将${scheme.title}归档到当前浏览器`);
+        archiveButton.append(actionIcon('archive')); archiveButton.addEventListener('click', () => archiveScheme(scheme.id));
+        actions.append(previewLink, voteButton, archiveButton); ranking.append(actions);
+        const button = node('button', 'scheme-button'); button.type = 'button'; button.dataset.schemeId = scheme.id; button.dataset.catalogAction = 'select';
+        button.setAttribute('aria-label', `预览${scheme.title}${scheme.subtitle ? `，${scheme.subtitle}` : ''}`);
+        const thumb = node('span', 'scheme-thumb'); const graphic = () => node('span', `scheme-graphic graphic-${index % 3}`);
+        const thumbnailURL = scheme.thumbnailUrl && safeURL(scheme.thumbnailUrl);
+        if (thumbnailURL) { const img = document.createElement('img'); img.src = thumbnailURL; img.alt = ''; img.loading = 'lazy'; img.addEventListener('error', () => thumb.replaceChildren(graphic()), { once: true }); thumb.append(img); } else thumb.append(graphic());
+        const copy = node('span', 'scheme-copy'); copy.append(node('span', 'scheme-title', scheme.title));
+        if (scheme.subtitle) copy.append(node('span', 'scheme-subtitle', scheme.subtitle));
+        const meta = node('span', 'scheme-meta'); const date = formatDate(scheme.date); if (date) meta.append(node('span', '', date)); copy.append(meta);
+        const mark = node('span', 'scheme-selected-mark'); mark.append(checkIcon()); mark.hidden = scheme.id !== state.selectedId;
+        button.append(thumb, copy, mark); button.addEventListener('click', () => selectScheme(scheme.id)); button.classList.toggle('is-selected', scheme.id === state.selectedId);
+        if (scheme.id === state.selectedId) button.setAttribute('aria-current', 'true');
+        item.append(ranking, button); items.append(item);
+      });
+      if (!schemes.length) items.append(node('p', 'group-empty', groupId === 'history' ? '暂无历史版本' : '暂无主方案'));
+      group.append(heading, items); fragment.append(group);
+    }
+    if (!visibleSchemes().length) {
+      const empty = node('div', 'catalog-empty'); empty.append(node('p', '', state.schemes.length ? '方案已全部归档到当前浏览器。' : '暂时还没有收录方案。'));
+      if (state.schemes.length) { const open = node('button', 'button button-secondary', '查看已归档方案'); open.type = 'button'; open.addEventListener('click', openArchives); empty.append(open); }
+      fragment.append(empty);
+    }
+    elements.list.replaceChildren(fragment); paintCatalogVotes({ preserveView: false }); restoreCatalogView(view);
   }
 
-  function selectScheme(id, { updateHash = true, force = false } = {}) {
+  function selectScheme(id, { updateHash = true, force = false, allowArchived = false } = {}) {
     const scheme = state.schemes.find((item) => item.id === id);
-    if (!scheme) return;
+    if (!scheme || (state.archived.has(id) && !allowArchived)) return;
+    state.archivePreview = state.archived.has(id) ? id : null;
     const changed = state.selectedId !== id;
     state.selectedId = id;
     document.title = `${scheme.title} · AH 方案预览`;
     elements.frame.title = `${scheme.title} · 设计方案预览`;
     elements.title.textContent = scheme.title;
+    elements.archiveState.hidden = !state.archived.has(id);
     elements.description.textContent = scheme.description || scheme.subtitle || '打开真实页面，体验这个设计方向。';
     elements.group.textContent = scheme.group === 'history' ? '历史版本' : '主方案';
     elements.version.textContent = scheme.version || 'DESIGN EXPLORATION';
@@ -420,6 +481,10 @@
 
   function clearPreview() {
     state.selectedId = null;
+    state.archivePreview = null;
+    elements.archiveState.hidden = true;
+    if (getHashId()) history.replaceState(null, '', location.pathname + location.search);
+    try { localStorage.removeItem('ah-public-preview-selected'); } catch { /* Optional preference storage. */ }
     clearTimeout(state.loadingTimer);
     elements.frame.removeAttribute('src');
     elements.frame.hidden = true;
@@ -429,7 +494,7 @@
     elements.open.removeAttribute('href');
     elements.open.setAttribute('aria-disabled', 'true');
     elements.title.textContent = '选择一个设计方向';
-    elements.description.textContent = '暂时还没有收录方案。';
+    elements.description.textContent = state.schemes.length ? '方案已全部归档。打开页头「已归档」可继续预览或恢复。' : '暂时还没有收录方案。';
     elements.group.textContent = '方案预览';
     elements.version.textContent = 'DESIGN EXPLORATION';
     elements.address.textContent = '选择方案以开始预览';
@@ -449,11 +514,15 @@
     }
   }
 
-  byId('vote-entry').addEventListener('click', (event) => {
-    event.preventDefault();
-    if (elements.voting.hidden) { notify('请先选择一个方案。'); return; }
-    elements.voting.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
-    elements.voting.focus({ preventScroll: true });
+  byId('open-archives').addEventListener('click', openArchives);
+  byId('close-archives').addEventListener('click', () => elements.archivesDialog.close());
+  window.addEventListener('storage', (event) => {
+    if (event.key !== ARCHIVE_KEY) return;
+    state.archived = readArchives(); updateArchiveCount(); renderCatalog();
+    if (state.selectedId && state.archived.has(state.selectedId) && state.archivePreview !== state.selectedId) {
+      const next = rankedSchemes()[0]; if (next) selectScheme(next.id); else clearPreview();
+    } else if (state.selectedId) selectScheme(state.selectedId, { allowArchived: true });
+    if (elements.archivesDialog.open) renderArchives();
   });
   elements.voteButton.addEventListener('click', () => {
     if (state.selectedId) submitVote(state.votes.myVote === state.selectedId ? null : state.selectedId);
@@ -477,7 +546,7 @@
   byId('retry-load').addEventListener('click', () => { loadSchemes({ initial: !state.selectedId }).catch(() => {}); });
   window.addEventListener('hashchange', () => {
     const id = getHashId();
-    if (state.schemes.some((scheme) => scheme.id === id)) selectScheme(id, { updateHash: false });
+    if (state.schemes.some((scheme) => scheme.id === id)) selectScheme(id, { updateHash: false, allowArchived: state.archived.has(id) });
   });
   loadSchemes({ initial: true }).catch(() => {});
 })();

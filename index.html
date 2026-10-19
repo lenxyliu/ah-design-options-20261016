@@ -6,9 +6,10 @@
   <meta name="theme-color" content="#f6f7f9">
   <title>AH · 方案预览</title>
   <link rel="icon" type="image/png" href="./brand/agent-hosting-symbol.png">
-  <link rel="stylesheet" href="./styles.css">
-  <link rel="stylesheet" href="./layout-refinement.css">
-  <script src="./app.js" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=20261019-vote">
+  <link rel="stylesheet" href="./layout-refinement.css?v=20261019-vote">
+  <script src="./app.js?v=20261019-vote" defer></script>
+  <link rel="stylesheet" href="./vote-entry.css?v=20261019-vote">
 </head>
 <body>
   <a class="skip-link" href="#preview-title">跳到方案预览</a>
@@ -19,6 +20,8 @@
         <div class="brand-copy"><span class="eyebrow">AGENT HOSTING / DESIGN SPACE</span><h1>方案预览<span class="title-dot">.</span></h1></div>
       </div>
       <div class="header-actions">
+        <a id="vote-entry" class="button vote-entry" href="#scheme-voting"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 11 3 3 6-6"/><path d="M5 4h14v16H5z"/></svg><span>方案投票</span></a>
+
         <span class="scheme-total"><strong id="scheme-count">—</strong><span>个预览入口</span></span>
         <span class="header-divider" aria-hidden="true"></span>
         <span class="public-status"><i aria-hidden="true"></i><span>公开预览</span></span>
@@ -29,8 +32,8 @@
 
     <main class="workbench">
       <aside class="catalog" aria-label="设计方案导航">
-        <div class="catalog-header"><div><span class="eyebrow">THE COLLECTION</span><h2>设计方向</h2></div><button id="refresh-list" class="icon-button" type="button" aria-label="刷新方案列表" title="刷新方案列表"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button></div>
-        <p class="catalog-intro">保留每一次探索，找到最合适的方向。</p>
+        <div class="catalog-header"><div><span class="eyebrow">THE COLLECTION</span><h2>设计方向 · 票数排行</h2></div><button id="refresh-list" class="icon-button" type="button" aria-label="刷新方案列表" title="刷新方案列表"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button></div>
+        <p class="catalog-intro">所有方案按票数排名，同票保持原顺序。<br>点卡片预览，也可以直接投票。</p>
         <nav id="scheme-list" class="scheme-list" aria-label="选择预览方案"><div class="catalog-loading"><span class="spinner"></span><span>正在收录方案…</span></div></nav>
         <div class="catalog-footer"><span class="archive-dot" aria-hidden="true"></span><div><span>公开设计档案</span><small>方案与历史版本，统一收录</small></div></div>
       </aside>
@@ -40,6 +43,12 @@
           <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
           <span class="preview-public-label">PUBLIC PREVIEW</span>
         </div>
+
+        <section id="scheme-voting" class="scheme-voting" aria-labelledby="vote-title" tabindex="-1" hidden>
+          <div class="vote-overview"><div class="vote-heading"><h3 id="vote-title">为喜欢的方案投一票</h3><p class="vote-counts">当前方案 <strong id="scheme-vote-count">—</strong> 票<span aria-hidden="true"> · </span>总计 <strong id="total-vote-count">—</strong> 票</p></div><p class="vote-explanation">无需登录，每个浏览器一票，可随时改投或撤回。</p><p id="vote-status" class="vote-status" role="status" aria-live="polite">正在读取票数…</p></div>
+          <button id="vote-current" class="button vote-current" type="button" aria-pressed="false" disabled>投给这个方案</button>
+          <div id="vote-error" class="vote-error" role="alert" hidden><span id="vote-error-text"></span><button id="vote-retry" type="button">重试读取票数</button></div>
+        </section>
 
         <div class="preview-toolbar">
           <div class="device-switch" role="group" aria-label="预览尺寸"><button id="device-desktop" class="device-button is-active" type="button" aria-pressed="true" title="桌面预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>桌面</span></button><button id="device-mobile" class="device-button" type="button" aria-pressed="false" title="手机预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>手机</span></button></div>

@@ -139,7 +139,7 @@ function paintScroll() {
   $('.page-progress').style.transform=`scaleX(${y / Math.max(1,document.documentElement.scrollHeight-h)})`;
   const pose=sculptureLayout(y,h,section);
   const productMix=pose.productMix;
-  scene?.setState({section,progress,product:selected,productPosition,pointerX:lerp(pointerX,productPointerX,productMix),pointerY:lerp(pointerY,productPointerY,productMix),drag:drag*(1-productMix),heroDragging:dragging,paused,reduced,...pose,octopColor:params.get('octop')==='red'?'red':'purple'});
+  scene?.setState({section,progress,product:selected,productPosition,pointerX:paused||reduced?0:lerp(pointerX,productPointerX,productMix),pointerY:paused||reduced?0:lerp(pointerY,productPointerY,productMix),drag:drag*(1-productMix),heroDragging:dragging,paused,reduced,...pose,octopColor:params.get('octop')==='red'?'red':'purple'});
   if(productMix>=.994)scene?.flush(performance.now());
   pointerFollower.refresh();
   const switcher=$('#language-switch');
@@ -238,7 +238,9 @@ detail.addEventListener('close',()=>document.body.classList.remove('dialog-open'
 
 const observer = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');observer.unobserve(e.target);}}),{threshold:.12});
 $$('.begin-heading,.intent-list,.footer-word').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
-document.addEventListener('visibilitychange',()=>{scene?.setState({paused:paused||document.hidden});if(!document.hidden)requestPaint();});
+function resetPointerPose(){pointerX=pointerY=productPointerX=productPointerY=0;requestPaint();}
+addEventListener('blur',resetPointerPose);
+document.addEventListener('visibilitychange',()=>{resetPointerPose();scene?.setState({paused:paused||document.hidden});if(!document.hidden)requestPaint();});
 addEventListener('pagehide',event=>{if(!event.persisted){scene?.dispose();journey?.dispose();copyFit.dispose();}});
 journey=createProductJourney({section:productsSection,stage:$('.product-stage'),reduced:()=>reduced,onProgress:state=>{
   if(!readingPaintFrame){requestPaint();return;}

@@ -4,15 +4,15 @@
       "id": "open-field",
       "title": "OPEN FIELD",
       "subtitle": "纸白 · 金属曲面",
-      "description": "银蓝雕塑与纸白版面；四产品连续切换、正面停留，配合细线导向与轻量光标反馈。中英文独立预览。",
+      "description": "银蓝雕塑与纸白版面；四产品连续切换、正面停留，微型导向与雕塑区域单一光标。中英文独立预览。",
       "group": "current",
       "date": "2026-10-19",
-      "previewVersion": "09a7304d8eb5b26a",
+      "previewVersion": "2cde86f84c5efc06",
       "canDestroy": true,
       "hosted": false,
-      "previewUrl": "./preview/open-field/releases/09a7304d8eb5b26a/?_v=09a7304d8eb5b26a#home",
+      "previewUrl": "./preview/open-field/releases/2cde86f84c5efc06/?_v=2cde86f84c5efc06#home",
       "thumbnailUrl": "./thumbs/open-field.jpg",
-      "updatedAt": "2026-10-19T05:05:05.551Z"
+      "updatedAt": "2026-10-19T05:31:21.628Z"
     },
     {
       "id": "glass",

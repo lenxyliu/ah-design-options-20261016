@@ -1,11 +1,11 @@
 {
   "schemeId": "open-field",
-  "revision": "09a7304d8eb5b26a",
-  "contentHash": "09a7304d8eb5b26a8eb81ab08fca8c0f0270f3d70875dfe582be90714df9d0f7",
+  "revision": "2cde86f84c5efc06",
+  "contentHash": "2cde86f84c5efc06878c97100bb1956804d6ff05643c9e22da7cfbcf96867e03",
   "files": {
     "app.js": {
-      "bytes": 17580,
-      "sha256": "58fa2a354dd5f12f4c653064e6ccc6d16e34c099878c01b6e4074dbef6b75c54"
+      "bytes": 17775,
+      "sha256": "141da2bf8016c98156b54071971ceea07f16a925a1a0d183efef6c265409b5f6"
     },
     "assets/ah-logo.png": {
       "bytes": 55998,
@@ -20,16 +20,16 @@
       "sha256": "95d318b1d9bf03a296308f4ea02d6eab1ab69414574d91a90dad013317019679"
     },
     "en.html": {
-      "bytes": 9448,
-      "sha256": "0d97ec6cfd94e5ce1fedaa412bbb0d4909fc2956c0f6b8f2426744581a564b52"
+      "bytes": 9446,
+      "sha256": "70d1a41baacb6aeed65a3a13a7758aedd82217fb3aa9b375eb67a647209c0c5b"
     },
     "index.html": {
-      "bytes": 9421,
-      "sha256": "7edcb8681bf4583be4eda7910773fb538dd11f379835c221deb12bdf8030fad7"
+      "bytes": 9419,
+      "sha256": "89c59e9700256e87c76ec884763c960f4eaf5b4719e1d17c6f35112b6756b237"
     },
     "pointer-follow.js": {
-      "bytes": 5764,
-      "sha256": "30f7025912a91ee6a2496a9b60ea2647782f6655332173bb2aed678b501fdb17"
+      "bytes": 4904,
+      "sha256": "3f6abf019abeb7accc05e636fce49aafa0722b1b82419d03ced6f8fbbce8f473"
     },
     "product-copy-fit.js": {
       "bytes": 3607,
@@ -56,8 +56,8 @@
       "sha256": "0a1aa21fcf2286ee4547a545a651f328f9a78e6d9ca12bc4a8c89e43e90eb9c9"
     },
     "styles.css": {
-      "bytes": 33073,
-      "sha256": "4a390a72da369e7cf910ca19e368d0439f9e208cacc5c1864518de42a68ebfdd"
+      "bytes": 32904,
+      "sha256": "04c43a9d3724c39a1ef111bb90ae1aa268f9a2dc255808c0d9a8d94aee4f2364"
     },
     "vendor/LICENSE-three.txt": {
       "bytes": 1081,

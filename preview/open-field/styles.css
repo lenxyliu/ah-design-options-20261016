@@ -42,19 +42,16 @@ html[lang="en"] .hero-description{max-width:430px}html[lang="en"] .product-promi
 @media(max-width:800px){.manifesto-art{left:3%;right:57%;top:auto;bottom:150px;height:250px}.hero-floor{right:var(--gutter);gap:16px}.manifesto>.section-label{max-width:100%;justify-content:space-between;gap:15px}.manifesto-copy{background:var(--paper)}.product-copy-layer .product-keywords{min-height:12px}}
 @media(prefers-reduced-motion:reduce){.product-copy-layer{will-change:auto}}
 
-/* A small inertial mark; the sculpture alone gets a directional drag cue. */
-.pointer-follower{position:fixed;top:0;left:0;width:0;height:0;z-index:30;pointer-events:none;opacity:0;transition:opacity .16s;--cursor-color:#3159f5;--pointer-stretch:4px;--pointer-angle:0deg;color:var(--cursor-color)}
-.pointer-follower.is-visible{opacity:1}
-.pointer-follower>span{position:absolute;left:0;top:0;pointer-events:none}
-.pointer-dot{width:var(--pointer-stretch);height:4px;border-radius:3px;background:currentColor;transform:translate(-50%,-50%) rotate(var(--pointer-angle));transition:opacity .14s}
-.pointer-cue{width:24px;height:12px;opacity:0;transform:translate(-50%,-50%);transition:opacity .16s,scale .2s var(--ease)}
-.pointer-cue svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
-.pointer-follower.is-over-art .pointer-dot{opacity:0}
-.pointer-follower.is-over-art .pointer-cue{opacity:1}
-.pointer-follower.is-interactive{opacity:0}
-.pointer-follower.is-pressed .pointer-cue{scale:.8}
-body.dialog-open .pointer-follower{opacity:0}
-@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.pointer-follower{display:none}}
+/* Exactly one pointer in the sculpture zone; native controls elsewhere. */
+.art-pointer{position:fixed;top:0;left:0;z-index:30;display:none;width:0;height:0;pointer-events:none;color:var(--cursor-color,#3159f5)}
+.art-pointer.is-visible{display:block}
+.art-pointer .pointer-cue{position:absolute;left:0;top:0;width:16px;height:8px;transform:translate(-50%,-50%);pointer-events:none;transition:scale .16s var(--ease)}
+.art-pointer svg{display:block;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter}
+.art-pointer .cursor-outline{stroke:var(--paper);stroke-width:3.4;opacity:.95}
+.art-pointer.is-pressed .pointer-cue{scale:.84}
+.art-interaction.is-custom-cursor,.art-interaction.is-custom-cursor.dragging,.product-stage.is-custom-cursor{cursor:none}
+body.dialog-open .art-pointer{display:none}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.art-pointer{display:none!important}.is-custom-cursor{cursor:grab!important}}
 
 /* Copy density follows measured content, independent of viewport breakpoints. */
 .is-copy-measuring,.is-copy-measuring .product-intro,.is-copy-measuring .product-copy-layer,.is-copy-measuring .product-copy-layer *,.is-copy-measuring .product-tabs,.is-copy-measuring .product-tabs *{transition:none!important}
@@ -96,16 +93,18 @@ body.dialog-open .pointer-follower{opacity:0}
 .is-copy-scrollable .product-intro::-webkit-scrollbar-track{background:#252d21}
 .is-copy-scrollable .product-intro::-webkit-scrollbar-thumb{background:#66765d;border-radius:4px}
 
-/* Exhibition-style directions: a text label, a fine rule, and an open arrow. */
+/* Small typographic directions share the text's scale and rhythm. */
 .title-dot.title-stop{font-family:"Songti SC","STSong",serif;font-size:.66em;font-weight:400;vertical-align:baseline;letter-spacing:-.1em;margin-left:.06em;line-height:0}
-.round-link{position:relative;gap:22px;width:max-content;max-width:100%;padding:8px 0 12px;line-height:1.4}
+.round-link{position:relative;gap:12px;width:max-content;max-width:100%;padding:8px 0;line-height:1.4;min-height:44px}
 .hero-copy .round-link{font-size:14px;margin-top:3px}
-.round-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;opacity:.27;transform:scaleX(.44);transform-origin:left;transition:transform .45s var(--ease),opacity .3s}
-.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{display:block;flex:none;width:28px;height:28px;border:0;border-radius:0;background:none;color:inherit;translate:var(--pointer-shift-x,0px) var(--pointer-shift-y,0px);transform:none;transition:translate .15s,transform .4s var(--ease)}
-.round-arrow svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:square;stroke-linejoin:miter}
+.round-link::after{content:none}
+.round-link>span:first-child{position:relative}
+.round-link>span:first-child::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;background:currentColor;opacity:.35;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{display:block;flex:none;width:14px;height:14px;border:0;border-radius:0;background:none;color:inherit;translate:none;transform:none;transition:transform .3s var(--ease)}
+.round-arrow svg{width:100%;height:100%;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:butt;stroke-linejoin:miter}
 .round-link:hover,.round-link:focus-visible{color:var(--blue)}
 .round-link.light:hover,.round-link.light:focus-visible{color:var(--accent)}
-.round-link:hover::after,.round-link:focus-visible::after{transform:scaleX(1);opacity:.7}
-.round-link:hover .round-arrow,.round-link:focus-visible .round-arrow{background:none;color:inherit;transform:translateX(3px)}
-.hero-copy .round-link:hover .round-arrow,.hero-copy .round-link:focus-visible .round-arrow{transform:translate(3px,3px)}
-@media(max-width:800px){.hero-copy .round-link{font-size:12px}.round-link,.product-intro .round-link{gap:18px}.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{width:24px;height:24px}}
+.round-link:hover>span:first-child::after,.round-link:focus-visible>span:first-child::after{transform:scaleX(1)}
+.round-link:hover .round-arrow,.round-link:focus-visible .round-arrow{background:none;color:inherit;transform:translateX(2px)}
+.hero-copy .round-link:hover .round-arrow,.hero-copy .round-link:focus-visible .round-arrow{transform:translate(2px,2px)}
+@media(max-width:800px){.hero-copy .round-link{font-size:12px}.round-link,.product-intro .round-link{gap:10px}.round-link .round-arrow,.product-intro .round-arrow,.is-copy-compact .product-intro .round-arrow{width:13px;height:13px}}

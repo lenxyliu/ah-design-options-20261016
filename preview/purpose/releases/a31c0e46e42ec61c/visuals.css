@@ -1,0 +1,17 @@
+.ahp-visual{position:relative;width:100%;height:100%;min-width:0;isolation:isolate;perspective:1000px;contain:layout style;pointer-events:auto}
+.ahp-visual__parallax{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.ahp-visual__scene{display:block;width:100%;height:100%;overflow:visible}
+.ahp-visual__label{fill:#8a9ab0;font:500 9px/1 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;letter-spacing:1.5px;transition:fill .4s,opacity .4s}
+.ahp-visual__ring{animation:ahp-ring-float 8s ease-in-out infinite;transform-origin:350px 270px;will-change:transform}
+.ahp-visual__node{animation:ahp-node-float 6.8s ease-in-out infinite;animation-delay:var(--node-delay);transition:opacity .5s,filter .5s;will-change:transform}
+.ahp-visual__current{animation:ahp-current 14s linear infinite}
+.ahp-visual--focused .ahp-visual__node{opacity:.43;filter:saturate(.6)}
+.ahp-visual--focused .ahp-visual__node.is-active{opacity:1;filter:saturate(1.15)}
+.ahp-visual--focused .ahp-visual__node.is-active .ahp-visual__label{fill:#376eaf}
+.ahp-visual--paused .ahp-visual__ring,.ahp-visual--paused .ahp-visual__node,.ahp-visual--paused .ahp-visual__current{animation-play-state:paused}
+.ahp-visual--reduced .ahp-visual__ring,.ahp-visual--reduced .ahp-visual__node,.ahp-visual--reduced .ahp-visual__current{animation:none}
+@keyframes ahp-ring-float{0%,100%{transform:translateY(0) rotate(.1deg)}50%{transform:translateY(-7px) rotate(-.6deg)}}
+@keyframes ahp-node-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes ahp-current{to{stroke-dashoffset:-1008}}
+@media(prefers-reduced-motion:reduce){.ahp-visual__ring,.ahp-visual__node,.ahp-visual__current{animation:none}.ahp-visual__parallax{will-change:auto}.ahp-visual__node{transition:none}}
+@media(max-width:640px){.ahp-visual__label{font-size:10px;letter-spacing:.6px}.ahp-visual__scene{transform:scale(1.05);transform-origin:50% 50%}}

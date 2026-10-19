@@ -4,14 +4,15 @@
       "id": "open-field",
       "title": "OPEN FIELD",
       "subtitle": "纸白 · 金属曲面",
-      "description": "以连续金属曲面为视觉主体，结合纸白版面、钴蓝点色与四产品交互展区。",
+      "description": "连续金属曲面与纸白版面，四款产品以单雕塑连续交接、正面停留；中英文独立呈现。",
       "group": "current",
-      "date": "2026-10-16",
-      "previewVersion": "e8842acec2806fbb",
+      "date": "2026-10-19",
+      "previewVersion": "61c57158ffb300fd",
       "canDestroy": true,
       "hosted": false,
-      "previewUrl": "./preview/open-field/?_v=e8842acec2806fbb#home",
-      "thumbnailUrl": "./thumbs/open-field.jpg"
+      "previewUrl": "./preview/open-field/releases/61c57158ffb300fd/?_v=61c57158ffb300fd#home",
+      "thumbnailUrl": "./thumbs/open-field.jpg",
+      "updatedAt": "2026-10-19T04:51:12.764Z"
     },
     {
       "id": "glass",

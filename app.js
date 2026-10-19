@@ -343,7 +343,9 @@
     refreshButton.classList.add('is-refreshing');
     refreshButton.disabled = true;
     try {
-      const response = await fetch('./schemes.json', { cache: 'no-store' });
+      const catalogURL = new URL('./schemes.json', document.baseURI);
+      catalogURL.searchParams.set('_catalog', String(Date.now()));
+      const response = await fetch(catalogURL.href, { cache: 'no-store' });
       if (!response.ok) throw new Error('暂时无法读取方案列表，请重新载入。');
       const data = await response.json();
       if (requestId !== loadRequest) return;

@@ -70,62 +70,6 @@
       "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
       "previewUrl": "./preview/v14/?_v=1893d71aadc28882#overview",
       "thumbnailUrl": "./thumbs/v14.png"
-    },
-    {
-      "id": "v13",
-      "title": "白纸光影与折痕层次",
-      "subtitle": "空间探索 · V13 固定快照",
-      "description": "保留蓝白配色与展开节奏，收低背景补光，细化纸面漫反射、折痕接触阴影和切边，延后材质淡出。",
-      "group": "history",
-      "version": "V13",
-      "date": "2026-10-19",
-      "previewVersion": "9e01f0ad10ad51d6",
-      "canDestroy": false,
-      "hosted": false,
-      "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
-      "previewUrl": "./preview/v13/?_v=9e01f0ad10ad51d6#overview"
-    },
-    {
-      "id": "v12",
-      "title": "白纸共边与折弯修复",
-      "subtitle": "空间探索 · V12 固定快照",
-      "description": "统一白纸与冰蓝阴影，消除闭合盖片台阶、补齐连续折弯连接，并对齐面片、背衬和切边轮廓。",
-      "group": "history",
-      "version": "V12",
-      "date": "2026-10-19",
-      "previewVersion": "1e2167108f790798",
-      "canDestroy": false,
-      "hosted": false,
-      "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
-      "previewUrl": "./preview/v12/?_v=1e2167108f790798#overview"
-    },
-    {
-      "id": "v11",
-      "title": "IP 蓝白配色",
-      "subtitle": "空间探索 · V11 固定快照",
-      "description": "沿用 V10 的纸盒展开，以云白和冰蓝为舞台，搭配品牌蓝侧面与内折、深蓝文字；仅调整配色。",
-      "group": "history",
-      "version": "V11",
-      "date": "2026-10-19",
-      "previewVersion": "92838fef19a8e583",
-      "canDestroy": false,
-      "hosted": false,
-      "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
-      "previewUrl": "./preview/v11/?_v=92838fef19a8e583#overview"
-    },
-    {
-      "id": "v10",
-      "title": "细纹纸材与回折细节",
-      "subtitle": "空间探索 · V10 固定快照",
-      "description": "细化压痕、纸张厚度与冷色漫反射；修正回折纸叶的遮挡，让底纸逐渐显影为同一产品界面。",
-      "group": "history",
-      "version": "V10",
-      "date": "2026-10-16",
-      "previewVersion": "6cd462cd9dfa40f6",
-      "canDestroy": false,
-      "hosted": false,
-      "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
-      "previewUrl": "./preview/v10/?_v=6cd462cd9dfa40f6#overview"
     }
   ]
 }

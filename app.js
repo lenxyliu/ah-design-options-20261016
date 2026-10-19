@@ -3,7 +3,7 @@
 (() => {
   const byId = (id) => document.getElementById(id);
   const state = { schemes: [], selectedId: null, device: 'desktop', loadingTimer: null,
-    votes: { counts: {}, totalVotes: null, myVote: null, loaded: false }, voteReading: false, voteBusy: false, voteError: '', archived: readArchives(), archivePreview: null };
+    votes: { counts: {}, totalVotes: null, myVotes: [], voteLimit: 2, remainingVotes: 2, loaded: false }, voteReading: false, voteBusy: false, voteError: '', archived: readArchives(), archivePreview: null };
   const elements = {
     list: byId('scheme-list'), count: byId('scheme-count'), title: byId('preview-title'),
     description: byId('preview-description'), group: byId('preview-group'), version: byId('preview-version'),
@@ -115,7 +115,7 @@
         headers: { ...options.headers, Authorization: 'Bearer ' + anonymousIdentity() } });
       let data;
       try { data = await response.json(); } catch { throw new Error('投票服务暂不可用（' + response.status + '），请稍后重试。'); }
-      if (!response.ok) throw new Error(data.error || '投票请求未完成（' + response.status + '）。');
+      if (!response.ok) throw Object.assign(new Error(data.error || '投票请求未完成（' + response.status + '）。'), { status: response.status });
       return data;
     } catch (error) {
       if (error.name === 'AbortError') throw new Error('投票服务连接超时，请重试。');
@@ -126,6 +126,9 @@
   function voteCount(id) {
     return state.votes.loaded ? (state.votes.counts[id] || 0) : null;
   }
+
+  function hasVote(id) { return state.votes.loaded && state.votes.myVotes.includes(id); }
+  function voteQuota() { return '已用 ' + state.votes.myVotes.length + '/2 票'; }
 
   const ARCHIVE_KEY = 'ah-public-archives';
   const groupId = (scheme) => scheme.group === 'history' ? 'history' : 'main';
@@ -229,7 +232,7 @@
     for (const group of ['main', 'history']) rankedSchemes(group).forEach((scheme, index) => {
       const item = items.get(scheme.id);
       if (!item) return;
-      item.classList.toggle('has-vote', state.votes.loaded && state.votes.myVote === scheme.id);
+      item.classList.toggle('has-vote', hasVote(scheme.id));
       if (reorder) elements.list.querySelector(`[data-scheme-group="${group}"] .scheme-group-items`)?.append(item);
     });
     restoreCatalogView(view);
@@ -237,7 +240,7 @@
 
   function renderVotePanel() {
     const selected = state.schemes.find((scheme) => scheme.id === state.selectedId);
-    const voted = Boolean(selected && state.votes.loaded && state.votes.myVote === selected.id);
+    const voted = Boolean(selected && hasVote(selected.id));
     byId('vote-display').hidden = !selected;
     byId('archive-current').hidden = !selected || state.archived.has(selected.id);
     const count = selected ? voteCount(selected.id) : null;
@@ -245,7 +248,7 @@
     elements.totalVotes.textContent = state.votes.loaded ? String(state.votes.totalVotes) : '—';
     elements.inlineVoteCount.textContent = count === null ? '—' : String(count);
     elements.voteButton.querySelector('.title-vote-label').textContent = state.voteBusy ? '保存中' : voted ? '已投' : '投票';
-    const voteLabel = `${state.voteBusy ? '正在提交投票' : voted ? '已投票，点击撤回' : '投给这个方案'} · ${count === null ? '票数读取中' : count + ' 票'}`;
+    const voteLabel = `${state.voteBusy ? '正在提交投票' : voted ? '撤回当前方案的投票' : '投给当前方案'} · ${count === null ? '票数读取中' : count + ' 票'}，${voteQuota()}`;
     elements.voteButton.setAttribute('aria-label', voteLabel);
     elements.voteButton.classList.toggle('is-voted', voted);
     elements.voteButton.setAttribute('aria-pressed', String(voted));
@@ -253,12 +256,11 @@
     elements.inlineVoteCount.removeAttribute('title');
     elements.voteButton.disabled = !selected || state.voteBusy;
     let status;
-    if (state.voteBusy) status = '正在保存你的选择…';
+    if (state.voteBusy) status = '正在保存你的选择…' + voteQuota();
     else if (!state.votes.loaded) status = state.voteReading ? '正在读取票数…' : '票数暂不可用，请重试。';
-    else if (state.votes.myVote) {
-      const chosen = state.schemes.find((scheme) => scheme.id === state.votes.myVote);
-      status = voted ? '你已选择当前方案。' : chosen ? `你已投给「${chosen.title}」，可改投当前方案。` : '你已投给暂未显示的方案，可以改投。';
-    } else status = '还没有投票，选一个喜欢的方向。';
+    else status = voteQuota() + '。' + (voted ? '当前方案已投票，点击可单独撤回。'
+      : state.votes.myVotes.length >= 2 ? '最多可投两个方案，请先撤回一票。'
+      : '每个浏览器最多投两个方案，每个方案一票，可分别撤回。');
     if (elements.voteStatus.textContent !== status) elements.voteStatus.textContent = status;
     elements.voteError.hidden = !state.voteError;
     if (elements.voteErrorText.textContent !== state.voteError) elements.voteErrorText.textContent = state.voteError;
@@ -268,16 +270,24 @@
   function readVoteData(data) {
     if (!data || typeof data.counts !== 'object' || data.counts === null || Array.isArray(data.counts)
       || Object.values(data.counts).some((count) => !Number.isSafeInteger(count) || count < 0)
-      || !Number.isSafeInteger(data.totalVotes) || data.totalVotes < 0
-      || (data.myVote !== null && typeof data.myVote !== 'string')) {
+      || !Number.isSafeInteger(data.totalVotes) || data.totalVotes < 0) {
       throw new Error('投票服务返回的票数格式不正确。');
     }
-    return { counts: { ...data.counts }, totalVotes: data.totalVotes, myVote: data.myVote, loaded: true };
+    const myVotes = data.myVotes === undefined
+      ? (typeof data.myVote === 'string' ? [data.myVote] : data.myVote == null ? [] : null)
+      : data.myVotes;
+    if (!Array.isArray(myVotes) || myVotes.length > 2 || new Set(myVotes).size !== myVotes.length
+      || myVotes.some((id) => typeof id !== 'string' || !id)
+      || (data.voteLimit !== undefined && data.voteLimit !== 2)
+      || (data.remainingVotes !== undefined && data.remainingVotes !== 2 - myVotes.length)) {
+      throw new Error('投票服务返回的个人票额格式不正确。');
+    }
+    return { counts: { ...data.counts }, totalVotes: data.totalVotes, myVotes: [...myVotes], voteLimit: 2, remainingVotes: 2 - myVotes.length, loaded: true };
   }
 
   function applyVotes(data) {
     const next = readVoteData(data);
-    const changed = !state.votes.loaded || state.votes.totalVotes !== next.totalVotes || state.votes.myVote !== next.myVote
+    const changed = !state.votes.loaded || state.votes.totalVotes !== next.totalVotes || JSON.stringify(state.votes.myVotes) !== JSON.stringify(next.myVotes)
       || Object.keys({ ...state.votes.counts, ...next.counts }).some((id) => state.votes.counts[id] !== next.counts[id]);
     const firstLoad = !state.votes.loaded;
     state.votes = next;
@@ -307,34 +317,37 @@
   }
 
   async function submitVote(schemeId) {
-    if (state.voteBusy || !state.votes.loaded || (schemeId !== null && !state.schemes.some((scheme) => scheme.id === schemeId))) return;
-    const focus = document.activeElement;
-    const view = catalogView();
-    const requestId = ++voteRequest;
-    state.voteReading = false;
-    state.voteBusy = true;
-    state.voteError = '';
-    paintCatalogVotes();
-    renderVotePanel();
+    if (state.voteBusy || !state.votes.loaded || !state.schemes.some((scheme) => scheme.id === schemeId)) return;
+    const action = hasVote(schemeId) ? 'remove' : 'add';
+    if (action === 'add' && state.votes.myVotes.length >= 2) {
+      notify('最多可投两个方案，请先撤回一票');
+      elements.voteStatus.textContent = '已用 2/2 票。最多可投两个方案，请先撤回一票。';
+      return;
+    }
+    const focus = document.activeElement, view = catalogView(), requestId = ++voteRequest;
+    let refreshAfterConflict = false;
+    state.voteReading = false; state.voteBusy = true; state.voteError = '';
+    paintCatalogVotes(); renderVotePanel();
     try {
-      const data = await requestVotes({ method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ schemeId }) });
+      const data = await requestVotes({ method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ schemeId, action }) });
       if (requestId !== voteRequest) return;
       applyVotes(data);
-      notify(schemeId === null ? '已撤回投票。' : '投票已记录，可以随时改投。');
+      notify((action === 'remove' ? '已撤回该方案的投票，' : '投票已记录，') + voteQuota() + '。');
     } catch (error) {
       if (requestId !== voteRequest) return;
-      state.voteError = `投票未确认：${error.message || '请重试读取票数后再操作。'}`;
+      refreshAfterConflict = error.status === 409;
+      state.voteError = '投票未确认：' + (error.message || '请重试读取票数后再操作。');
+      notify(state.voteError);
     } finally {
       if (requestId === voteRequest) {
-        state.voteBusy = false;
-        paintCatalogVotes();
-        renderVotePanel();
+        state.voteBusy = false; paintCatalogVotes(); renderVotePanel();
         if (!document.hidden && (document.activeElement === document.body || document.activeElement === focus)) {
           if (view.focusId) restoreCatalogView(view);
           else if (focus === elements.voteButton) elements.voteButton.focus({ preventScroll: true });
         }
       }
     }
+    if (refreshAfterConflict) await loadVotes();
   }
 
   async function loadSchemes({ initial = false } = {}) {
@@ -588,7 +601,7 @@
   });
   elements.voteButton.addEventListener('click', () => {
     if (!state.votes.loaded) { loadVotes(); return; }
-    if (state.selectedId) submitVote(state.votes.myVote === state.selectedId ? null : state.selectedId);
+    if (state.selectedId) submitVote(state.selectedId);
   });
   elements.voteRetry.addEventListener('click', loadVotes);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) loadVotes(); });

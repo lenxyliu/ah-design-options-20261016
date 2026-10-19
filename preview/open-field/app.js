@@ -3,6 +3,7 @@ import { products as englishProducts } from './products-en.js';
 import { translations } from './copy.js';
 import { mountSculpture } from './sculpture.js';
 import { createProductJourney } from './product-journey.js';
+import { createProductCopyFit } from './product-copy-fit.js';
 
 const lang=document.documentElement.lang.startsWith('en')?'en':'zh';
 const t=translations[lang],products=lang==='en'?englishProducts:chineseProducts;
@@ -40,6 +41,7 @@ const copyLayers=products.map((p,index)=>{
   layer.append(category,title,promise,description,keywords,button);return layer;
 });
 copyHost.replaceChildren(...copyLayers);
+const copyFit=createProductCopyFit({stage:$('.product-stage'),host:copyHost,layers:copyLayers,tabs:$('.product-tabs'),lang,onLayout:requestPaint});
 function paintProductPosition(state){
   productPosition=reduced?state.selectedIndex:state.position;
   const panelWidth=$('#sculpture').getBoundingClientRect().width||innerWidth;
@@ -148,6 +150,7 @@ art.addEventListener('pointerup',releaseArt);art.addEventListener('pointercancel
 
 const accents=['#dee4ed','#7898ff','#59d59b',params.get('octop')==='red'?'#ef5b66':'#b599fa'];
 function renderProduct(index,animate=true){
+  if(index!==selected)copyFit.resetScroll();
   selected=index;const p=products[index];
   $$('.product-tabs [role=tab]').forEach((t,i)=>{t.setAttribute('aria-selected',String(i===index));t.tabIndex=i===index?0:-1;});
   $('#product-panel').setAttribute('aria-labelledby',`tab-${p.id}`);
@@ -199,7 +202,7 @@ detail.addEventListener('close',()=>document.body.classList.remove('dialog-open'
 const observer = new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in-view');observer.unobserve(e.target);}}),{threshold:.12});
 $$('.begin-heading,.intent-list,.footer-word').forEach(el=>{el.classList.add('reveal');observer.observe(el);});
 document.addEventListener('visibilitychange',()=>{scene?.setState({paused:paused||document.hidden});if(!document.hidden)requestPaint();});
-addEventListener('pagehide',event=>{if(!event.persisted){scene?.dispose();journey?.dispose();}});
+addEventListener('pagehide',event=>{if(!event.persisted){scene?.dispose();journey?.dispose();copyFit.dispose();}});
 journey=createProductJourney({section:productsSection,stage:$('.product-stage'),reduced:()=>reduced,onIndex:index=>renderProduct(index),onProgress:state=>{
   paintProductPosition(state);
   $$('.product-tabs [role=tab]').forEach((tab,index)=>tab.style.setProperty('--segment-progress',index<state.index?1:index===state.index?Math.max(.04,state.local):0));

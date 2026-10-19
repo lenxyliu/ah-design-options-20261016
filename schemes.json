@@ -84,6 +84,21 @@
       "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
       "previewUrl": "./preview/v14/?_v=1893d71aadc28882#overview",
       "thumbnailUrl": "./thumbs/v14.png"
+    },
+    {
+      "id": "daylight-v1",
+      "title": "DAYLIGHT · 日常发生",
+      "subtitle": "DAYLIGHT · V1 固定快照",
+      "description": "DAYLIGHT 初版：居中首屏、缓弧场景轮播与触感产品矩阵。保留完整中英文独立预览。",
+      "group": "history",
+      "version": "V1",
+      "date": "2026-10-19",
+      "previewVersion": "66ebccaa27bfe9cc",
+      "canDestroy": false,
+      "hosted": false,
+      "protectionReason": "固定历史快照，保留以便回看与追溯。",
+      "previewUrl": "./preview/daylight/releases/66ebccaa27bfe9cc/?_v=66ebccaa27bfe9cc#home",
+      "thumbnailUrl": "./thumbs/daylight-v1.png"
     }
   ]
 }

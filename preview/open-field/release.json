@@ -1,11 +1,11 @@
 {
   "schemeId": "open-field",
-  "revision": "f5b40ea8704d7216",
-  "contentHash": "f5b40ea8704d7216b3649b359958c4d68b9f70c1b8227a4b4ac2d61946be955e",
+  "revision": "facac7a3515a6f27",
+  "contentHash": "facac7a3515a6f274ddf70d5b9fc20a1eaad037154794f0edb571d10832f9b40",
   "files": {
     "app.js": {
-      "bytes": 18291,
-      "sha256": "72d42487f9cd38a3a4f11c087262a656012a6218af67a510aed287be57d48ee1"
+      "bytes": 18315,
+      "sha256": "49682d61ef4f7613e1390ba3b2f2df9cb9b6e73e1b5fc28c376c15b81ec7a7ca"
     },
     "assets/ah-logo.png": {
       "bytes": 55998,

@@ -147,8 +147,8 @@ function paintScroll() {
   const target=new URL(isOffline?(lang==='zh'?'./offline-en.html':'./离线预览.html'):t.languageUrl,location.href);
   const applicationsRect=$('#applications')?.getBoundingClientRect();
   const readingApplications=applicationsRect&&applicationsRect.top<h*.6&&applicationsRect.bottom>h*.3;
-  target.hash=section==='products'?'products':section==='hero'?'home':section==='manifesto'?'manifesto':readingApplications?'applications':'begin';
-  if(journeyState?.active||section==='products')target.searchParams.set('product',products[selected].id);
+  target.hash=readingApplications?'applications':section==='products'?'products':section==='hero'?'home':section==='manifesto'?'manifesto':'begin';
+  if(!readingApplications&&(journeyState?.active||section==='products'))target.searchParams.set('product',products[selected].id);
   switcher.href=target.href;
 }
 function requestPaint(){if(!framePending){framePending=true;requestAnimationFrame(paintScroll);}}

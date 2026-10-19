@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#f6f7f9">
   <title>AH · 方案预览</title>
   <link rel="icon" type="image/png" href="./brand/agent-hosting-symbol.png">
-  <link rel="stylesheet" href="./styles.css?v=20261019-card-rail">
-  <link rel="stylesheet" href="./layout-refinement.css?v=20261019-card-rail">
-  <script src="./app.js?v=20261019-card-rail" defer></script>
-  <link rel="stylesheet" href="./vote-entry.css?v=20261019-card-rail">
+  <link rel="stylesheet" href="./styles.css?v=20261019-title-controls">
+  <link rel="stylesheet" href="./layout-refinement.css?v=20261019-title-controls">
+  <script src="./app.js?v=20261019-title-controls" defer></script>
+  <link rel="stylesheet" href="./vote-entry.css?v=20261019-title-controls">
 </head>
 <body>
   <a class="skip-link" href="#preview-title">跳到方案预览</a>
@@ -40,7 +40,7 @@
 
       <section class="preview-panel" aria-labelledby="preview-title">
         <div class="preview-heading">
-          <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><div class="preview-title-row"><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><span id="preview-archive-state" class="preview-archive-state" hidden>已归档</span><button id="vote-current" class="title-vote" type="button" aria-pressed="false" aria-label="投给当前方案" title="投给当前方案" disabled hidden><span class="title-vote-label">投票</span><span id="inline-vote-count" class="inline-vote-count">—</span></button></div><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
+          <div class="preview-heading-main"><div class="preview-breadcrumb"><span class="preview-dot" aria-hidden="true"></span><span id="preview-group">方案预览</span><span class="breadcrumb-slash">/</span><span id="preview-version">DESIGN EXPLORATION</span></div><div class="preview-title-row"><h2 id="preview-title" tabindex="-1">选择一个设计方向</h2><span id="preview-archive-state" class="preview-archive-state" hidden>已归档</span><button id="vote-current" class="title-vote" type="button" aria-pressed="false" aria-label="投给当前方案" title="投给当前方案" disabled hidden><span class="title-vote-label">投票</span><span id="inline-vote-count" class="inline-vote-count">—</span></button><span class="title-actions"><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>独立预览</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a><button id="archive-current" class="button button-quiet title-archive" type="button" title="归档当前方案" aria-label="归档当前方案" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4h16v5H4zM6 9v11h12V9M10 13h4"/></svg><span>归档</span></button></span></div><p id="preview-description">所有方案，在同一个工作台中查看。</p></div>
           <span class="preview-public-label">PUBLIC PREVIEW</span>
         </div>
 
@@ -48,7 +48,7 @@
 
         <div class="preview-toolbar">
           <div class="device-switch" role="group" aria-label="预览尺寸"><button id="device-desktop" class="device-button is-active" type="button" aria-pressed="true" title="桌面预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>桌面</span></button><button id="device-mobile" class="device-button" type="button" aria-pressed="false" title="手机预览"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>手机</span></button></div>
-          <div class="preview-tools"><span class="full-preview-hint">完整交互，建议在新标签中体验</span><button id="reload-preview" class="icon-button" type="button" aria-label="重新载入当前预览" title="重新载入"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 8a8 8 0 1 0 .2 7M20 3v5h-5"/></svg></button><a id="open-preview" class="button button-open" target="_blank" rel="noopener noreferrer" aria-disabled="true"><span>新标签打开完整预览</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 4h6v6M20 4 10 14"/><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/></svg></a></div>
+          
         </div>
 
         <div id="preview-notice" class="preview-notice" role="status" hidden><span id="preview-notice-text"></span><a id="notice-open" target="_blank" rel="noopener noreferrer">打开独立预览 ↗</a></div>

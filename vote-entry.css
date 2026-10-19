@@ -32,3 +32,17 @@
 .title-vote:disabled{background:transparent;border:0;opacity:.5;cursor:wait;text-decoration:none}
 .title-vote .inline-vote-count{position:static;min-width:0;width:auto;height:auto;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:inherit;font:inherit;line-height:inherit}
 @media(max-width:620px){#scheme-list .scheme-item{width:220px;padding:5px 4px;grid-template-columns:minmax(0,1fr) 28px}.title-vote{min-height:28px}}
+
+/* The menu is selection-only. Current-scheme controls live by the title. */
+#scheme-list .scheme-item{display:block;grid-template-columns:none;padding:5px 4px}
+#scheme-list .scheme-button{width:100%;min-width:0}
+.preview-title-row{display:flex;align-items:center;flex-wrap:wrap;gap:9px}
+.title-actions{display:inline-flex;align-items:center;flex:0 0 auto;gap:7px;margin-top:6px;margin-left:4px}
+.title-actions #reload-preview{display:inline-flex;order:initial;flex:0 0 auto;width:28px;height:28px;min-height:28px;margin:0;padding:5px}
+.title-actions #open-preview{display:inline-flex;order:initial;flex:0 0 auto;width:auto;min-width:0;min-height:28px;margin:0;padding:5px 9px;font-size:10px;line-height:18px;gap:6px;box-shadow:none}
+.title-actions #open-preview svg{width:13px;height:13px}
+.title-actions .title-archive{min-height:28px;padding:5px 3px;font-size:10px;color:#7c8da6;background:transparent;gap:5px}
+.title-actions .title-archive svg{width:14px;height:14px}
+.title-actions .title-archive:hover{background:transparent;color:#315ce7}
+.preview-toolbar{justify-content:flex-start}
+@media(max-width:620px){#scheme-list .scheme-item{display:block;width:220px}.title-actions{flex-wrap:nowrap;margin-left:0;gap:6px}.title-actions #open-preview{min-width:0;width:auto;font-size:10px}}

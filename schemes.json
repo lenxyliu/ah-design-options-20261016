@@ -43,16 +43,17 @@
     {
       "id": "spatial",
       "title": "方块空间 · 当前稿",
-      "subtitle": "能力展开 · 开盒交互",
-      "description": "四产品方块从聚合到展开；当前视觉与 V05 固定快照相同，保留工作工程入口。",
+      "subtitle": "蓝白纸面 · V14 清晰开合",
+      "description": "当前稿为 V14：保留蓝白配色与展开停顿，界面在同一纸面上清晰显影，优化折痕明暗及滚轮开合响应。",
       "group": "current",
-      "date": "2026-10-16",
+      "date": "2026-10-19",
       "previewVersion": "dd670f251f5dccb4",
       "canDestroy": false,
       "hosted": true,
       "protectionReason": "已关联托管站点，保留本机发布工程。",
       "previewUrl": "./preview/spatial/?_v=dd670f251f5dccb4#overview",
-      "thumbnailUrl": "./thumbs/spatial.jpg"
+      "thumbnailUrl": "./thumbs/spatial.png",
+      "version": "V14"
     },
     {
       "id": "v14",
@@ -66,7 +67,8 @@
       "canDestroy": false,
       "hosted": false,
       "protectionReason": "固定历史快照，已收录进空间版发布工程，保留以便回看与追溯。",
-      "previewUrl": "./preview/v14/?_v=1893d71aadc28882#overview"
+      "previewUrl": "./preview/v14/?_v=1893d71aadc28882#overview",
+      "thumbnailUrl": "./thumbs/v14.png"
     },
     {
       "id": "v13",
